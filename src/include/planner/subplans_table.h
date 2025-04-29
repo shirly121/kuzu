@@ -37,7 +37,7 @@ private:
     std::bitset<binder::MAX_NUM_QUERY_VARIABLES> encodePlan(const LogicalPlan& plan);
 
 private:
-    constexpr static uint32_t MAX_NUM_PLANS = 10;
+    constexpr static uint32_t MAX_NUM_PLANS = 1000;
 
 private:
     uint64_t maxCost = UINT64_MAX;
@@ -66,7 +66,7 @@ public:
     inline void clear() { subgraph2Plans.clear(); }
 
 private:
-    constexpr static uint32_t MAX_NUM_SUBGRAPH = 50;
+    constexpr static uint32_t MAX_NUM_SUBGRAPH = 10000;
 
 private:
     binder::subquery_graph_V_map_t<std::unique_ptr<SubgraphPlans>> subgraph2Plans;

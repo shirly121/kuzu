@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
     }
 
     // auto databasePath = args::get(inputDirFlag);
-    auto databasePath = "test2.db";
+    auto databasePath = "test.db";
     std::shared_ptr<Database> database;
     std::shared_ptr<Connection> conn;
     try {

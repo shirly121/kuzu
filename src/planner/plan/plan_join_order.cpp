@@ -487,9 +487,9 @@ void Planner::planWCOJoin(const SubqueryGraph& subgraph,
             appendFilter(predicate, *leftPlanCopy);
         }
         context.subPlansTable->addPlan(newSubgraph, std::move(leftPlanCopy));
-        std::cout << "planWCOJoin: " << std::endl << leftPlan->toString() << std::endl
-                  << std::endl
-                  << std::endl;
+        // std::cout << "planWCOJoin: " << std::endl << leftPlan->toString() << std::endl
+        //           << std::endl
+        //           << std::endl;
     }
 }
 
@@ -579,7 +579,8 @@ bool Planner::tryPlanINLJoin(const SubqueryGraph& subgraph, const SubqueryGraph&
             auto plan = prevPlan->shallowCopy();
             appendExtend(boundNode, nbrNode, rel, extendDirection, getProperties(*rel), *plan);
             appendFilters(predicates, *plan);
-            std::cout << "expand plan: " << std::endl << plan->toString() << std::endl << std::endl << std::endl;
+            // std::cout << "expand plan: " << std::endl << plan->toString() << std::endl << std::endl << std::endl;
+            // std::cout << "expand plan cost: " << plan->getCost() << std::endl << std::endl << std::endl;
             context.addPlan(newSubgraph, std::move(plan));
             hasAppliedINLJoin = true;
         // }
@@ -625,10 +626,10 @@ void Planner::planInnerHashJoin(const SubqueryGraph& subgraph, const SubqueryGra
                 appendFilters(predicates, *rightPlanProbeCopy);
                 std::cout << "join plan:" << std::endl << rightPlanProbeCopy->toString() << std::endl << std::endl << 
                 std::endl;
-                // uint64_t cost = CostModel::computeHashJoinCost(joinNodeIDs, *rightPlan, *leftPlan);
-                // std::cout << "probe cost: " << rightPlan->getCost() << " build cost: " << leftPlan->getCost() 
-                // << "probe cardinality: " << rightPlan->getCardinality()
-                // << " build cardinality: " << leftPlan->getCardinality() << " total cost: " << cost << std::endl << std::endl << std::endl;
+                uint64_t cost = CostModel::computeHashJoinCost(joinNodeIDs, *rightPlan, *leftPlan);
+                std::cout << "probe cost: " << rightPlan->getCost() << " build cost: " << leftPlan->getCost() 
+                << "probe cardinality: " << rightPlan->getCardinality()
+                << " build cardinality: " << leftPlan->getCardinality() << " total cost: " << cost << std::endl << std::endl << std::endl;
                 context.addPlan(newSubgraph, std::move(rightPlanProbeCopy));
             }
         }

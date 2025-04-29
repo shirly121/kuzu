@@ -125,6 +125,8 @@ void Planner::appendRecursiveExtend(const std::shared_ptr<NodeExpression>& bound
         recursiveExtend->addChild(nodeMaskRoot);
     }
     recursiveExtend->computeFactorizedSchema();
+    // recursiveExtend->addChild(plan.getLastOperator());
+    // plan.setLastOperator(std::move(recursiveExtend));
     probePlan.setLastOperator(std::move(recursiveExtend));
     // Scan path node property pipeline
     std::shared_ptr<LogicalOperator> pathNodePropertyScanRoot = nullptr;
@@ -147,6 +149,9 @@ void Planner::appendRecursiveExtend(const std::shared_ptr<NodeExpression>& bound
         pathRelPropertyScanRoot = pathRelPropertyScanPlan->getLastOperator();
     }
     // Construct path by probing scanned properties
+    // auto pathPropertyProbe =
+    //     std::make_shared<LogicalPathPropertyProbe>(rel, probePlan.getLastOperator(),
+    //         pathNodePropertyScanRoot, pathRelPropertyScanRoot, RecursiveJoinType::TRACK_PATH);
     auto pathPropertyProbe =
         std::make_shared<LogicalPathPropertyProbe>(rel, probePlan.getLastOperator(),
             pathNodePropertyScanRoot, pathRelPropertyScanRoot, RecursiveJoinType::TRACK_PATH);
@@ -162,8 +167,10 @@ void Planner::appendRecursiveExtend(const std::shared_ptr<NodeExpression>& bound
     pathPropertyProbe->setCardinality(resultCard);
     probePlan.setLastOperator(pathPropertyProbe);
     probePlan.setCost(plan.getCardinality());
+    // plan.setLastOperator(std::move(pathPropertyProbe));
+    // plan.setCost(plan.getCardinality());
 
-    // Join with input node
+    // // Join with input node
     auto joinConditions = expression_vector{boundNode->getInternalID()};
     appendHashJoin(joinConditions, JoinType::INNER, probePlan, plan, plan);
     // Hash join above is joining input node with its properties. So 1-1 match is guaranteed and
