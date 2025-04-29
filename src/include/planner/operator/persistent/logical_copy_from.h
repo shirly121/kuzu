@@ -49,7 +49,7 @@ public:
     }
 
     std::unique_ptr<LogicalOperator> copy() override {
-        return make_unique<LogicalCopyFrom>(info.copy(), outExprs, LogicalOperator::copy(children));
+        return std::make_unique<LogicalCopyFrom>(info.copy(), outExprs, LogicalOperator::copy(children));
     }
 
 private:

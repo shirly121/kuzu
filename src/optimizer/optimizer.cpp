@@ -1,5 +1,8 @@
 #include "optimizer/optimizer.h"
 
+#include <fstream>
+#include <iostream>
+
 #include "main/client_context.h"
 #include "optimizer/acc_hash_join_optimizer.h"
 #include "optimizer/agg_key_dependency_optimizer.h"
@@ -28,8 +31,21 @@ void Optimizer::optimize(planner::LogicalPlan* plan, main::ClientContext* contex
         auto correlatedSubqueryUnnestSolver = CorrelatedSubqueryUnnestSolver(nullptr);
         correlatedSubqueryUnnestSolver.solve(plan->getLastOperator().get());
 
+        std::ofstream outfile("test.plan", std::ios::app);
+        if (!outfile.is_open()) {
+            std::cerr << "无法打开文件进行写入" << std::endl << std::endl << std::endl;
+        }
+        // outfile << "after correlated subquery unnest: \n" << plan->toString() << std::endl <<
+        // std::endl
+        //         << std::endl;
+        // std::cout << "before remove unnecessary join: " << plan->toString() << std::endl;
         auto removeUnnecessaryJoinOptimizer = RemoveUnnecessaryJoinOptimizer();
         removeUnnecessaryJoinOptimizer.rewrite(plan);
+        outfile << "after remove unnecessary join: \n"
+                << plan->toString() << std::endl
+                << std::endl
+                << std::endl;
+        // std::cout << "after remove unnecessary join: " << plan->toString() << std::endl;
 
         auto filterPushDownOptimizer = FilterPushDownOptimizer(context);
         filterPushDownOptimizer.rewrite(plan);
@@ -45,6 +61,10 @@ void Optimizer::optimize(planner::LogicalPlan* plan, main::ClientContext* contex
             // HashJoinSIPOptimizer should be applied after optimizers that manipulate hash join.
             auto hashJoinSIPOptimizer = HashJoinSIPOptimizer();
             hashJoinSIPOptimizer.rewrite(plan);
+            outfile << "after hash join sip: \n"
+                    << plan->toString() << std::endl
+                    << std::endl
+                    << std::endl;
         }
 
         auto topKOptimizer = TopKOptimizer();
@@ -52,6 +72,10 @@ void Optimizer::optimize(planner::LogicalPlan* plan, main::ClientContext* contex
 
         auto factorizationRewriter = FactorizationRewriter();
         factorizationRewriter.rewrite(plan);
+        outfile << "after factorization rewriter: \n"
+                << plan->toString() << std::endl
+                << std::endl
+                << std::endl;
 
         // AggKeyDependencyOptimizer doesn't change factorization structure and thus can be put
         // after FactorizationRewriter.
@@ -68,6 +92,7 @@ void Optimizer::optimize(planner::LogicalPlan* plan, main::ClientContext* contex
                 cardinalityUpdater.rewrite(plan);
             }
         }
+        outfile.close();
     } else {
         // we still need to compute the schema for each operator even if we have optimizations
         // disabled

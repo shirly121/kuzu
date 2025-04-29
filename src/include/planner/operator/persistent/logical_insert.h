@@ -9,6 +9,7 @@ namespace planner {
 
 struct LogicalInsertInfo {
     common::TableType tableType;
+    // including alias and the node or rel expression which defines the query pattern.
     std::shared_ptr<binder::Expression> pattern;
     binder::expression_vector columnExprs;
     binder::expression_vector columnDataExprs;

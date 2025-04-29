@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+
 #include "parser/parser.h"
 
 // ANTLR4 generates code with unused parameters.
@@ -20,6 +23,12 @@ namespace parser {
 
 std::vector<std::shared_ptr<Statement>> Parser::parseQuery(std::string_view query) {
     auto queryStr = std::string(query);
+    std::ofstream outfile("test.plan", std::ios::app);
+    if (!outfile.is_open()) {
+        std::cerr << "无法打开文件进行写入" << std::endl;
+    }
+    outfile << "Query is: \n" << queryStr << std::endl << std::endl << std::endl;
+    outfile.close();
     queryStr = common::StringUtils::ltrim(queryStr);
     queryStr = common::StringUtils::ltrimNewlines(queryStr);
     // LCOV_EXCL_START

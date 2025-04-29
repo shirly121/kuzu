@@ -1,4 +1,5 @@
 #include "planner/join_order/cost_model.h"
+#include <iostream>
 
 #include "common/constants.h"
 #include "planner/join_order/join_order_util.h"
@@ -23,9 +24,14 @@ uint64_t CostModel::computeHashJoinCost(const binder::expression_vector& joinNod
     uint64_t cost = 0ul;
     cost += probe.getCost();
     cost += build.getCost();
-    cost += probe.getCardinality();
-    cost += PlannerKnobs::BUILD_PENALTY *
-            JoinOrderUtil::getJoinKeysFlatCardinality(joinNodeIDs, build.getLastOperatorRef());
+    // cost += probe.getCardinality();
+    uint64_t flatCost = PlannerKnobs::BUILD_PENALTY *
+    JoinOrderUtil::getJoinKeysFlatCardinality(joinNodeIDs, build.getLastOperatorRef());
+    // std::cout << "flat cardinality: " << flatCost << std::endl << std::endl << std::endl;
+    cost += flatCost;
+    // cost += PlannerKnobs::BUILD_PENALTY * build.getCardinality();
+    // std::cout << "probe cost: " << probe.getCost() << " build cost: " << build.getCost()
+    //           << " flat cost: " << flatCost << " total cost:" << cost << std::endl;
     return cost;
 }
 

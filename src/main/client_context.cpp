@@ -1,3 +1,4 @@
+#include <fstream>
 #include "main/client_context.h"
 
 #include "binder/binder.h"
@@ -25,6 +26,8 @@
 #include "storage/buffer_manager/spiller.h"
 #include "storage/storage_manager.h"
 #include "transaction/transaction_context.h"
+#include <nlohmann/json.hpp>
+#include "main/plan_printer.h"
 
 #if defined(_WIN32)
 #include "common/windows_utils.h"
@@ -538,6 +541,16 @@ std::unique_ptr<QueryResult> ClientContext::executeNoLock(PreparedStatement* pre
                 const auto physicalPlan =
                     mapper.mapLogicalPlanToPhysical(preparedStatement->logicalPlan.get(),
                         preparedStatement->statementResult->getColumns());
+                // auto explainStr =
+                //     main::PlanPrinter::printPlanToJson(physicalPlan.get(), profiler.get());
+                // std::ofstream outfile("test.plan", std::ios::app);
+                // if (!outfile.is_open()) {
+                //     std::cerr << "无法打开文件进行写入" << std::endl << std::endl << std::endl;
+                // }
+                // outfile << "physical plan: \n" << explainStr.dump(4) << std::endl
+                //         << std::endl
+                //         << std::endl;
+                // outfile.close();
                 queryResult = std::make_unique<QueryResult>(preparedStatement->preparedSummary);
                 if (preparedStatement->isTransactionStatement()) {
                     resultFT = localDatabase->queryProcessor->execute(physicalPlan.get(),

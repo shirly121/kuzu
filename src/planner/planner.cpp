@@ -1,7 +1,13 @@
+#include <iostream>
+#include <fstream>
+
 #include "planner/planner.h"
 
 #include "binder/bound_explain.h"
 #include "main/client_context.h"
+#include "planner/operator/logical_plan_util.h"
+#include "planner/operator/persistent/logical_insert.h"
+#include "catalog/catalog_entry/rel_table_catalog_entry.h";
 
 using namespace kuzu::binder;
 using namespace kuzu::catalog;
@@ -59,11 +65,57 @@ Planner::Planner(main::ClientContext* clientContext) : clientContext{clientConte
     context = JoinOrderEnumeratorContext();
 }
 
+
+// void printLabelInfo(const std::vector<TableCatalogEntry*>& entries) {
+//     for (auto& entry : entries) {
+//         if (entry->getTableType() == TableType::NODE) {
+//             std::cout << entry->getTableID() << std::endl;
+//         } else if (entry->getTableType() == TableType::REL) {
+//             auto relTable = dynamic_cast<RelTableCatalogEntry*>(entry);
+//             std::cout << relTable->getTableID() << ", " << relTable->getSrcTableID() << ", " << relTable->getDstTableID() << std::endl;
+//         }
+//     }
+// }
+
 std::unique_ptr<LogicalPlan> Planner::getBestPlan(const BoundStatement& statement) {
     auto plan = std::make_unique<LogicalPlan>();
     switch (statement.getStatementType()) {
     case StatementType::QUERY: {
         plan = getBestPlan(planQuery(statement));
+        // auto insert = dynamic_cast<LogicalInsert*>(plan->getLastOperator().get());
+        // if (insert != nullptr) {
+        //     std::cout << "insert pattern is " << std::endl;
+        //     for (auto& info : insert->getInfos()) {
+        //         binder::Expression* expr = info.pattern.get();
+        //         RelExpression* relExpr = dynamic_cast<RelExpression*>(expr);
+        //         if (relExpr != nullptr) {
+        //             std::cout << relExpr->getSrcNode()->toString() << ", " << extend_string(relExpr->getExtendDirections().at(0)) << ", "<< relExpr->getDstNode()->toString() << std::endl;
+        //             printLabelInfo(relExpr->getEntries());
+        //         }
+        //     }
+        //     std::cout << "end of insert pattern" << std::endl;
+        // }
+        // LogicalInsert* child = nullptr;
+        // if (insert->getNumChildren() > 0) {
+        //     child = dynamic_cast<LogicalInsert*>(insert->getChild(0).get());
+        //     if (child != nullptr) {
+        //         std::cout << "child insert pattern is " << std::endl;
+        //         for (auto& info : child->getInfos()) {
+        //             binder::Expression* expr = info.pattern.get();
+        //             std::cout << (expr->dataType).toString() << "," << expr->getUniqueName() << ", " << expr->getAlias() << std::endl;
+        //         }
+        //         std::cout << "end of child insert pattern" << std::endl;
+        //     }
+    
+        // }
+
+        std::ofstream outfile("test.plan", std::ios::app);
+        if (!outfile.is_open()) {
+            std::cerr << "无法打开文件进行写入" << std::endl;
+        }
+        outfile << "After Best Plan: \n" << plan->toString() << std::endl << std::endl << std::endl;
+        outfile.close();
+        // std::cout << "best plan is \n" + planner::LogicalPlanUtil::encodeJoin(*plan) << std::endl;
     } break;
     case StatementType::CREATE_TABLE: {
         appendCreateTable(statement, *plan);

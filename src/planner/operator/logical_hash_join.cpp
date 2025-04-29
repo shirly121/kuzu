@@ -111,10 +111,26 @@ void LogicalHashJoin::computeFlatSchema() {
 }
 
 std::string LogicalHashJoin::getExpressionsForPrinting() const {
+    std::unordered_map<SemiMaskPosition, std::string> maskToStr = {
+        {SemiMaskPosition::NONE, "NONE"},
+        {SemiMaskPosition::ON_BUILD, "ON_BUILD"},
+        {SemiMaskPosition::ON_PROBE, "ON_PROBE"},
+        {SemiMaskPosition::PROHIBIT_PROBE_TO_BUILD, "PROHIBIT_PROBE_TO_BUILD"},
+        {SemiMaskPosition::PROHIBIT, "PROHIBIT"},
+    };
+
+    std::unordered_map<JoinType, std::string> joinToStr = {
+        {JoinType::INNER, "INNER"},
+        {JoinType::LEFT, "LEFT"},
+        {JoinType::COUNT, "COUNT"},
+        {JoinType::MARK, "MARK"},
+    };
+    
+    auto extra = ", SIP: " + maskToStr.at(getSIPInfo().position) + ", Join Type: " + joinToStr.at(joinType);
     if (isNodeIDOnlyJoin(joinConditions)) {
-        return binder::ExpressionUtil::toStringOrdered(getJoinNodeIDs());
+        return binder::ExpressionUtil::toStringOrdered(getJoinNodeIDs()).append(extra);
     }
-    return binder::ExpressionUtil::toString(joinConditions);
+    return binder::ExpressionUtil::toString(joinConditions).append(extra);
 }
 
 binder::expression_vector LogicalHashJoin::getExpressionsToMaterialize() const {

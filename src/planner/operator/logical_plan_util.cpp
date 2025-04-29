@@ -72,17 +72,17 @@ void LogicalPlanUtil::encodeCrossProduct(LogicalOperator* /*logicalOperator*/,
 
 void LogicalPlanUtil::encodeIntersect(LogicalOperator* logicalOperator, std::string& encodeString) {
     auto& logicalIntersect = logicalOperator->constCast<LogicalIntersect>();
-    encodeString += "I(" + logicalIntersect.getIntersectNodeID()->toString() + ")";
+    encodeString += "IIII(" + logicalIntersect.getIntersectNodeID()->toString() + ")IIII";
 }
 
 void LogicalPlanUtil::encodeHashJoin(LogicalOperator* logicalOperator, std::string& encodeString) {
     auto& logicalHashJoin = logicalOperator->constCast<LogicalHashJoin>();
-    encodeString += "HJ(" + logicalHashJoin.getExpressionsForPrinting() + ")";
+    encodeString += "HJJJ(" + logicalHashJoin.getExpressionsForPrinting() + ")HJJJ";
 }
 
 void LogicalPlanUtil::encodeExtend(LogicalOperator* logicalOperator, std::string& encodeString) {
     auto& logicalExtend = logicalOperator->constCast<LogicalExtend>();
-    encodeString += "E(" + logicalExtend.getNbrNode()->toString() + ")";
+    encodeString += "EEE(" + logicalExtend.getNbrNode()->toString() + ")EEE";
 }
 
 void LogicalPlanUtil::encodeScanNodeTable(LogicalOperator* logicalOperator,

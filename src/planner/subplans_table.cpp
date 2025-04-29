@@ -19,26 +19,27 @@ void SubgraphPlans::addPlan(std::unique_ptr<LogicalPlan> plan) {
         return;
     }
     auto planCode = encodePlan(*plan);
-    if (!encodedPlan2PlanIdx.contains(planCode)) {
+    // if (!encodedPlan2PlanIdx.contains(planCode)) {
         encodedPlan2PlanIdx.insert({planCode, plans.size()});
         if (maxCost == UINT64_MAX || plan->getCost() > maxCost) { // update max cost
             maxCost = plan->getCost();
         }
         plans.push_back(std::move(plan));
-    } else {
-        auto planIdx = encodedPlan2PlanIdx.at(planCode);
-        if (plan->getCost() < plans[planIdx]->getCost()) {
-            if (plans[planIdx]->getCost() == maxCost) { // update max cost
-                maxCost = 0;
-                for (auto& plan_ : plans) {
-                    if (plan_->getCost() > maxCost) {
-                        maxCost = plan_->getCost();
-                    }
-                }
-            }
-            plans[planIdx] = std::move(plan);
-        }
-    }
+    // } 
+    // else {
+    //     auto planIdx = encodedPlan2PlanIdx.at(planCode);
+    //     if (plan->getCost() < plans[planIdx]->getCost()) {
+    //         if (plans[planIdx]->getCost() == maxCost) { // update max cost
+    //             maxCost = 0;
+    //             for (auto& plan_ : plans) {
+    //                 if (plan_->getCost() > maxCost) {
+    //                     maxCost = plan_->getCost();
+    //                 }
+    //             }
+    //         }
+    //         plans[planIdx] = std::move(plan);
+    //     }
+    // }
 }
 
 std::bitset<MAX_NUM_QUERY_VARIABLES> SubgraphPlans::encodePlan(const LogicalPlan& plan) {

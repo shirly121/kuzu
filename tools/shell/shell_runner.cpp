@@ -148,7 +148,8 @@ int main(int argc, char* argv[]) {
         shellConfig.stats = false;
     }
 
-    auto databasePath = args::get(inputDirFlag);
+    // auto databasePath = args::get(inputDirFlag);
+    auto databasePath = "test2.db";
     std::shared_ptr<Database> database;
     std::shared_ptr<Connection> conn;
     try {
