@@ -68,7 +68,15 @@ public:
     void computeFlatSchema() override;
 
     std::string getExpressionsForPrinting() const override {
-        return nodeID->toString() + " " + binder::ExpressionUtil::toString(properties);
+        auto message = nodeID->toString() + " " + binder::ExpressionUtil::toString(properties);
+        auto extraInfo = getExtraInfo();
+        if (extraInfo != nullptr) {
+            auto pkExtraInfo = dynamic_cast<PrimaryKeyScanInfo*>(extraInfo);
+            if (pkExtraInfo != nullptr) {
+                message += " PK_SCAN(" + pkExtraInfo->key->toString() + ")"; 
+            }
+        }
+        return message;
     }
 
     LogicalScanNodeTableType getScanType() const { return scanType; }

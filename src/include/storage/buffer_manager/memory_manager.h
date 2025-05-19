@@ -73,6 +73,7 @@ class KUZU_API MemoryManager {
     friend class MemoryBuffer;
 
 public:
+    MemoryManager() = default;
     MemoryManager(BufferManager* bm, common::VirtualFileSystem* vfs);
 
     ~MemoryManager() = default;

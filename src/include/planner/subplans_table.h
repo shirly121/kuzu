@@ -37,7 +37,7 @@ private:
     std::bitset<binder::MAX_NUM_QUERY_VARIABLES> encodePlan(const LogicalPlan& plan);
 
 private:
-    constexpr static uint32_t MAX_NUM_PLANS = 1000;
+    constexpr static uint32_t MAX_NUM_PLANS = 10000;
 
 private:
     uint64_t maxCost = UINT64_MAX;

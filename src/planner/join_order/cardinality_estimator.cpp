@@ -167,18 +167,18 @@ static std::optional<cardinality_t> getTableStatsIfPossible(main::ClientContext*
     const Expression& predicate,
     const std::unordered_map<common::table_id_t, storage::TableStats>& nodeTableStats) {
     KU_ASSERT(predicate.getNumChildren() >= 1);
-    if (isSingleLabelledProperty(*predicate.getChild(0))) {
-        auto& propertyExpr = predicate.getChild(0)->cast<PropertyExpression>();
-        auto tableID = propertyExpr.getSingleTableID();
-        if (nodeTableStats.contains(tableID)) {
-            auto columnID = propertyExpr.getColumnID(
-                *context->getCatalog()->getTableCatalogEntry(context->getTransaction(), tableID));
-            if (columnID != INVALID_COLUMN_ID && columnID != ROW_IDX_COLUMN_ID) {
-                auto& stats = nodeTableStats.at(tableID);
-                return atLeastOne(stats.getNumDistinctValues(columnID));
-            }
-        }
-    }
+    // if (isSingleLabelledProperty(*predicate.getChild(0))) {
+    //     auto& propertyExpr = predicate.getChild(0)->cast<PropertyExpression>();
+    //     auto tableID = propertyExpr.getSingleTableID();
+    //     if (nodeTableStats.contains(tableID)) {
+    //         auto columnID = propertyExpr.getColumnID(
+    //             *context->getCatalog()->getTableCatalogEntry(context->getTransaction(), tableID));
+    //         if (columnID != INVALID_COLUMN_ID && columnID != ROW_IDX_COLUMN_ID) {
+    //             auto& stats = nodeTableStats.at(tableID);
+    //             return atLeastOne(stats.getNumDistinctValues(columnID));
+    //         }
+    //     }
+    // }
     return {};
 }
 

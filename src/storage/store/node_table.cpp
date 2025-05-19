@@ -214,8 +214,14 @@ bool NodeTableScanState::scanNext(Transaction* transaction) {
 }
 
 NodeTable::NodeTable(const StorageManager* storageManager,
-    const NodeTableCatalogEntry* nodeTableEntry, MemoryManager* memoryManager,
-    VirtualFileSystem* vfs, main::ClientContext* context, Deserializer* deSer)
+    const catalog::NodeTableCatalogEntry* nodeTableEntry)
+    : Table{nodeTableEntry, storageManager},
+      versionRecordHandler(this) {
+      }
+
+NodeTable::NodeTable(const StorageManager* storageManager,
+        const NodeTableCatalogEntry* nodeTableEntry, MemoryManager* memoryManager,
+        VirtualFileSystem* vfs, main::ClientContext* context, Deserializer* deSer)
     : Table{nodeTableEntry, storageManager, memoryManager},
       pkColumnID{nodeTableEntry->getColumnID(nodeTableEntry->getPrimaryKeyName())},
       versionRecordHandler(this) {

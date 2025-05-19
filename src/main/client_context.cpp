@@ -1,4 +1,6 @@
 #include <fstream>
+#include <nlohmann/json.hpp>
+
 #include "main/client_context.h"
 
 #include "binder/binder.h"
@@ -26,8 +28,8 @@
 #include "storage/buffer_manager/spiller.h"
 #include "storage/storage_manager.h"
 #include "transaction/transaction_context.h"
-#include <nlohmann/json.hpp>
 #include "main/plan_printer.h"
+
 
 #if defined(_WIN32)
 #include "common/windows_utils.h"
@@ -424,6 +426,7 @@ std::vector<std::shared_ptr<Statement>> ClientContext::parseQuery(std::string_vi
     std::vector<std::shared_ptr<Statement>> statements;
     auto parserTimer = TimeMetric(true /*enable*/);
     parserTimer.start();
+    // return a list of statements by parsing queries dotted by ';'
     auto parsedStatements = Parser::parseQuery(query);
     parserTimer.stop();
     const auto avgParsingTime = parserTimer.getElapsedTimeMS() / parsedStatements.size() / 1.0;
@@ -472,6 +475,7 @@ std::unique_ptr<PreparedStatement> ClientContext::prepareNoLock(
     prepareTimer.start();
     try {
         preparedStatement->preparedSummary.statementType = parsedStatement->getStatementType();
+        // analyze the query mode (read_only) by visiting statement
         auto readWriteAnalyzer = StatementReadWriteAnalyzer(this);
         TransactionHelper::runFuncInTransaction(
             *transactionContext, [&]() -> void { readWriteAnalyzer.visit(*parsedStatement); },
@@ -492,10 +496,10 @@ std::unique_ptr<PreparedStatement> ClientContext::prepareNoLock(
                 preparedStatement->parameterMap = binder.getParameterMap();
                 preparedStatement->statementResult = std::make_unique<BoundStatementResult>(
                     boundStatement->getStatementResult()->copy());
-                // planning
+                // planning: convert statement to logical operators, and find best join orders for each match statement
                 auto planner = Planner(this);
                 auto bestPlan = planner.getBestPlan(*boundStatement);
-                // optimizing
+                // optimizing: apply a series of heuristic rules
                 optimizer::Optimizer::optimize(bestPlan.get(), this,
                     planner.getCardinalityEstimator());
                 preparedStatement->logicalPlan = std::move(bestPlan);

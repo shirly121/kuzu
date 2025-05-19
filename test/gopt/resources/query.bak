@@ -1,0 +1,7 @@
+EXPLAIN MATCH 
+ (person1:PERSON)-[:ISLOCATEDIN]->(city1:PLACE)-[:ISPARTOF]->(country:PLACE),
+ (person2:PERSON)-[:ISLOCATEDIN]->(city2:PLACE)-[:ISPARTOF]->(country:PLACE),
+ (person3:PERSON)-[:ISLOCATEDIN]->(city3:PLACE)-[:ISPARTOF]->(country:PLACE),
+ (person1)-[:KNOWS]->(person2)-[:KNOWS]->(person3),
+ (person3)-[:KNOWS]->(person1) 
+RETURN count(country) AS count;

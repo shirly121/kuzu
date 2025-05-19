@@ -143,6 +143,10 @@ class LocalTable;
 class StorageManager;
 class KUZU_API Table {
 public:
+    Table(const catalog::TableCatalogEntry* tableEntry, const StorageManager* storageManager)
+        : tableType{tableEntry->getTableType()}, tableID{tableEntry->getTableID()},
+          tableName{tableEntry->getName()} {}
+
     Table(const catalog::TableCatalogEntry* tableEntry, const StorageManager* storageManager,
         MemoryManager* memoryManager);
     virtual ~Table() = default;

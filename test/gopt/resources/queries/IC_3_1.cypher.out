@@ -1,0 +1,48 @@
+PROJECTION[p2_id,p2_firstname,p2_lastname]
+HASH_JOIN[pl1._ID, SIP: ON_BUILD, Join Type: INNER]
+CHILD:
+    FLATTEN[]
+    FILTER[EQUALS(pl1.pl_name,Turkey)]
+    SCAN_NODE_TABLE[pl1._ID pl1.pl_name]
+CHILD:
+    SEMI_MASKER[pl1._ID]
+    PROJECTION[pl1._ID,p2_id,p2_firstname,p2_lastname]
+    EXTEND[m1-->pl1]
+    HASH_JOIN[m1._ID, SIP: ON_BUILD, Join Type: INNER]
+    CHILD:
+        FLATTEN[]
+        FILTER[LESS_THAN(m1.m_creationDate,1348066795431)]
+        FILTER[GREATER_THAN_EQUALS(m1.m_creationDate,1346770795431)]
+        SCAN_NODE_TABLE[m1._ID m1.m_creationDate]
+    CHILD:
+        SEMI_MASKER[m1._ID]
+        PROJECTION[m1._ID,p2_id,p2_firstname,p2_lastname]
+        EXTEND[p2<--m1]
+        HASH_JOIN[pl2._ID, SIP: ON_BUILD, Join Type: INNER]
+        CHILD:
+            FLATTEN[]
+            FILTER[EQUALS(pl2.pl_name,Turkey)]
+            SCAN_NODE_TABLE[pl2._ID pl2.pl_name]
+        CHILD:
+            SEMI_MASKER[pl2._ID]
+            PROJECTION[pl2._ID,p2_id,p2_firstname,p2_lastname,p2._ID]
+            EXTEND[m2-->pl2]
+            HASH_JOIN[m2._ID, SIP: ON_BUILD, Join Type: INNER]
+            CHILD:
+                FLATTEN[]
+                FILTER[LESS_THAN(m2.m_creationDate,1348066795431)]
+                FILTER[GREATER_THAN_EQUALS(m2.m_creationDate,1346770795431)]
+                SCAN_NODE_TABLE[m2._ID m2.m_creationDate]
+            CHILD:
+                SEMI_MASKER[m2._ID]
+                PROJECTION[p2_id,p2_firstname,p2_lastname,m2._ID,p2._ID]
+                EXTEND[p2<--m2]
+                HASH_JOIN[p2._ID, SIP: ON_BUILD, Join Type: INNER]
+                CHILD:
+                    FLATTEN[]
+                    SCAN_NODE_TABLE[p2._ID p2_lastname,p2_firstname,p2_id]
+                CHILD:
+                    SEMI_MASKER[p2._ID]
+                    PROJECTION[p2._ID]
+                    EXTEND[p1<-k1->p2]
+                    SCAN_NODE_TABLE[p1._ID p1.p_personid PK_SCAN(933)]

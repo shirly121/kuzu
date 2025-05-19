@@ -1,0 +1,19 @@
+PROJECTION[p2_id,p2_firstname,p2_lastname,c_messageid,c_content,c_creationdate]
+HASH_JOIN[c._ID, SIP: ON_BUILD, Join Type: INNER]
+CHILD:
+    FLATTEN[]
+    FILTER[LESS_THAN(c.m_creationDate,1342766586311)]
+    SCAN_NODE_TABLE[c._ID c_content,c_messageid,c.m_creationDate]
+CHILD:
+    SEMI_MASKER[c._ID]
+    PROJECTION[p2_id,p2_firstname,c._ID,p2_lastname]
+    EXTEND[p2<--c]
+    HASH_JOIN[p2._ID, SIP: ON_BUILD, Join Type: INNER]
+    CHILD:
+        FLATTEN[]
+        SCAN_NODE_TABLE[p2._ID p2_lastname,p2_firstname,p2_id]
+    CHILD:
+        SEMI_MASKER[p2._ID]
+        PROJECTION[p2._ID]
+        EXTEND[p1<-->p2]
+        SCAN_NODE_TABLE[p1._ID p1.p_personid PK_SCAN(933)]

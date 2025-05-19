@@ -142,6 +142,10 @@ std::unique_ptr<TableCatalogEntry> TableCatalogEntry::deserialize(Deserializer& 
     return result;
 }
 
+void TableCatalogEntry::setPropertyCollection(PropertyDefinitionCollection propertyCollection_) {
+    propertyCollection = std::move(propertyCollection_);
+}
+
 void TableCatalogEntry::copyFrom(const CatalogEntry& other) {
     CatalogEntry::copyFrom(other);
     auto& otherTable = ku_dynamic_cast<const TableCatalogEntry&>(other);

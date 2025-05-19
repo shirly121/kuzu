@@ -1,0 +1,12 @@
+PROJECTION[p1.p_personid]
+HASH_JOIN[p2._ID, SIP: ON_BUILD, Join Type: INNER]
+CHILD:
+    FLATTEN[]
+    FILTER[EQUALS(p2.p_firstName,XX)]
+    SCAN_NODE_TABLE[p2._ID p2.p_firstName]
+CHILD:
+    SEMI_MASKER[p2._ID]
+    PROJECTION[p2._ID,p1.p_personid]
+    FILTER[GREATER_THAN(k.k_creationDate,10000)]
+    EXTEND[p1-k->p2]
+    SCAN_NODE_TABLE[p1._ID p1.p_personid PK_SCAN(1)]

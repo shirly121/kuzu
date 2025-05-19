@@ -1,0 +1,3 @@
+PROJECTION[p1.p_personid]
+EXTEND[p1-k->p2]
+SCAN_NODE_TABLE[p1._ID p1.p_personid PK_SCAN(1)]

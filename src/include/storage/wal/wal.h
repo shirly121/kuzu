@@ -29,6 +29,7 @@ class WAL {
     friend class WALReplayer;
 
 public:
+    WAL();
     WAL(const std::string& directory, bool readOnly, common::VirtualFileSystem* vfs,
         main::ClientContext* context);
 

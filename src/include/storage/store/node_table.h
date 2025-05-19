@@ -103,8 +103,11 @@ private:
 
 class StorageManager;
 
-class KUZU_API NodeTable final : public Table {
+class KUZU_API NodeTable : public Table {
 public:
+    NodeTable() = default;
+    NodeTable(const StorageManager* storageManager,
+        const catalog::NodeTableCatalogEntry* nodeTableEntry);
     NodeTable(const StorageManager* storageManager,
         const catalog::NodeTableCatalogEntry* nodeTableEntry, MemoryManager* memoryManager,
         common::VirtualFileSystem* vfs, main::ClientContext* context,
@@ -193,7 +196,7 @@ public:
         return nodeGroups->getNodeGroupNoLock(nodeGroupIdx);
     }
 
-    TableStats getStats(const transaction::Transaction* transaction) const;
+    virtual TableStats getStats(const transaction::Transaction* transaction) const;
     // NOLINTNEXTLINE(readability-make-member-function-const): Semantically non-const.
     void mergeStats(const std::vector<common::column_id_t>& columnIDs, const TableStats& stats) {
         nodeGroups->mergeStats(columnIDs, stats);

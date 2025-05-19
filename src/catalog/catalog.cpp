@@ -38,18 +38,18 @@ Catalog::Catalog() : version{0} {
 }
 
 Catalog::Catalog(const std::string& directory, VirtualFileSystem* vfs) : version{0} {
-    const auto isInMemMode = main::DBConfig::isDBPathInMemory(directory);
-    if (!isInMemMode && vfs->fileOrPathExists(StorageUtils::getCatalogFilePath(vfs, directory,
-                            FileVersionType::ORIGINAL))) {
-        readFromFile(directory, vfs, FileVersionType::ORIGINAL);
-    } else {
-        initCatalogSets();
-        if (!isInMemMode) {
-            // TODO(Guodong): Ideally we should be able to remove this line. Revisit here.
-            saveToFile(directory, vfs, FileVersionType::ORIGINAL);
-        }
-    }
-    registerBuiltInFunctions();
+    // const auto isInMemMode = main::DBConfig::isDBPathInMemory(directory);
+    // if (!isInMemMode && vfs->fileOrPathExists(StorageUtils::getCatalogFilePath(vfs, directory,
+    //                         FileVersionType::ORIGINAL))) {
+    //     readFromFile(directory, vfs, FileVersionType::ORIGINAL);
+    // } else {
+    //     initCatalogSets();
+    //     if (!isInMemMode) {
+    //         // TODO(Guodong): Ideally we should be able to remove this line. Revisit here.
+    //         saveToFile(directory, vfs, FileVersionType::ORIGINAL);
+    //     }
+    // }
+    // registerBuiltInFunctions();
 }
 
 void Catalog::initCatalogSets() {

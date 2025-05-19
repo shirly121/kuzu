@@ -24,7 +24,7 @@ struct KUZU_API PropertyDefinition {
     std::unique_ptr<parser::ParsedExpression> defaultExpr;
 
     PropertyDefinition() = default;
-    explicit PropertyDefinition(ColumnDefinition columnDefinition);
+    // explicit PropertyDefinition(ColumnDefinition columnDefinition);
     PropertyDefinition(ColumnDefinition columnDefinition,
         std::unique_ptr<parser::ParsedExpression> defaultExpr)
         : columnDefinition{std::move(columnDefinition)}, defaultExpr{std::move(defaultExpr)} {}
@@ -41,6 +41,9 @@ struct KUZU_API PropertyDefinition {
 private:
     PropertyDefinition(const PropertyDefinition& other)
         : columnDefinition{other.columnDefinition.copy()}, defaultExpr{other.defaultExpr->copy()} {}
+
+public:
+    explicit PropertyDefinition(ColumnDefinition columnDefinition);
 };
 
 } // namespace binder

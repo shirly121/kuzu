@@ -45,6 +45,8 @@ public:
     void serialize(common::Serializer serializer) const;
     static std::unique_ptr<CatalogSet> deserialize(common::Deserializer& deserializer);
 
+    void emplaceNoLock(std::unique_ptr<CatalogEntry> entry);
+
 private:
     bool containsEntryNoLock(const transaction::Transaction* transaction,
         const std::string& name) const;
@@ -60,7 +62,6 @@ private:
     void validateNotExistNoLock(const transaction::Transaction* transaction,
         const std::string& name) const;
 
-    void emplaceNoLock(std::unique_ptr<CatalogEntry> entry);
     void eraseNoLock(const std::string& name);
 
     static std::unique_ptr<CatalogEntry> createDummyEntryNoLock(std::string name,

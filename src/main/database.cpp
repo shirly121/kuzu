@@ -75,6 +75,8 @@ static void getLockFileFlagsAndType(bool readOnly, bool createNew, int& flags, F
     lock = readOnly ? FileLockType::READ_LOCK : FileLockType::WRITE_LOCK;
 }
 
+Database::Database(const SystemConfig& systemConfig) : dbConfig{systemConfig} {}
+
 Database::Database(std::string_view databasePath, SystemConfig systemConfig)
     : dbConfig{systemConfig} {
     initMembers(databasePath);
@@ -105,6 +107,7 @@ void Database::initMembers(std::string_view dbPath, construct_bm_func_t initBmFu
     bufferManager = initBmFunc(*this);
     memoryManager = std::make_unique<MemoryManager>(bufferManager.get(), vfs.get());
     queryProcessor = std::make_unique<processor::QueryProcessor>(dbConfig.maxNumThreads);
+    // create schema
     catalog = std::make_unique<Catalog>(this->databasePath, vfs.get());
     storageManager = std::make_unique<StorageManager>(dbPathStr, dbConfig.readOnly, *catalog,
         *memoryManager, dbConfig.enableCompression, vfs.get(), &clientContext);

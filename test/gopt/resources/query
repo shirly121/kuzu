@@ -1,0 +1,1 @@
+MATCH (p1:person)-[k:knows]->(p2:person) Return p1.p_personid, k.k_creationDate;

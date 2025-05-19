@@ -69,6 +69,8 @@ public:
     binder::BoundCreateTableInfo getBoundCreateTableInfo(transaction::Transaction* transaction,
         bool isInternal) const;
 
+    void setPropertyCollection(PropertyDefinitionCollection propertyCollection_);
+
 protected:
     void copyFrom(const CatalogEntry& other) override;
     virtual std::unique_ptr<binder::BoundExtraCreateCatalogEntryInfo> getBoundExtraCreateInfo(

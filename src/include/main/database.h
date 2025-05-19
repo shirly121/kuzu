@@ -88,6 +88,7 @@ class Database {
     friend struct extension::ExtensionUtils;
 
 public:
+    Database(const SystemConfig &systemConfig);
     /**
      * @brief Creates a database object.
      * @param databasePath Database path. If left empty, or :memory: is specified, this will create
@@ -99,7 +100,7 @@ public:
     /**
      * @brief Destructs the database object.
      */
-    KUZU_API ~Database();
+    KUZU_API virtual ~Database();
 
     KUZU_API void registerFileSystem(std::unique_ptr<common::FileSystem> fs);
 
@@ -136,16 +137,18 @@ private:
     void openLockFile();
     void initAndLockDBDir();
 
+protected:
+    std::unique_ptr<catalog::Catalog> catalog;
+    std::unique_ptr<storage::StorageManager> storageManager;
+    std::unique_ptr<storage::MemoryManager> memoryManager;
+    std::unique_ptr<transaction::TransactionManager> transactionManager;
+
 private:
     std::string databasePath;
     DBConfig dbConfig;
     std::unique_ptr<common::VirtualFileSystem> vfs;
     std::unique_ptr<storage::BufferManager> bufferManager;
-    std::unique_ptr<storage::MemoryManager> memoryManager;
     std::unique_ptr<processor::QueryProcessor> queryProcessor;
-    std::unique_ptr<catalog::Catalog> catalog;
-    std::unique_ptr<storage::StorageManager> storageManager;
-    std::unique_ptr<transaction::TransactionManager> transactionManager;
     std::unique_ptr<common::FileInfo> lockFile;
     std::unique_ptr<DatabaseManager> databaseManager;
     std::unique_ptr<extension::ExtensionManager> extensionManager;

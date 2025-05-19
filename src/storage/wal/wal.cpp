@@ -17,6 +17,8 @@ using namespace kuzu::binder;
 namespace kuzu {
 namespace storage {
 
+WAL::WAL() = default;
+
 WAL::WAL(const std::string& directory, bool readOnly, VirtualFileSystem* vfs,
     main::ClientContext* context)
     : directory{directory}, vfs{vfs} {

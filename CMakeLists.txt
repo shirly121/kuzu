@@ -11,6 +11,13 @@ else()
     find_package(Threads REQUIRED)
 endif()
 
+## find yaml-cpp-----------------------------------------------------------------
+find_package(yaml-cpp REQUIRED)
+include_directories(SYSTEM ${yaml-cpp_INCLUDE_DIRS})
+if (NOT yaml-cpp_FOUND)
+    message(FATAL_ERROR "yaml-cpp not found, please install the yaml-cpp library")
+endif ()
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -298,14 +305,18 @@ function(add_kuzu_test TEST_NAME)
     if (TEST_NAME STREQUAL "e2e_test")
         gtest_discover_tests(${TEST_NAME}
             DISCOVERY_TIMEOUT 600
-            DISCOVERY_MODE PRE_TEST
+            # DISCOVERY_MODE PRE_TEST
+            DISCOVERY_MODE POST_BUILD
             TEST_PREFIX e2e_test_
         )
     else()
-        gtest_discover_tests(${TEST_NAME}
-            DISCOVERY_TIMEOUT 600
-            DISCOVERY_MODE PRE_TEST
-        )
+	    #    gtest_discover_tests(${TEST_NAME}
+            #    gtesDISCOVERY_TIMEOUT 600
+            #    gtes# DISCOVERY_MODE PRE_TEST
+            #    gtesDISCOVERY_MODE POST_BUILD
+	    #)
+	add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+	gtest_add_tests(TARGET ${TEST_NAME} TEST_LIST ${TEST_NAME}_tests)
     endif()
 endfunction()
 
@@ -372,6 +383,10 @@ include_directories(
 )
 
 add_subdirectory(src)
+
+include(CTest)
+enable_testing()
+
 if (${BUILD_TESTS} OR ${BUILD_EXTENSION_TESTS})
     add_subdirectory(test)
 elseif (${BUILD_BENCHMARK})

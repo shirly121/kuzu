@@ -90,7 +90,9 @@ void BaseGraphTest::createDBAndConn() {
     if (database != nullptr) {
         database.reset();
     }
+    // create database instance
     database = std::make_unique<Database>(databasePath, *systemConfig);
+    // create connection instances to interact with database
     conn = std::make_unique<Connection>(database.get());
     spdlog::set_level(spdlog::level::info);
 }

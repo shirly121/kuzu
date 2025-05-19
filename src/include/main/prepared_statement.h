@@ -45,18 +45,19 @@ public:
 
     KUZU_API ~PreparedStatement();
 
+    std::unique_ptr<planner::LogicalPlan> logicalPlan;
+    bool success = true;
+    std::string errMsg;
+
 private:
     bool isProfile() const;
 
 private:
-    bool success = true;
     bool readOnly = false;
     bool useInternalCatalogEntry = false;
-    std::string errMsg;
     PreparedSummary preparedSummary;
     std::unordered_map<std::string, std::shared_ptr<common::Value>> parameterMap;
     std::unique_ptr<binder::BoundStatementResult> statementResult;
-    std::unique_ptr<planner::LogicalPlan> logicalPlan;
     std::shared_ptr<parser::Statement> parsedStatement;
 };
 

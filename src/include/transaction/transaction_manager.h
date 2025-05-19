@@ -30,13 +30,13 @@ public:
     explicit TransactionManager(storage::WAL& wal)
         : wal{wal}, lastTransactionID{Transaction::START_TRANSACTION_ID}, lastTimestamp{1} {};
 
-    std::unique_ptr<Transaction> beginTransaction(main::ClientContext& clientContext,
+    virtual std::unique_ptr<Transaction> beginTransaction(main::ClientContext& clientContext,
         TransactionType type);
 
-    void commit(main::ClientContext& clientContext);
-    void rollback(main::ClientContext& clientContext, Transaction* transaction);
+    virtual void commit(main::ClientContext& clientContext);
+    virtual void rollback(main::ClientContext& clientContext, Transaction* transaction);
 
-    void checkpoint(main::ClientContext& clientContext);
+    virtual void checkpoint(main::ClientContext& clientContext);
 
 private:
     bool canAutoCheckpoint(const main::ClientContext& clientContext) const;

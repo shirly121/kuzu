@@ -487,9 +487,9 @@ void Planner::planWCOJoin(const SubqueryGraph& subgraph,
             appendFilter(predicate, *leftPlanCopy);
         }
         context.subPlansTable->addPlan(newSubgraph, std::move(leftPlanCopy));
-        // std::cout << "planWCOJoin: " << std::endl << leftPlan->toString() << std::endl
-        //           << std::endl
-        //           << std::endl;
+        std::cout << "planWCOJoin: " << std::endl << leftPlan->toString() << std::endl
+                  << std::endl
+                  << std::endl;
     }
 }
 
@@ -515,6 +515,9 @@ static bool needPruneImplicitJoins(const SubqueryGraph& leftSubgraph,
 void Planner::planInnerJoin(uint32_t leftLevel, uint32_t rightLevel) {
     std::cout << "planInnerJoin: leftLevel=" << leftLevel << ", rightLevel=" << rightLevel
               << std::endl << std::endl << std::endl;
+    if (leftLevel == 1 && rightLevel == 14) {
+        std::cout << "enter here" << std::endl;
+    }
     KU_ASSERT(leftLevel <= rightLevel);
     for (auto& rightSubgraph : context.subPlansTable->getSubqueryGraphs(rightLevel)) {
         for (auto& nbrSubgraph : rightSubgraph.getNbrSubgraphs(leftLevel)) {

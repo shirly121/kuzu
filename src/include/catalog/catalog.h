@@ -234,9 +234,9 @@ private:
 
 protected:
     std::unique_ptr<CatalogSet> tables;
+    std::unique_ptr<CatalogSet> relGroups;
 
 private:
-    std::unique_ptr<CatalogSet> relGroups;
     std::unique_ptr<CatalogSet> sequences;
     std::unique_ptr<CatalogSet> functions;
     std::unique_ptr<CatalogSet> types;
