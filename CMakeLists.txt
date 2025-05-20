@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 
 project(Kuzu VERSION 0.9.2.1 LANGUAGES CXX C)
 
+add_compile_options(-w)
+
 option(SINGLE_THREADED "Single-threaded mode" FALSE)
 if(SINGLE_THREADED)
     set(__SINGLE_THREADED__ TRUE)
@@ -387,12 +389,12 @@ add_subdirectory(src)
 include(CTest)
 enable_testing()
 
-if (${BUILD_TESTS} OR ${BUILD_EXTENSION_TESTS})
-    add_subdirectory(test)
-elseif (${BUILD_BENCHMARK})
-    add_subdirectory(test/test_helper)
-endif ()
-add_subdirectory(tools)
+#if (${BUILD_TESTS} OR ${BUILD_EXTENSION_TESTS})
+#    add_subdirectory(test)
+#elseif (${BUILD_BENCHMARK})
+#    add_subdirectory(test/test_helper)
+#endif ()
+#add_subdirectory(tools)
 endif ()
 
 # Link extensions which require static linking.

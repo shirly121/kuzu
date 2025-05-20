@@ -10,6 +10,7 @@
 using namespace kuzu::common;
 using namespace kuzu::planner;
 using namespace kuzu::binder;
+using namespace kuzu::main;
 
 namespace kuzu {
 namespace processor {
@@ -29,21 +30,9 @@ std::unique_ptr<PhysicalOperator> PlanMapper::mapExplain(const LogicalOperator* 
         return std::make_unique<Profile>(outputPosition, ProfileInfo{}, ProfileLocalState{},
             getOperatorID(), std::move(lastPhysicalOP), std::move(printInfo));
     }
-    if (logicalExplain.getExplainType() == ExplainType::PHYSICAL_PLAN) {
-        auto physicalPlanToExplain = std::make_unique<PhysicalPlan>(std::move(lastPhysicalOP));
-        auto profiler = std::make_unique<Profiler>();
-        auto explainStr =
-            main::PlanPrinter::printPlanToOstream(physicalPlanToExplain.get(), profiler.get())
-                .str();
-        auto factorizedTable = FactorizedTableUtils::getFactorizedTableForOutputMsg(explainStr,
-            clientContext->getMemoryManager());
-        return createFTableScanAligned(expression_vector{outputExpression}, outSchema,
-            factorizedTable, DEFAULT_VECTOR_CAPACITY /* maxMorselSize */);
-    }
-    auto logicalPlanToExplain = std::make_unique<LogicalPlan>();
-    logicalPlanToExplain->setLastOperator(lastLogicalOP);
-    auto explainStr = main::PlanPrinter::printPlanToOstream(logicalPlanToExplain.get()).str();
-    auto factorizedTable = FactorizedTableUtils::getFactorizedTableForOutputMsg(explainStr,
+    // Mock implementation: return empty string for all explain types
+    std::string emptyStr;
+    auto factorizedTable = FactorizedTableUtils::getFactorizedTableForOutputMsg(emptyStr,
         clientContext->getMemoryManager());
     return createFTableScanAligned(expression_vector{outputExpression}, outSchema, factorizedTable,
         DEFAULT_VECTOR_CAPACITY /* maxMorselSize */);

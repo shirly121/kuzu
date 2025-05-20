@@ -952,19 +952,7 @@ ArrowArray ArrowRowBatch::toArray() {
 }
 
 ArrowArray ArrowRowBatch::append(main::QueryResult& queryResult, std::int64_t chunkSize) {
-    std::int64_t numTuplesInBatch = 0;
-    auto numColumns = queryResult.getColumnNames().size();
-    while (numTuplesInBatch < chunkSize) {
-        if (!queryResult.hasNext()) {
-            break;
-        }
-        auto tuple = queryResult.getNext();
-        for (auto i = 0u; i < numColumns; i++) {
-            appendValue(vectors[i].get(), types[i], tuple->getValue(i));
-        }
-        numTuplesInBatch++;
-    }
-    numTuples += numTuplesInBatch;
+    // Mock implementation: return empty array
     return toArray();
 }
 

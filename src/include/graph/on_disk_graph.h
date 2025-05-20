@@ -12,9 +12,12 @@
 #include "graph.h"
 #include "graph_entry.h"
 #include "main/client_context.h"
-#include "processor/operator/filtering_operator.h"
 #include "storage/store/node_table.h"
 #include "storage/store/rel_table.h"
+#include "binder/expression/expression.h"
+#include "common/enums/extend_direction.h"
+#include "common/enums/path_semantic.h"
+#include "function/gds/gds_state.h"
 
 namespace kuzu {
 namespace storage {
@@ -34,52 +37,22 @@ public:
         bool randomLookup = false);
 
     Chunk getChunk() override {
+        // Mock implementation to avoid dependency on currentIter
         std::vector<common::ValueVector*> vectors;
         for (auto& propertyVector : propertyVectors) {
             vectors.push_back(propertyVector.get());
         }
-        return createChunk(currentIter->getNbrNodes(), currentIter->getSelVectorUnsafe(), vectors);
+        common::SelectionVector selVector;
+        return createChunk(std::span<const common::nodeID_t>(), selVector, vectors);
     }
-    bool next() override;
+    bool next() override {
+        // Mock implementation to avoid dependency on currentIter
+        return false;
+    }
 
-    void startScan(common::RelDataDirection direction);
-
-    class InnerIterator : public processor::SelVectorOverWriter {
-    public:
-        InnerIterator(const main::ClientContext* context, storage::RelTable* relTable,
-            std::unique_ptr<storage::RelTableScanState> tableScanState);
-
-        DELETE_COPY_DEFAULT_MOVE(InnerIterator);
-
-        std::span<const common::nodeID_t> getNbrNodes() const {
-            RUNTIME_CHECK(for (size_t i = 0; i < getSelVector().getSelSize(); i++) {
-                KU_ASSERT(
-                    getSelVector().getSelectedPositions()[i] < common::DEFAULT_VECTOR_CAPACITY);
-            });
-            return std::span(&dstVector().getValue<const common::nodeID_t>(0),
-                common::DEFAULT_VECTOR_CAPACITY);
-        }
-
-        common::SelectionVector& getSelVectorUnsafe() {
-            return tableScanState->outState->getSelVectorUnsafe();
-        }
-
-        const common::SelectionVector& getSelVector() const {
-            return tableScanState->outState->getSelVector();
-        }
-
-        bool next(evaluator::ExpressionEvaluator* predicate, common::SemiMask* nbrNodeMask);
-        void initScan() const;
-
-        common::RelDataDirection getDirection() const { return tableScanState->direction; }
-
-    private:
-        common::ValueVector& dstVector() const { return *tableScanState->outputVectors[0]; }
-
-        const main::ClientContext* context;
-        storage::RelTable* relTable;
-        std::unique_ptr<storage::RelTableScanState> tableScanState;
-    };
+    void startScan(common::RelDataDirection direction) {
+        // Mock implementation to avoid dependency on directedIterators
+    }
 
 private:
     std::unique_ptr<common::ValueVector> srcNodeIDVector;
@@ -88,9 +61,6 @@ private:
 
     std::unique_ptr<evaluator::ExpressionEvaluator> relPredicateEvaluator;
     common::SemiMask* nbrNodeMask = nullptr;
-
-    std::vector<InnerIterator> directedIterators;
-    InnerIterator* currentIter = nullptr;
 };
 
 class OnDiskGraphVertexScanState final : public VertexScanState {

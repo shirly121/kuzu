@@ -182,7 +182,7 @@ std::string ClientContext::getDatabasePath() const {
 }
 
 TaskScheduler* ClientContext::getTaskScheduler() const {
-    return localDatabase->queryProcessor->getTaskScheduler();
+    return nullptr;
 }
 
 DatabaseManager* ClientContext::getDatabaseManager() const {
@@ -545,24 +545,12 @@ std::unique_ptr<QueryResult> ClientContext::executeNoLock(PreparedStatement* pre
                 const auto physicalPlan =
                     mapper.mapLogicalPlanToPhysical(preparedStatement->logicalPlan.get(),
                         preparedStatement->statementResult->getColumns());
-                // auto explainStr =
-                //     main::PlanPrinter::printPlanToJson(physicalPlan.get(), profiler.get());
-                // std::ofstream outfile("test.plan", std::ios::app);
-                // if (!outfile.is_open()) {
-                //     std::cerr << "无法打开文件进行写入" << std::endl << std::endl << std::endl;
-                // }
-                // outfile << "physical plan: \n" << explainStr.dump(4) << std::endl
-                //         << std::endl
-                //         << std::endl;
-                // outfile.close();
                 queryResult = std::make_unique<QueryResult>(preparedStatement->preparedSummary);
                 if (preparedStatement->isTransactionStatement()) {
-                    resultFT = localDatabase->queryProcessor->execute(physicalPlan.get(),
-                        executionContext.get());
+                    resultFT = nullptr;
                 } else {
                     getTransaction()->checkForceCheckpoint(preparedStatement->getStatementType());
-                    resultFT = localDatabase->queryProcessor->execute(physicalPlan.get(),
-                        executionContext.get());
+                    resultFT = nullptr;
                 }
             },
             preparedStatement->isReadOnly(), preparedStatement->isTransactionStatement(),
@@ -578,7 +566,7 @@ std::unique_ptr<QueryResult> ClientContext::executeNoLock(PreparedStatement* pre
     queryResult->querySummary->executionTime = executingTimer.getElapsedTimeMS();
     const auto sResult = preparedStatement->statementResult.get();
     queryResult->setColumnHeader(sResult->getColumnNames(), sResult->getColumnTypes());
-    queryResult->initResultTableAndIterator(std::move(resultFT));
+    // queryResult->initResultTableAndIterator(std::move(resultFT));
     return queryResult;
 }
 

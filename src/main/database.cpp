@@ -1,3 +1,4 @@
+#include <thread>
 #include "main/database.h"
 
 #include "extension/extension_manager.h"
@@ -14,7 +15,6 @@
 #include "common/exception/exception.h"
 #include "common/file_system/virtual_file_system.h"
 #include "main/db_config.h"
-#include "processor/processor.h"
 #include "storage/storage_extension.h"
 #include "storage/storage_manager.h"
 #include "transaction/transaction_manager.h"
@@ -106,7 +106,6 @@ void Database::initMembers(std::string_view dbPath, construct_bm_func_t initBmFu
     initAndLockDBDir();
     bufferManager = initBmFunc(*this);
     memoryManager = std::make_unique<MemoryManager>(bufferManager.get(), vfs.get());
-    queryProcessor = std::make_unique<processor::QueryProcessor>(dbConfig.maxNumThreads);
     // create schema
     catalog = std::make_unique<Catalog>(this->databasePath, vfs.get());
     storageManager = std::make_unique<StorageManager>(dbPathStr, dbConfig.readOnly, *catalog,

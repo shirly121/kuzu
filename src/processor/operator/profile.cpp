@@ -4,6 +4,7 @@
 #include "processor/execution_context.h"
 
 using namespace kuzu::common;
+using namespace kuzu::main;
 
 namespace kuzu {
 namespace processor {
@@ -13,19 +14,7 @@ void Profile::initLocalStateInternal(ResultSet* resultSet, ExecutionContext* /*c
 }
 
 bool Profile::getNextTuplesInternal(ExecutionContext* context) {
-    if (localState.hasExecuted) {
-        return false;
-    }
-    localState.hasExecuted = true;
-    ku_string_t profileStr;
-    const auto planInString =
-        main::PlanPrinter::printPlanToOstream(info.physicalPlan, context->profiler).str();
-    StringVector::addString(outputVector, profileStr, planInString.c_str(), planInString.length());
-    auto& selVector = outputVector->state->getSelVectorUnsafe();
-    selVector.setSelSize(1);
-    outputVector->setValue<ku_string_t>(selVector[0], profileStr);
-    metrics->numOutputTuple.incrementByOne();
-    return true;
+    return false;
 }
 
 } // namespace processor

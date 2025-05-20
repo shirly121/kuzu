@@ -148,7 +148,6 @@ private:
     DBConfig dbConfig;
     std::unique_ptr<common::VirtualFileSystem> vfs;
     std::unique_ptr<storage::BufferManager> bufferManager;
-    std::unique_ptr<processor::QueryProcessor> queryProcessor;
     std::unique_ptr<common::FileInfo> lockFile;
     std::unique_ptr<DatabaseManager> databaseManager;
     std::unique_ptr<extension::ExtensionManager> extensionManager;

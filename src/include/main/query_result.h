@@ -5,8 +5,8 @@
 #include "common/api.h"
 #include "common/arrow/arrow.h"
 #include "common/types/types.h"
+#include "common/types/value/value.h"
 #include "kuzu_fwd.h"
-#include "processor/result/flat_tuple.h"
 #include "query_summary.h"
 
 namespace kuzu {
@@ -94,24 +94,11 @@ public:
     KUZU_API QueryResult* getNextQueryResult();
 
     std::unique_ptr<QueryResult> nextQueryResult;
-    /**
-     * @return next flat tuple in the query result. Note that to reduce resource allocation, all
-     * calls to getNext() reuse the same FlatTuple object. Since its contents will be overwritten,
-     * please complete processing a FlatTuple or make a copy of its data before calling getNext()
-     * again.
-     */
-    KUZU_API std::shared_ptr<processor::FlatTuple> getNext();
+
     /**
      * @return string of first query result.
      */
     KUZU_API std::string toString() const;
-
-    /**
-     * @brief Resets the result tuple iterator.
-     */
-    KUZU_API void resetIterator();
-
-    processor::FactorizedTable* getTable() { return factorizedTable.get(); }
 
     /**
      * @brief Returns the arrow schema of the query result.
@@ -138,10 +125,7 @@ public:
 private:
     void setColumnHeader(std::vector<std::string> columnNames,
         std::vector<common::LogicalType> columnTypes);
-    void initResultTableAndIterator(std::shared_ptr<processor::FactorizedTable> factorizedTable_);
     void validateQuerySucceed() const;
-    std::pair<std::unique_ptr<processor::FlatTuple>, std::unique_ptr<processor::FlatTupleIterator>>
-    getIterator() const;
 
 private:
     // execution status
@@ -151,10 +135,6 @@ private:
     // header information
     std::vector<std::string> columnNames;
     std::vector<common::LogicalType> columnDataTypes;
-    // data
-    std::shared_ptr<processor::FactorizedTable> factorizedTable;
-    std::unique_ptr<processor::FlatTupleIterator> iterator;
-    std::shared_ptr<processor::FlatTuple> tuple;
 
     // execution statistics
     std::unique_ptr<QuerySummary> querySummary;

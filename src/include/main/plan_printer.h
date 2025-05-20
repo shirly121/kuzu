@@ -36,23 +36,13 @@ private:
 
 class OpProfileTree {
 public:
-    OpProfileTree(const processor::PhysicalOperator* op, common::Profiler& profiler);
-
     explicit OpProfileTree(const planner::LogicalOperator* op);
-
-    std::ostringstream printPlanToOstream() const;
 
     std::ostringstream printLogicalPlanToOstream() const;
 
 private:
-    static void calculateNumRowsAndColsForOp(const processor::PhysicalOperator* op,
-        uint32_t& numRows, uint32_t& numCols);
-
     static void calculateNumRowsAndColsForOp(const planner::LogicalOperator* op, uint32_t& numRows,
         uint32_t& numCols);
-
-    uint32_t fillOpProfileBoxes(const processor::PhysicalOperator* op, uint32_t rowIdx,
-        uint32_t colIdx, uint32_t& maxFieldWidth, common::Profiler& profiler);
 
     uint32_t fillOpProfileBoxes(const planner::LogicalOperator* op, uint32_t rowIdx,
         uint32_t colIdx, uint32_t& maxFieldWidth);
@@ -98,21 +88,12 @@ private:
 };
 
 struct PlanPrinter {
-    static nlohmann::json printPlanToJson(const processor::PhysicalPlan* physicalPlan,
-        common::Profiler* profiler);
-    static std::ostringstream printPlanToOstream(const processor::PhysicalPlan* physicalPlan,
-        common::Profiler* profiler);
-    static std::string getOperatorName(const processor::PhysicalOperator* physicalOperator);
-    static std::string getOperatorParams(const processor::PhysicalOperator* physicalOperator);
-
     static nlohmann::json printPlanToJson(const planner::LogicalPlan* logicalPlan);
     static std::ostringstream printPlanToOstream(const planner::LogicalPlan* logicalPlan);
     static std::string getOperatorName(const planner::LogicalOperator* logicalOperator);
     static std::string getOperatorParams(const planner::LogicalOperator* logicalOperator);
 
 private:
-    static nlohmann::json toJson(const processor::PhysicalOperator* physicalOperator,
-        common::Profiler& profiler_);
     static nlohmann::json toJson(const planner::LogicalOperator* logicalOperator);
 };
 
