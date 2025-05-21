@@ -34,22 +34,26 @@ using get_file_idx_func_t = std::function<common::idx_t(const CopyFromFileError&
 
 class KUZU_API WarningContext {
 public:
-    explicit WarningContext(main::ClientConfig* clientConfig);
+    explicit WarningContext(main::ClientConfig* clientConfig) {}
 
-    void appendWarningMessages(const std::vector<CopyFromFileError>& messages);
+    void appendWarningMessages(const std::vector<CopyFromFileError>& messages) {}
 
     void populateWarnings(uint64_t queryID, populate_func_t populateFunc = {},
-        get_file_idx_func_t getFileIdxFunc = {});
-    void defaultPopulateAllWarnings(uint64_t queryID);
+        get_file_idx_func_t getFileIdxFunc = {}) {}
 
-    const std::vector<WarningInfo>& getPopulatedWarnings() const;
-    uint64_t getWarningCount(uint64_t queryID);
-    void clearPopulatedWarnings();
+    void defaultPopulateAllWarnings(uint64_t queryID) {}
 
-    void setIgnoreErrorsForCurrentQuery(bool ignoreErrors);
+    const std::vector<WarningInfo>& getPopulatedWarnings() const {
+        return {};
+    }
+
+    uint64_t getWarningCount(uint64_t queryID) { return 0; }
+    void clearPopulatedWarnings() {}
+
+    void setIgnoreErrorsForCurrentQuery(bool ignoreErrors) {}
     // NOTE: this function only works if the logical operator is COPY FROM
     // for other operators setIgnoreErrorsForCurrentQuery() is not called
-    bool getIgnoreErrorsOption() const;
+    bool getIgnoreErrorsOption() const { return false; }
 
 private:
     std::mutex mtx;

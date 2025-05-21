@@ -57,15 +57,15 @@ void ProjectionPushDownOptimizer::visitPathPropertyProbe(LogicalOperator* op) {
     pathPropertyProbe.setJoinType(planner::RecursiveJoinType::TRACK_NONE);
     auto extend = child->ptrCast<LogicalRecursiveExtend>();
     auto functionName = extend->getFunction().getFunctionName();
-    if (functionName == VarLenJoinsFunction::name) {
-        extend->getBindDataUnsafe().writePath = false;
-    } else if (functionName == SingleSPPathsFunction::name) {
-        extend->setFunction(SingleSPDestinationsFunction::getAlgorithm());
-    } else if (functionName == AllSPPathsFunction::name) {
-        extend->setFunction(AllSPDestinationsFunction::getAlgorithm());
-    } else if (functionName == WeightedSPPathsFunction::name) {
-        extend->setFunction(WeightedSPDestinationsFunction::getAlgorithm());
-    }
+    // if (functionName == VarLenJoinsFunction::name) {
+    //     extend->getBindDataUnsafe().writePath = false;
+    // } else if (functionName == SingleSPPathsFunction::name) {
+    //     extend->setFunction(SingleSPDestinationsFunction::getAlgorithm());
+    // } else if (functionName == AllSPPathsFunction::name) {
+    //     extend->setFunction(AllSPDestinationsFunction::getAlgorithm());
+    // } else if (functionName == WeightedSPPathsFunction::name) {
+    //     extend->setFunction(WeightedSPDestinationsFunction::getAlgorithm());
+    // }
     extend->setResultColumns(extend->getFunction().getResultColumns(extend->getBindData()));
 }
 

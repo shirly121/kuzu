@@ -297,11 +297,15 @@ endif()
 function(add_kuzu_test TEST_NAME)
     set(SRCS ${ARGN})
     add_executable(${TEST_NAME} ${SRCS})
-    target_link_libraries(${TEST_NAME} PRIVATE test_helper test_runner graph_test)
-    if (ENABLE_BACKTRACES)
-        target_link_libraries(${TEST_NAME} PRIVATE register_backtrace_signal_handler)
-    endif()
-    target_include_directories(${TEST_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/test/include)
+    #target_link_libraries(${TEST_NAME} PRIVATE test_helper test_runner graph_test)
+    #if (ENABLE_BACKTRACES)
+    #    target_link_libraries(${TEST_NAME} PRIVATE register_backtrace_signal_handler)
+    #endif()
+    #target_include_directories(${TEST_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/test/include)
+
+    target_link_libraries(${TEST_NAME} PUBLIC GTest::GTest kuzu)
+    target_include_directories(${TEST_NAME} PRIVATE src/include)
+
     include(GoogleTest)
 
     if (TEST_NAME STREQUAL "e2e_test")
@@ -388,6 +392,8 @@ add_subdirectory(src)
 
 include(CTest)
 enable_testing()
+
+add_subdirectory(test)
 
 #if (${BUILD_TESTS} OR ${BUILD_EXTENSION_TESTS})
 #    add_subdirectory(test)

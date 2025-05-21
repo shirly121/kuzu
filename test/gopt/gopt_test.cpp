@@ -62,13 +62,16 @@ TEST(GOptTest, GCataLog) {
 }
 
 TEST(GOptTest, GStorageManager) {
-    std::string schemaPath = getEnvVarOrDefault("schema", "/workspaces/kuzu/test/gopt/resources/ldbc_relgo_schema2.yaml");
-    std::string statsPath = getEnvVarOrDefault("stats", "/workspaces/kuzu/test/gopt/resources/ldbc_relgo_stats.json");
+    std::string schemaPath = getEnvVarOrDefault("schema",
+        "/workspaces/kuzu/test/gopt/resources/ldbc_relgo_schema2.yaml");
+    std::string statsPath =
+        getEnvVarOrDefault("stats", "/workspaces/kuzu/test/gopt/resources/ldbc_relgo_stats.json");
     kuzu::main::SystemConfig sysConfig;
     sysConfig.readOnly = true;
     auto database = std::make_unique<kuzu::main::GDatabase>(schemaPath, statsPath, sysConfig);
     auto ctx = std::make_unique<kuzu::main::ClientContext>(database.get());
-    std::string queryPath = getEnvVarOrDefault("query", "/workspaces/kuzu/test/gopt/resources/query");
+    std::string queryPath =
+        getEnvVarOrDefault("query", "/workspaces/kuzu/test/gopt/resources/query");
     if (std::filesystem::is_directory(queryPath)) {
         for (auto& query : std::filesystem::directory_iterator(queryPath)) {
             if (query.is_regular_file()) {
@@ -89,7 +92,7 @@ TEST(GOptTest, GStorageManager) {
                 }
             }
         }
-    } else if (std::filesystem::is_regular_file(queryPath)){
+    } else if (std::filesystem::is_regular_file(queryPath)) {
         std::string path = queryPath;
         std::cout << "start to plan queries" << std::endl;
         auto statement = ctx->prepare(readString(path));
