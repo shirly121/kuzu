@@ -9,12 +9,12 @@ namespace gds_extension {
 using namespace extension;
 
 void GdsExtension::load(main::ClientContext* context) {
-    auto& db = *context->getDatabase();
-    extension::ExtensionUtils::addTableFunc<SCCFunction>(db);
-    extension::ExtensionUtils::addTableFunc<SCCKosarajuFunction>(db);
-    extension::ExtensionUtils::addTableFunc<WeaklyConnectedComponentsFunction>(db);
-    extension::ExtensionUtils::addTableFunc<PageRankFunction>(db);
-    extension::ExtensionUtils::addTableFunc<KCoreDecompositionFunction>(db);
+    // auto& db = *context->getDatabase();
+    // extension::ExtensionUtils::addTableFunc<SCCFunction>(db);
+    // extension::ExtensionUtils::addTableFunc<SCCKosarajuFunction>(db);
+    // extension::ExtensionUtils::addTableFunc<WeaklyConnectedComponentsFunction>(db);
+    // extension::ExtensionUtils::addTableFunc<PageRankFunction>(db);
+    // extension::ExtensionUtils::addTableFunc<KCoreDecompositionFunction>(db);
 }
 
 } // namespace gds_extension

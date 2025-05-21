@@ -4,6 +4,7 @@
 #include "function/table/bind_data.h"
 #include "graph/graph.h"
 #include "graph/graph_entry.h"
+// todo: remove include path
 #include "processor/result/factorized_table_pool.h"
 
 namespace kuzu {
@@ -40,16 +41,21 @@ struct KUZU_API GDSBindData : public TableFuncBindData {
         std::unique_ptr<GDSOptionalParams> optionalParams = nullptr)
         : TableFuncBindData{std::move(columns)}, graphEntry{graphEntry.copy()},
           nodeOutput{std::move(nodeOutput)}, optionalParams{std::move(optionalParams)} {}
+    // GDSBindData(const GDSBindData& other)
+    //     : TableFuncBindData{other}, graphEntry{other.graphEntry.copy()},
+    //       nodeOutput{other.nodeOutput},
+    //       optionalParams{other.optionalParams == nullptr ? nullptr : other.optionalParams->copy()},
+    //       resultTable{other.resultTable} {}
+
     GDSBindData(const GDSBindData& other)
         : TableFuncBindData{other}, graphEntry{other.graphEntry.copy()},
           nodeOutput{other.nodeOutput},
-          optionalParams{other.optionalParams == nullptr ? nullptr : other.optionalParams->copy()},
-          resultTable{other.resultTable} {}
+          optionalParams{other.optionalParams == nullptr ? nullptr : other.optionalParams->copy()} {}
 
-    void setResultFTable(std::shared_ptr<processor::FactorizedTable> table) {
-        resultTable = std::move(table);
-    }
-    std::shared_ptr<processor::FactorizedTable> getResultTable() const { return resultTable; }
+    // void setResultFTable(std::shared_ptr<processor::FactorizedTable> table) {
+    //     resultTable = std::move(table);
+    // }
+    // std::shared_ptr<processor::FactorizedTable> getResultTable() const { return resultTable; }
 
     std::unique_ptr<GDSConfig> getConfig() const { return optionalParams->getConfig(); }
 
@@ -58,21 +64,24 @@ struct KUZU_API GDSBindData : public TableFuncBindData {
     }
 
 private:
-    std::shared_ptr<processor::FactorizedTable> resultTable;
+    // std::shared_ptr<processor::FactorizedTable> resultTable;
 };
 
 struct KUZU_API GDSFuncSharedState : public TableFuncSharedState {
     std::unique_ptr<graph::Graph> graph;
 
-    GDSFuncSharedState(std::shared_ptr<processor::FactorizedTable> fTable,
-        std::unique_ptr<graph::Graph> graph)
-        : TableFuncSharedState{}, graph{std::move(graph)}, factorizedTablePool{std::move(fTable)} {}
+    // GDSFuncSharedState(std::shared_ptr<processor::FactorizedTable> fTable,
+    //     std::unique_ptr<graph::Graph> graph)
+    //     : TableFuncSharedState{}, graph{std::move(graph)}, factorizedTablePool{std::move(fTable)} {}
+
+    GDSFuncSharedState(std::unique_ptr<graph::Graph> graph)
+        : TableFuncSharedState{}, graph{std::move(graph)} {}
 
     void setGraphNodeMask(std::unique_ptr<common::NodeOffsetMaskMap> maskMap);
     common::NodeOffsetMaskMap* getGraphNodeMaskMap() const { return graphNodeMask.get(); }
 
 public:
-    processor::FactorizedTablePool factorizedTablePool;
+    // processor::FactorizedTablePool factorizedTablePool;
 
 private:
     std::unique_ptr<common::NodeOffsetMaskMap> graphNodeMask = nullptr;
@@ -96,8 +105,8 @@ public:
     static void getLogicalPlan(planner::Planner* planner,
         const binder::BoundReadingClause& readingClause, binder::expression_vector predicates,
         std::vector<std::unique_ptr<planner::LogicalPlan>>& logicalPlans);
-    static std::unique_ptr<processor::PhysicalOperator> getPhysicalPlan(
-        processor::PlanMapper* planMapper, const planner::LogicalOperator* logicalOp);
+    // static std::unique_ptr<processor::PhysicalOperator> getPhysicalPlan(
+    //     processor::PlanMapper* planMapper, const planner::LogicalOperator* logicalOp);
 };
 
 } // namespace function

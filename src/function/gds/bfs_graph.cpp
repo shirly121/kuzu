@@ -1,7 +1,7 @@
 #include "function/gds/bfs_graph.h"
 
 #include "function/gds/gds_utils.h"
-#include "processor/execution_context.h"
+// #include "processor/execution_context.h"
 
 using namespace kuzu::common;
 using namespace kuzu::graph;
@@ -44,11 +44,11 @@ private:
 };
 
 void DenseBFSGraph::init(ExecutionContext* context, Graph* graph) {
-    for (auto& [tableID, maxOffset] : maxOffsetMap) {
-        denseObjects.allocate(tableID, maxOffset, context->clientContext->getMemoryManager());
-    }
-    auto vc = std::make_unique<BFSGraphInitVertexCompute>(*this);
-    GDSUtils::runVertexCompute(context, GDSDensityState::DENSE, graph, *vc);
+    // for (auto& [tableID, maxOffset] : maxOffsetMap) {
+    //     denseObjects.allocate(tableID, maxOffset, context->clientContext->getMemoryManager());
+    // }
+    // auto vc = std::make_unique<BFSGraphInitVertexCompute>(*this);
+    // GDSUtils::runVertexCompute(context, GDSDensityState::DENSE, graph, *vc);
 }
 
 void DenseBFSGraph::pinTableID(table_id_t tableID) {

@@ -5,6 +5,7 @@
 #include "common/data_chunk/data_chunk.h"
 #include "common/mask.h"
 #include "function/function.h"
+// todo: remove include path
 #include "processor/operator/physical_operator.h"
 
 namespace kuzu {
@@ -141,8 +142,8 @@ using table_func_rewrite_t =
 using table_func_get_logical_plan_t = std::function<void(planner::Planner*,
     const binder::BoundReadingClause&, std::vector<std::shared_ptr<binder::Expression>>,
     std::vector<std::unique_ptr<planner::LogicalPlan>>&)>;
-using table_func_get_physical_plan_t = std::function<std::unique_ptr<processor::PhysicalOperator>(
-    processor::PlanMapper*, const planner::LogicalOperator*)>;
+// using table_func_get_physical_plan_t = std::function<std::unique_ptr<processor::PhysicalOperator>(
+//     processor::PlanMapper*, const planner::LogicalOperator*)>;
 using table_func_infer_input_types =
     std::function<std::vector<common::LogicalType>(const binder::expression_vector&)>;
 
@@ -157,7 +158,7 @@ struct KUZU_API TableFunction final : Function {
     table_func_finalize_t finalizeFunc = [](auto, auto) {};
     table_func_rewrite_t rewriteFunc = nullptr;
     table_func_get_logical_plan_t getLogicalPlanFunc = getLogicalPlan;
-    table_func_get_physical_plan_t getPhysicalPlanFunc = getPhysicalPlan;
+    // table_func_get_physical_plan_t getPhysicalPlanFunc = getPhysicalPlan;
     table_func_infer_input_types inferInputTypes = nullptr;
 
     TableFunction() {}
@@ -190,9 +191,9 @@ struct KUZU_API TableFunction final : Function {
     static void getLogicalPlan(planner::Planner* planner,
         const binder::BoundReadingClause& boundReadingClause, binder::expression_vector predicates,
         std::vector<std::unique_ptr<planner::LogicalPlan>>& plans);
-    // Get physical plan func
-    static std::unique_ptr<processor::PhysicalOperator> getPhysicalPlan(
-        processor::PlanMapper* planMapper, const planner::LogicalOperator* logicalOp);
+    // // Get physical plan func
+    // static std::unique_ptr<processor::PhysicalOperator> getPhysicalPlan(
+    //     processor::PlanMapper* planMapper, const planner::LogicalOperator* logicalOp);
     // Table func
     static common::offset_t emptyTableFunc(const TableFuncInput& input, TableFuncOutput& output);
 };

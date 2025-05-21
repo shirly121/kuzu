@@ -6,7 +6,7 @@
 #include "connector/duckdb_type_converter.h"
 #include "function/duckdb_scan.h"
 #include "main/database_manager.h"
-#include "processor/execution_context.h"
+// #include "processor/execution_context.h"
 #include "storage/attached_postgres_database.h"
 #include "storage/postgres_storage.h"
 

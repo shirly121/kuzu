@@ -5,6 +5,7 @@
 #include "common/enums/path_semantic.h"
 #include "common/mask.h"
 #include "common/types/types.h"
+// todo: remove include path
 #include "processor/result/factorized_table.h"
 
 namespace kuzu {
@@ -21,11 +22,11 @@ public:
         beginWritingInternal(tableID);
     }
     virtual void beginWritingInternal(common::table_id_t tableID) = 0;
-    // Write
-    virtual void write(processor::FactorizedTable& fTable, common::table_id_t tableID,
-        common::LimitCounter* counter) = 0;
-    virtual void write(processor::FactorizedTable& fTable, common::nodeID_t dstNodeID,
-        common::LimitCounter* counter) = 0;
+    // // Write
+    // virtual void write(processor::FactorizedTable& fTable, common::table_id_t tableID,
+    //     common::LimitCounter* counter) = 0;
+    // virtual void write(processor::FactorizedTable& fTable, common::nodeID_t dstNodeID,
+    //     common::LimitCounter* counter) = 0;
 
     bool inOutputNodeMask(common::offset_t offset);
 
@@ -68,20 +69,20 @@ public:
 
     void beginWritingInternal(common::table_id_t tableID) override { bfsGraph.pinTableID(tableID); }
 
-    void write(processor::FactorizedTable& fTable, common::table_id_t tableID,
-        common::LimitCounter* counter) override;
-    void write(processor::FactorizedTable& fTable, common::nodeID_t dstNodeID,
-        common::LimitCounter* counter) override;
+    // void write(processor::FactorizedTable& fTable, common::table_id_t tableID,
+    //     common::LimitCounter* counter) override;
+    // void write(processor::FactorizedTable& fTable, common::nodeID_t dstNodeID,
+    //     common::LimitCounter* counter) override;
 
 protected:
-    virtual void writeInternal(processor::FactorizedTable& fTable, common::nodeID_t dstNodeID,
-        common::LimitCounter* counter) = 0;
-    // Fast path when there is no node predicate or semantic check
-    void dfsFast(ParentList* firstParent, processor::FactorizedTable& fTable,
-        common::LimitCounter* counter);
-    // Slow path to check node predicate or semantic.
-    void dfsSlow(ParentList* firstParent, processor::FactorizedTable& fTable,
-        common::LimitCounter* counter);
+    // virtual void writeInternal(processor::FactorizedTable& fTable, common::nodeID_t dstNodeID,
+    //     common::LimitCounter* counter) = 0;
+    // // Fast path when there is no node predicate or semantic check
+    // void dfsFast(ParentList* firstParent, processor::FactorizedTable& fTable,
+    //     common::LimitCounter* counter);
+    // // Slow path to check node predicate or semantic.
+    // void dfsSlow(ParentList* firstParent, processor::FactorizedTable& fTable,
+    //     common::LimitCounter* counter);
 
     bool updateCounterAndTerminate(common::LimitCounter* counter);
 
@@ -122,8 +123,8 @@ public:
         common::nodeID_t sourceNodeID, PathsOutputWriterInfo info, BaseBFSGraph& bfsGraph)
         : PathsOutputWriter{context, outputNodeMask, sourceNodeID, info, bfsGraph} {}
 
-    void writeInternal(processor::FactorizedTable& fTable, common::nodeID_t dstNodeID,
-        common::LimitCounter* counter) override;
+    // void writeInternal(processor::FactorizedTable& fTable, common::nodeID_t dstNodeID,
+    //     common::LimitCounter* counter) override;
 
     std::unique_ptr<RJOutputWriter> copy() override {
         return std::make_unique<SPPathsOutputWriter>(context, outputNodeMask, sourceNodeID_, info,

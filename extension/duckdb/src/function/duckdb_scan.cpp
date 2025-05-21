@@ -5,7 +5,7 @@
 #include "connector/duckdb_connector.h"
 #include "function/table/bind_input.h"
 #include "function/table/table_function.h"
-#include "processor/execution_context.h"
+// #include "processor/execution_context.h"
 
 using namespace kuzu::function;
 using namespace kuzu::common;

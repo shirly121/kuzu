@@ -39,17 +39,17 @@ public:
     }
 
     void vertexCompute(offset_t startOffset, offset_t endOffset, table_id_t tableID) override {
-        for (auto i = startOffset; i < endOffset; ++i) {
-            if (sharedState->exceedLimit()) {
-                return;
-            }
-            auto nodeID = nodeID_t{i, tableID};
-            writer->write(*localFT, nodeID, sharedState->counter.get());
-        }
+        // for (auto i = startOffset; i < endOffset; ++i) {
+        //     if (sharedState->exceedLimit()) {
+        //         return;
+        //     }
+        //     auto nodeID = nodeID_t{i, tableID};
+        //     writer->write(*localFT, nodeID, sharedState->counter.get());
+        // }
     }
 
     void vertexCompute(table_id_t tableID) override {
-        writer->write(*localFT, tableID, sharedState->counter.get());
+        // writer->write(*localFT, tableID, sharedState->counter.get());
     }
 
     std::unique_ptr<VertexCompute> copy() override {

@@ -2,16 +2,17 @@
 #include "catalog/catalog.h"
 #include "function/table/bind_data.h"
 #include "function/table/simple_table_function.h"
-#include "processor/execution_context.h"
+// #include "processor/execution_context.h"
+#include "function/table/bind_input.h"
 
 namespace kuzu {
 namespace function {
 
 static common::offset_t internalTableFunc(const TableFuncMorsel& /*morsel*/,
     const TableFuncInput& input, common::DataChunk& output) {
-    auto& outputVector = output.getValueVectorMutable(0);
-    auto pos = outputVector.state->getSelVector()[0];
-    outputVector.setValue(pos, input.context->clientContext->getCatalog()->getVersion());
+    // auto& outputVector = output.getValueVectorMutable(0);
+    // auto pos = outputVector.state->getSelVector()[0];
+    // outputVector.setValue(pos, input.context->clientContext->getCatalog()->getVersion());
     return 1;
 }
 

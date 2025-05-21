@@ -25,10 +25,10 @@
 #include "function/union/vector_union_functions.h"
 #include "function/utility/vector_utility_functions.h"
 #include "function/uuid/vector_uuid_functions.h"
-#include "processor/operator/persistent/reader/csv/parallel_csv_reader.h"
-#include "processor/operator/persistent/reader/csv/serial_csv_reader.h"
-#include "processor/operator/persistent/reader/npy/npy_reader.h"
-#include "processor/operator/persistent/reader/parquet/parquet_reader.h"
+// #include "processor/operator/persistent/reader/csv/parallel_csv_reader.h"
+// #include "processor/operator/persistent/reader/csv/serial_csv_reader.h"
+// #include "processor/operator/persistent/reader/npy/npy_reader.h"
+// #include "processor/operator/persistent/reader/parquet/parquet_reader.h"
 
 using namespace kuzu::processor;
 
@@ -236,9 +236,9 @@ FunctionCollection* FunctionCollection::getFunctions() {
         STANDALONE_TABLE_FUNCTION(CreateProjectedGraphFunction),
         STANDALONE_TABLE_FUNCTION(DropProjectedGraphFunction),
 
-        // Scan functions
-        TABLE_FUNCTION(ParquetScanFunction), TABLE_FUNCTION(NpyScanFunction),
-        TABLE_FUNCTION(SerialCSVScan), TABLE_FUNCTION(ParallelCSVScan),
+        // // Scan functions
+        // TABLE_FUNCTION(ParquetScanFunction), TABLE_FUNCTION(NpyScanFunction),
+        // TABLE_FUNCTION(SerialCSVScan), TABLE_FUNCTION(ParallelCSVScan),
 
         // Export functions
         EXPORT_FUNCTION(ExportCSVFunction), EXPORT_FUNCTION(ExportParquetFunction),

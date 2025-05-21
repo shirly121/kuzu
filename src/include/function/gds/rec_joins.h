@@ -5,6 +5,7 @@
 #include "common/enums/path_semantic.h"
 #include "function/gds/gds_state.h"
 #include "graph/graph_entry.h"
+// todo: remove include path
 #include "processor/operator/recursive_extend_shared_state.h"
 #include "rj_output_writer.h"
 

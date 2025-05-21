@@ -9,15 +9,16 @@ namespace processor {
 
 std::unique_ptr<PhysicalOperator> PlanMapper::mapTableFunctionCall(
     const LogicalOperator* logicalOperator) {
-    auto& call = logicalOperator->constCast<LogicalTableFunctionCall>();
-    auto getPhysicalPlanFunc = call.getTableFunc().getPhysicalPlanFunc;
-    KU_ASSERT(getPhysicalPlanFunc);
-    auto res = getPhysicalPlanFunc(this, logicalOperator);
-    logicalOpToPhysicalOpMap.insert({logicalOperator, res.get()});
-    for (auto i = 0u; i < call.getNumChildren(); ++i) {
-        res->addChild(mapOperator(call.getChild(i).get()));
-    }
-    return res;
+    // auto& call = logicalOperator->constCast<LogicalTableFunctionCall>();
+    // auto getPhysicalPlanFunc = call.getTableFunc().getPhysicalPlanFunc;
+    // KU_ASSERT(getPhysicalPlanFunc);
+    // auto res = getPhysicalPlanFunc(this, logicalOperator);
+    // logicalOpToPhysicalOpMap.insert({logicalOperator, res.get()});
+    // for (auto i = 0u; i < call.getNumChildren(); ++i) {
+    //     res->addChild(mapOperator(call.getChild(i).get()));
+    // }
+    // return res;
+    return nullptr;
 }
 
 } // namespace processor

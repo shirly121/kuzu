@@ -66,118 +66,118 @@ static ParentList* getTop(const std::vector<ParentList*>& path) {
     return path[path.size() - 1];
 }
 
-void PathsOutputWriter::write(FactorizedTable& fTable, table_id_t tableID, LimitCounter* counter) {
-    auto& sparseGraph = bfsGraph.cast<SparseBFSGraph>();
-    for (auto& [offset, _] : sparseGraph.getCurrentData()) {
-        write(fTable, {offset, tableID}, counter);
-    }
-    if (info.lowerBound == 0 && sourceNodeID_.tableID == tableID) {
-        write(fTable, sourceNodeID_, counter);
-    }
-}
+// void PathsOutputWriter::write(FactorizedTable& fTable, table_id_t tableID, LimitCounter* counter) {
+//     auto& sparseGraph = bfsGraph.cast<SparseBFSGraph>();
+//     for (auto& [offset, _] : sparseGraph.getCurrentData()) {
+//         write(fTable, {offset, tableID}, counter);
+//     }
+//     if (info.lowerBound == 0 && sourceNodeID_.tableID == tableID) {
+//         write(fTable, sourceNodeID_, counter);
+//     }
+// }
 
-void PathsOutputWriter::write(FactorizedTable& fTable, nodeID_t dstNodeID, LimitCounter* counter) {
-    if (!inOutputNodeMask(dstNodeID.offset)) {
-        return;
-    }
-    dstNodeIDVector->setValue<nodeID_t>(0, dstNodeID);
-    writeInternal(fTable, dstNodeID, counter);
-}
+// void PathsOutputWriter::write(FactorizedTable& fTable, nodeID_t dstNodeID, LimitCounter* counter) {
+//     if (!inOutputNodeMask(dstNodeID.offset)) {
+//         return;
+//     }
+//     dstNodeIDVector->setValue<nodeID_t>(0, dstNodeID);
+//     writeInternal(fTable, dstNodeID, counter);
+// }
 
-void PathsOutputWriter::dfsFast(ParentList* firstParent, FactorizedTable& fTable,
-    LimitCounter* counter) {
-    std::vector<ParentList*> curPath;
-    curPath.push_back(firstParent);
-    auto backtracking = false;
-    while (!curPath.empty()) {
-        if (context->interrupted()) {
-            throw InterruptException{};
-        }
-        auto top = curPath[curPath.size() - 1];
-        auto topNodeID = top->getNodeID();
-        if (top->getIter() == 1) {
-            writePath(curPath);
-            fTable.append(vectors);
-            if (updateCounterAndTerminate(counter)) {
-                return;
-            }
-            backtracking = true;
-        }
-        if (backtracking) {
-            auto next = getTop(curPath)->getNextPtr();
-            if (isNextViable(next, curPath)) {
-                curPath[curPath.size() - 1] = next;
-                backtracking = false;
-            } else {
-                curPath.pop_back();
-            }
-        } else {
-            auto parent = bfsGraph.getParentListHead(topNodeID);
-            while (parent->getIter() != top->getIter() - 1) {
-                parent = parent->getNextPtr();
-            }
-            curPath.push_back(parent);
-            backtracking = false;
-        }
-    }
-}
+// void PathsOutputWriter::dfsFast(ParentList* firstParent, FactorizedTable& fTable,
+//     LimitCounter* counter) {
+//     std::vector<ParentList*> curPath;
+//     curPath.push_back(firstParent);
+//     auto backtracking = false;
+//     while (!curPath.empty()) {
+//         if (context->interrupted()) {
+//             throw InterruptException{};
+//         }
+//         auto top = curPath[curPath.size() - 1];
+//         auto topNodeID = top->getNodeID();
+//         if (top->getIter() == 1) {
+//             writePath(curPath);
+//             fTable.append(vectors);
+//             if (updateCounterAndTerminate(counter)) {
+//                 return;
+//             }
+//             backtracking = true;
+//         }
+//         if (backtracking) {
+//             auto next = getTop(curPath)->getNextPtr();
+//             if (isNextViable(next, curPath)) {
+//                 curPath[curPath.size() - 1] = next;
+//                 backtracking = false;
+//             } else {
+//                 curPath.pop_back();
+//             }
+//         } else {
+//             auto parent = bfsGraph.getParentListHead(topNodeID);
+//             while (parent->getIter() != top->getIter() - 1) {
+//                 parent = parent->getNextPtr();
+//             }
+//             curPath.push_back(parent);
+//             backtracking = false;
+//         }
+//     }
+// }
 
-void PathsOutputWriter::dfsSlow(ParentList* firstParent, FactorizedTable& fTable,
-    LimitCounter* counter) {
-    std::vector<ParentList*> curPath;
-    curPath.push_back(firstParent);
-    auto backtracking = false;
-    while (!curPath.empty()) {
-        if (context->interrupted()) {
-            throw InterruptException{};
-        }
-        if (getTop(curPath)->getIter() == 1) {
-            writePath(curPath);
-            fTable.append(vectors);
-            if (updateCounterAndTerminate(counter)) {
-                return;
-            }
-            backtracking = true;
-        }
-        if (backtracking) {
-            auto next = getTop(curPath)->getNextPtr();
-            while (true) {
-                if (!isNextViable(next, curPath)) {
-                    curPath.pop_back();
-                    break;
-                }
-                // Further check next against path node mask (predicate).
-                if (!checkPathNodeMask(next) || !checkReplaceTopSemantic(curPath, next)) {
-                    next = next->getNextPtr();
-                    continue;
-                }
-                // Next is a valid path element. Push into stack and switch to forward track.
-                curPath[curPath.size() - 1] = next;
-                backtracking = false;
-                break;
-            }
-        } else {
-            auto top = getTop(curPath);
-            auto parent = bfsGraph.getParentListHead(top->getNodeID());
-            while (true) {
-                if (parent == nullptr) {
-                    // No more forward tracking candidates. Switch to backward tracking.
-                    backtracking = true;
-                    break;
-                }
-                if (parent->getIter() == top->getIter() - 1 && checkPathNodeMask(parent) &&
-                    checkAppendSemantic(curPath, parent)) {
-                    // A forward tracking candidate should decrease the iteration by one and also
-                    // pass node predicate checking.
-                    curPath.push_back(parent);
-                    backtracking = false;
-                    break;
-                }
-                parent = parent->getNextPtr();
-            }
-        }
-    }
-}
+// void PathsOutputWriter::dfsSlow(ParentList* firstParent, FactorizedTable& fTable,
+//     LimitCounter* counter) {
+//     std::vector<ParentList*> curPath;
+//     curPath.push_back(firstParent);
+//     auto backtracking = false;
+//     while (!curPath.empty()) {
+//         if (context->interrupted()) {
+//             throw InterruptException{};
+//         }
+//         if (getTop(curPath)->getIter() == 1) {
+//             writePath(curPath);
+//             fTable.append(vectors);
+//             if (updateCounterAndTerminate(counter)) {
+//                 return;
+//             }
+//             backtracking = true;
+//         }
+//         if (backtracking) {
+//             auto next = getTop(curPath)->getNextPtr();
+//             while (true) {
+//                 if (!isNextViable(next, curPath)) {
+//                     curPath.pop_back();
+//                     break;
+//                 }
+//                 // Further check next against path node mask (predicate).
+//                 if (!checkPathNodeMask(next) || !checkReplaceTopSemantic(curPath, next)) {
+//                     next = next->getNextPtr();
+//                     continue;
+//                 }
+//                 // Next is a valid path element. Push into stack and switch to forward track.
+//                 curPath[curPath.size() - 1] = next;
+//                 backtracking = false;
+//                 break;
+//             }
+//         } else {
+//             auto top = getTop(curPath);
+//             auto parent = bfsGraph.getParentListHead(top->getNodeID());
+//             while (true) {
+//                 if (parent == nullptr) {
+//                     // No more forward tracking candidates. Switch to backward tracking.
+//                     backtracking = true;
+//                     break;
+//                 }
+//                 if (parent->getIter() == top->getIter() - 1 && checkPathNodeMask(parent) &&
+//                     checkAppendSemantic(curPath, parent)) {
+//                     // A forward tracking candidate should decrease the iteration by one and also
+//                     // pass node predicate checking.
+//                     curPath.push_back(parent);
+//                     backtracking = false;
+//                     break;
+//                 }
+//                 parent = parent->getNextPtr();
+//             }
+//         }
+//     }
+// }
 
 bool PathsOutputWriter::updateCounterAndTerminate(LimitCounter* counter) {
     if (counter != nullptr) {
@@ -375,22 +375,22 @@ void PathsOutputWriter::addNode(nodeID_t nodeID, sel_t pos) const {
     ListVector::getDataVector(pathNodeIDsVector.get())->setValue(pos, nodeID);
 }
 
-void SPPathsOutputWriter::writeInternal(FactorizedTable& fTable, nodeID_t dstNodeID,
-    LimitCounter* counter) {
-    auto firstParent = findFirstParent(dstNodeID.offset);
-    if (firstParent == nullptr) {
-        return;
-    }
-    if (dstNodeID == sourceNodeID_) { // Avoid writing source
-        KU_ASSERT(firstParent->getIter() == FRONTIER_INITIAL_VISITED);
-        return;
-    }
-    if (!info.hasNodeMask() && info.semantic == PathSemantic::WALK) {
-        dfsFast(firstParent, fTable, counter);
-        return;
-    }
-    dfsSlow(firstParent, fTable, counter);
-}
+// void SPPathsOutputWriter::writeInternal(FactorizedTable& fTable, nodeID_t dstNodeID,
+//     LimitCounter* counter) {
+//     auto firstParent = findFirstParent(dstNodeID.offset);
+//     if (firstParent == nullptr) {
+//         return;
+//     }
+//     if (dstNodeID == sourceNodeID_) { // Avoid writing source
+//         KU_ASSERT(firstParent->getIter() == FRONTIER_INITIAL_VISITED);
+//         return;
+//     }
+//     if (!info.hasNodeMask() && info.semantic == PathSemantic::WALK) {
+//         dfsFast(firstParent, fTable, counter);
+//         return;
+//     }
+//     dfsSlow(firstParent, fTable, counter);
+// }
 
 } // namespace function
 } // namespace kuzu

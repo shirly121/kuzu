@@ -4,7 +4,7 @@
 #include "common/exception/binder.h"
 #include "function/table/bind_data.h"
 #include "function/table/simple_table_function.h"
-#include "processor/execution_context.h"
+// #include "processor/execution_context.h"
 #include "storage/local_cached_column.h"
 #include "storage/storage_manager.h"
 #include "storage/store/list_chunk_data.h"
@@ -82,12 +82,13 @@ struct CacheArrayColumnSharedState final : public SimpleTableFuncSharedState {
 
 static std::unique_ptr<TableFuncSharedState> initSharedState(
     const TableFuncInitSharedStateInput& input) {
-    const auto bindData = input.bindData->constPtrCast<CacheArrayColumnBindData>();
-    auto& table = input.context->clientContext->getStorageManager()
-                      ->getTable(bindData->tableEntry->getTableID())
-                      ->cast<storage::NodeTable>();
-    return std::make_unique<CacheArrayColumnSharedState>(table, table.getNumCommittedNodeGroups(),
-        *bindData);
+    // const auto bindData = input.bindData->constPtrCast<CacheArrayColumnBindData>();
+    // auto& table = input.context->clientContext->getStorageManager()
+    //                   ->getTable(bindData->tableEntry->getTableID())
+    //                   ->cast<storage::NodeTable>();
+    // return std::make_unique<CacheArrayColumnSharedState>(table, table.getNumCommittedNodeGroups(),
+    //     *bindData);
+    return nullptr;
 }
 
 struct CacheArrayColumnLocalState final : TableFuncLocalState {
@@ -142,31 +143,32 @@ static void scanTableDataToChunk(const node_group_idx_t nodeGroupIdx,
 }
 
 static offset_t tableFunc(const TableFuncInput& input, TableFuncOutput&) {
-    auto& bindData = input.bindData->cast<CacheArrayColumnBindData>();
-    const auto sharedState = input.sharedState->ptrCast<CacheArrayColumnSharedState>();
-    auto localState = input.localState->ptrCast<CacheArrayColumnLocalState>();
-    const auto morsel = sharedState->getMorsel();
-    if (morsel.isInvalid()) {
-        return 0;
-    }
-    auto context = input.context->clientContext;
-    auto columnType = bindData.tableEntry->getProperty(bindData.propertyID).getType().copy();
-    auto& table = sharedState->table;
-    auto& scanState = *localState->scanState;
-    for (auto i = morsel.startOffset; i < morsel.endOffset; i++) {
-        auto numRows = table.getNumTuplesInNodeGroup(i);
-        auto data = storage::ColumnChunkFactory::createColumnChunkData(*context->getMemoryManager(),
-            columnType.copy(), false /*enableCompression*/, numRows,
-            storage::ResidencyState::IN_MEMORY, true /*hasNullData*/, false /*initializeToZero*/);
-        if (columnType.getLogicalTypeID() == LogicalTypeID::ARRAY) {
-            auto arrayTypeInfo = columnType.getExtraTypeInfo()->constPtrCast<ArrayTypeInfo>();
-            data->cast<storage::ListChunkData>().getDataColumnChunk()->resize(
-                numRows * arrayTypeInfo->getNumElements());
-        }
-        scanTableDataToChunk(i, scanState, data.get(), context->getTransaction(), table);
-        sharedState->merge(i, std::move(data));
-    }
-    return morsel.endOffset - morsel.startOffset;
+    // auto& bindData = input.bindData->cast<CacheArrayColumnBindData>();
+    // const auto sharedState = input.sharedState->ptrCast<CacheArrayColumnSharedState>();
+    // auto localState = input.localState->ptrCast<CacheArrayColumnLocalState>();
+    // const auto morsel = sharedState->getMorsel();
+    // if (morsel.isInvalid()) {
+    //     return 0;
+    // }
+    // auto context = input.context->clientContext;
+    // auto columnType = bindData.tableEntry->getProperty(bindData.propertyID).getType().copy();
+    // auto& table = sharedState->table;
+    // auto& scanState = *localState->scanState;
+    // for (auto i = morsel.startOffset; i < morsel.endOffset; i++) {
+    //     auto numRows = table.getNumTuplesInNodeGroup(i);
+    //     auto data = storage::ColumnChunkFactory::createColumnChunkData(*context->getMemoryManager(),
+    //         columnType.copy(), false /*enableCompression*/, numRows,
+    //         storage::ResidencyState::IN_MEMORY, true /*hasNullData*/, false /*initializeToZero*/);
+    //     if (columnType.getLogicalTypeID() == LogicalTypeID::ARRAY) {
+    //         auto arrayTypeInfo = columnType.getExtraTypeInfo()->constPtrCast<ArrayTypeInfo>();
+    //         data->cast<storage::ListChunkData>().getDataColumnChunk()->resize(
+    //             numRows * arrayTypeInfo->getNumElements());
+    //     }
+    //     scanTableDataToChunk(i, scanState, data.get(), context->getTransaction(), table);
+    //     sharedState->merge(i, std::move(data));
+    // }
+    // return morsel.endOffset - morsel.startOffset;
+    return 0;
 }
 
 static double progressFunc(TableFuncSharedState* sharedState) {
@@ -183,10 +185,10 @@ static double progressFunc(TableFuncSharedState* sharedState) {
 
 static void finalizeFunc(const processor::ExecutionContext* context,
     TableFuncSharedState* sharedState) {
-    auto transaction = context->clientContext->getTransaction();
-    auto cacheColumnSharedState = sharedState->ptrCast<CacheArrayColumnSharedState>();
-    auto& localCacheManager = transaction->getLocalCacheManager();
-    localCacheManager.put(std::move(cacheColumnSharedState->cachedColumn));
+    // auto transaction = context->clientContext->getTransaction();
+    // auto cacheColumnSharedState = sharedState->ptrCast<CacheArrayColumnSharedState>();
+    // auto& localCacheManager = transaction->getLocalCacheManager();
+    // localCacheManager.put(std::move(cacheColumnSharedState->cachedColumn));
 }
 
 function_set LocalCacheArrayColumnFunction::getFunctionSet() {

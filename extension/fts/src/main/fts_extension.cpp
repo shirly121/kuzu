@@ -2,9 +2,9 @@
 
 #include "catalog/catalog.h"
 #include "catalog/fts_index_catalog_entry.h"
-#include "function/create_fts_index.h"
-#include "function/drop_fts_index.h"
-#include "function/query_fts_index.h"
+// #include "function/create_fts_index.h"
+// #include "function/drop_fts_index.h"
+// #include "function/query_fts_index.h"
 #include "function/stem.h"
 #include "main/client_context.h"
 
@@ -24,13 +24,13 @@ static void initFTSEntries(const transaction::Transaction* transaction, catalog:
 
 void FtsExtension::load(main::ClientContext* context) {
     auto& db = *context->getDatabase();
-    ExtensionUtils::addScalarFunc<StemFunction>(db);
-    ExtensionUtils::addTableFunc<QueryFTSFunction>(db);
-    ExtensionUtils::addStandaloneTableFunc<CreateFTSFunction>(db);
-    ExtensionUtils::addInternalStandaloneTableFunc<InternalCreateFTSFunction>(db);
-    ExtensionUtils::addStandaloneTableFunc<DropFTSFunction>(db);
-    ExtensionUtils::addInternalStandaloneTableFunc<InternalDropFTSFunction>(db);
-    initFTSEntries(&transaction::DUMMY_TRANSACTION, *db.getCatalog());
+    // ExtensionUtils::addScalarFunc<StemFunction>(db);
+    // ExtensionUtils::addTableFunc<QueryFTSFunction>(db);
+    // ExtensionUtils::addStandaloneTableFunc<CreateFTSFunction>(db);
+    // ExtensionUtils::addInternalStandaloneTableFunc<InternalCreateFTSFunction>(db);
+    // ExtensionUtils::addStandaloneTableFunc<DropFTSFunction>(db);
+    // ExtensionUtils::addInternalStandaloneTableFunc<InternalDropFTSFunction>(db);
+    // initFTSEntries(&transaction::DUMMY_TRANSACTION, *db.getCatalog());
 }
 
 } // namespace fts_extension
