@@ -24,58 +24,58 @@ TaskScheduler::~TaskScheduler() {
 
 void TaskScheduler::scheduleTaskAndWaitOrError(const std::shared_ptr<Task>& task,
     processor::ExecutionContext* context, bool launchNewWorkerThread) {
-    for (auto& dependency : task->children) {
-        scheduleTaskAndWaitOrError(dependency, context);
-    }
-    std::thread newWorkerThread;
-    if (launchNewWorkerThread) {
-        // Note that newWorkerThread is not executing yet. However, we still call
-        // task->registerThread() function because the call in the next line will guarantee
-        // that the thread starts working on it. registerThread() function only increases the
-        // numThreadsRegistered field of the task, tt does not keep track of the thread ids or
-        // anything specific to the thread.
-        task->registerThread();
-        newWorkerThread = std::thread(runTask, task.get());
-    }
-    auto scheduledTask = pushTaskIntoQueue(task);
-    cv.notify_all();
-    std::unique_lock<std::mutex> taskLck{task->taskMtx, std::defer_lock};
-    while (true) {
-        taskLck.lock();
-        bool timedWait = false;
-        auto timeout = 0u;
-        if (task->isCompletedNoLock()) {
-            // Note: we do not remove completed tasks from the queue in this function. They will be
-            // removed by the worker threads when they traverse down the queue for a task to work on
-            // (see getTaskAndRegister()).
-            taskLck.unlock();
-            break;
-        }
-        if (context->clientContext->hasTimeout()) {
-            timeout = context->clientContext->getTimeoutRemainingInMS();
-            if (timeout == 0) {
-                context->clientContext->interrupt();
-            } else {
-                timedWait = true;
-            }
-        } else if (task->hasExceptionNoLock()) {
-            // Interrupt tasks that errored, so other threads can stop working on them early.
-            context->clientContext->interrupt();
-        }
-        if (timedWait) {
-            task->cv.wait_for(taskLck, std::chrono::milliseconds(timeout));
-        } else {
-            task->cv.wait(taskLck);
-        }
-        taskLck.unlock();
-    }
-    if (launchNewWorkerThread) {
-        newWorkerThread.join();
-    }
-    if (task->hasException()) {
-        removeErroringTask(scheduledTask->ID);
-        std::rethrow_exception(task->getExceptionPtr());
-    }
+    // for (auto& dependency : task->children) {
+    //     scheduleTaskAndWaitOrError(dependency, context);
+    // }
+    // std::thread newWorkerThread;
+    // if (launchNewWorkerThread) {
+    //     // Note that newWorkerThread is not executing yet. However, we still call
+    //     // task->registerThread() function because the call in the next line will guarantee
+    //     // that the thread starts working on it. registerThread() function only increases the
+    //     // numThreadsRegistered field of the task, tt does not keep track of the thread ids or
+    //     // anything specific to the thread.
+    //     task->registerThread();
+    //     newWorkerThread = std::thread(runTask, task.get());
+    // }
+    // auto scheduledTask = pushTaskIntoQueue(task);
+    // cv.notify_all();
+    // std::unique_lock<std::mutex> taskLck{task->taskMtx, std::defer_lock};
+    // while (true) {
+    //     taskLck.lock();
+    //     bool timedWait = false;
+    //     auto timeout = 0u;
+    //     if (task->isCompletedNoLock()) {
+    //         // Note: we do not remove completed tasks from the queue in this function. They will be
+    //         // removed by the worker threads when they traverse down the queue for a task to work on
+    //         // (see getTaskAndRegister()).
+    //         taskLck.unlock();
+    //         break;
+    //     }
+    //     if (context->clientContext->hasTimeout()) {
+    //         timeout = context->clientContext->getTimeoutRemainingInMS();
+    //         if (timeout == 0) {
+    //             context->clientContext->interrupt();
+    //         } else {
+    //             timedWait = true;
+    //         }
+    //     } else if (task->hasExceptionNoLock()) {
+    //         // Interrupt tasks that errored, so other threads can stop working on them early.
+    //         context->clientContext->interrupt();
+    //     }
+    //     if (timedWait) {
+    //         task->cv.wait_for(taskLck, std::chrono::milliseconds(timeout));
+    //     } else {
+    //         task->cv.wait(taskLck);
+    //     }
+    //     taskLck.unlock();
+    // }
+    // if (launchNewWorkerThread) {
+    //     newWorkerThread.join();
+    // }
+    // if (task->hasException()) {
+    //     removeErroringTask(scheduledTask->ID);
+    //     std::rethrow_exception(task->getExceptionPtr());
+    // }
 }
 
 void TaskScheduler::runWorkerThread() {

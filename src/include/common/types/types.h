@@ -15,6 +15,7 @@ namespace kuzu {
 namespace main {
 class ClientContext;
 }
+// todo: remove include path
 namespace processor {
 class ParquetReader;
 }

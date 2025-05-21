@@ -7,7 +7,7 @@
 
 using namespace kuzu::common;
 using namespace kuzu::catalog;
-using namespace kuzu::processor;
+// using namespace kuzu::processor;
 
 namespace kuzu {
 namespace function {
