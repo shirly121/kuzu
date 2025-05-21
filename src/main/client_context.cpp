@@ -22,13 +22,14 @@
 #include "parser/visitor/standalone_call_rewriter.h"
 #include "parser/visitor/statement_read_write_analyzer.h"
 #include "planner/planner.h"
-#include "processor/plan_mapper.h"
-#include "processor/processor.h"
+// #include "processor/plan_mapper.h"
+// #include "processor/processor.h"
 #include "storage/buffer_manager/buffer_manager.h"
 #include "storage/buffer_manager/spiller.h"
 #include "storage/storage_manager.h"
 #include "transaction/transaction_context.h"
 #include "main/plan_printer.h"
+#include "common/task_system/task.h"
 
 
 #if defined(_WIN32)
@@ -40,7 +41,7 @@ using namespace kuzu::binder;
 using namespace kuzu::common;
 using namespace kuzu::catalog;
 using namespace kuzu::planner;
-using namespace kuzu::processor;
+// using namespace kuzu::processor;
 using namespace kuzu::transaction;
 
 namespace kuzu {
@@ -278,11 +279,11 @@ void ClientContext::removeScalarFunction(const std::string& name) {
         TransactionHelper::TransactionCommitAction::COMMIT_IF_NEW);
 }
 
-WarningContext& ClientContext::getWarningContextUnsafe() {
+kuzu::processor::WarningContext& ClientContext::getWarningContextUnsafe() {
     return warningContext;
 }
 
-const WarningContext& ClientContext::getWarningContext() const {
+const kuzu::processor::WarningContext& ClientContext::getWarningContext() const {
     return warningContext;
 }
 
@@ -520,54 +521,55 @@ std::unique_ptr<PreparedStatement> ClientContext::prepareNoLock(
 
 std::unique_ptr<QueryResult> ClientContext::executeNoLock(PreparedStatement* preparedStatement,
     std::optional<uint64_t> queryID) {
-    if (!preparedStatement->isSuccess()) {
-        return queryResultWithError(preparedStatement->errMsg);
-    }
-    useInternalCatalogEntry_ = preparedStatement->useInternalCatalogEntry;
-    this->resetActiveQuery();
-    this->startTimer();
-    auto executingTimer = TimeMetric(true /* enable */);
-    executingTimer.start();
-    std::shared_ptr<FactorizedTable> resultFT;
-    std::unique_ptr<QueryResult> queryResult;
-    try {
-        TransactionHelper::runFuncInTransaction(
-            *transactionContext,
-            [&]() -> void {
-                const auto profiler = std::make_unique<Profiler>();
-                profiler->enabled = preparedStatement->isProfile();
-                if (!queryID) {
-                    queryID = localDatabase->getNextQueryID();
-                }
-                const auto executionContext =
-                    std::make_unique<ExecutionContext>(profiler.get(), this, *queryID);
-                auto mapper = PlanMapper(executionContext.get());
-                const auto physicalPlan =
-                    mapper.mapLogicalPlanToPhysical(preparedStatement->logicalPlan.get(),
-                        preparedStatement->statementResult->getColumns());
-                queryResult = std::make_unique<QueryResult>(preparedStatement->preparedSummary);
-                if (preparedStatement->isTransactionStatement()) {
-                    resultFT = nullptr;
-                } else {
-                    getTransaction()->checkForceCheckpoint(preparedStatement->getStatementType());
-                    resultFT = nullptr;
-                }
-            },
-            preparedStatement->isReadOnly(), preparedStatement->isTransactionStatement(),
-            TransactionHelper::getAction(true /*shouldCommitNewTransaction*/,
-                !preparedStatement->isTransactionStatement() /*shouldCommitAutoTransaction*/));
-    } catch (std::exception& e) {
-        useInternalCatalogEntry_ = false;
-        return handleFailedExecution(queryID, e);
-    }
-    getMemoryManager()->getBufferManager()->getSpillerOrSkip(
-        [](auto& spiller) { spiller.clearFile(); });
-    executingTimer.stop();
-    queryResult->querySummary->executionTime = executingTimer.getElapsedTimeMS();
-    const auto sResult = preparedStatement->statementResult.get();
-    queryResult->setColumnHeader(sResult->getColumnNames(), sResult->getColumnTypes());
-    // queryResult->initResultTableAndIterator(std::move(resultFT));
-    return queryResult;
+    // if (!preparedStatement->isSuccess()) {
+    //     return queryResultWithError(preparedStatement->errMsg);
+    // }
+    // useInternalCatalogEntry_ = preparedStatement->useInternalCatalogEntry;
+    // this->resetActiveQuery();
+    // this->startTimer();
+    // auto executingTimer = TimeMetric(true /* enable */);
+    // executingTimer.start();
+    // std::shared_ptr<FactorizedTable> resultFT;
+    // std::unique_ptr<QueryResult> queryResult;
+    // try {
+    //     TransactionHelper::runFuncInTransaction(
+    //         *transactionContext,
+    //         [&]() -> void {
+    //             const auto profiler = std::make_unique<Profiler>();
+    //             profiler->enabled = preparedStatement->isProfile();
+    //             if (!queryID) {
+    //                 queryID = localDatabase->getNextQueryID();
+    //             }
+    //             const auto executionContext =
+    //                 std::make_unique<ExecutionContext>(profiler.get(), this, *queryID);
+    //             auto mapper = PlanMapper(executionContext.get());
+    //             const auto physicalPlan =
+    //                 mapper.mapLogicalPlanToPhysical(preparedStatement->logicalPlan.get(),
+    //                     preparedStatement->statementResult->getColumns());
+    //             queryResult = std::make_unique<QueryResult>(preparedStatement->preparedSummary);
+    //             if (preparedStatement->isTransactionStatement()) {
+    //                 resultFT = nullptr;
+    //             } else {
+    //                 getTransaction()->checkForceCheckpoint(preparedStatement->getStatementType());
+    //                 resultFT = nullptr;
+    //             }
+    //         },
+    //         preparedStatement->isReadOnly(), preparedStatement->isTransactionStatement(),
+    //         TransactionHelper::getAction(true /*shouldCommitNewTransaction*/,
+    //             !preparedStatement->isTransactionStatement() /*shouldCommitAutoTransaction*/));
+    // } catch (std::exception& e) {
+    //     useInternalCatalogEntry_ = false;
+    //     return handleFailedExecution(queryID, e);
+    // }
+    // getMemoryManager()->getBufferManager()->getSpillerOrSkip(
+    //     [](auto& spiller) { spiller.clearFile(); });
+    // executingTimer.stop();
+    // queryResult->querySummary->executionTime = executingTimer.getElapsedTimeMS();
+    // const auto sResult = preparedStatement->statementResult.get();
+    // queryResult->setColumnHeader(sResult->getColumnNames(), sResult->getColumnTypes());
+    // // queryResult->initResultTableAndIterator(std::move(resultFT));
+    // return queryResult;
+    throw std::runtime_error("executeNoLock is not implemented, to remove dependency of processor module");
 }
 
 std::unique_ptr<QueryResult> ClientContext::handleFailedExecution(std::optional<uint64_t> queryID,

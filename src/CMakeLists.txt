@@ -8,6 +8,7 @@ add_subdirectory(binder)
 #add_subdirectory(c_api)
 add_subdirectory(catalog)
 add_subdirectory(common)
+# to be removed after processor and storage
 add_subdirectory(expression_evaluator)
 add_subdirectory(function)
 add_subdirectory(graph)
