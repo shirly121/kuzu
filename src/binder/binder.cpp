@@ -8,16 +8,11 @@
 #include "common/string_utils.h"
 #include "function/built_in_function_utils.h"
 #include "function/table/table_function.h"
-#include "processor/operator/persistent/reader/csv/parallel_csv_reader.h"
-#include "processor/operator/persistent/reader/csv/serial_csv_reader.h"
-#include "processor/operator/persistent/reader/npy/npy_reader.h"
-#include "processor/operator/persistent/reader/parquet/parquet_reader.h"
 
 using namespace kuzu::catalog;
 using namespace kuzu::common;
 using namespace kuzu::function;
 using namespace kuzu::parser;
-using namespace kuzu::processor;
 
 namespace kuzu {
 namespace binder {
@@ -221,60 +216,7 @@ void Binder::replaceExpressionInScope(const std::string& oldName, const std::str
 
 TableFunction Binder::getScanFunction(const FileTypeInfo& typeInfo,
     const FileScanInfo& fileScanInfo) const {
-    Function* func = nullptr;
-    std::vector<LogicalType> inputTypes;
-    inputTypes.push_back(LogicalType::STRING());
-    auto catalog = clientContext->getCatalog();
-    auto transaction = clientContext->getTransaction();
-    switch (typeInfo.fileType) {
-    case FileType::PARQUET: {
-        auto entry = catalog->getFunctionEntry(transaction, ParquetScanFunction::name);
-        func = BuiltInFunctionsUtils::matchFunction(ParquetScanFunction::name, inputTypes,
-            entry->ptrCast<FunctionCatalogEntry>());
-    } break;
-    case FileType::NPY: {
-        auto entry = catalog->getFunctionEntry(transaction, NpyScanFunction::name);
-        func = BuiltInFunctionsUtils::matchFunction(NpyScanFunction::name, inputTypes,
-            entry->ptrCast<FunctionCatalogEntry>());
-    } break;
-    case FileType::CSV: {
-        bool containCompressedCSV = std::any_of(fileScanInfo.filePaths.begin(),
-            fileScanInfo.filePaths.end(), [&](const auto& file) {
-                return clientContext->getVFSUnsafe()->isCompressedFile(file);
-            });
-        auto csvConfig = CSVReaderConfig::construct(fileScanInfo.options);
-        // Parallel CSV scanning is only allowed:
-        // 1. No newline character inside the csv body.
-        // 2. The CSV file to scan is not compressed (because we couldn't perform seek in such
-        // case).
-        // 3. Not explicitly set by the user to use the serial csv reader.
-        auto name = (csvConfig.parallel && !containCompressedCSV) ? ParallelCSVScan::name :
-                                                                    SerialCSVScan::name;
-        auto entry = catalog->getFunctionEntry(transaction, name);
-        func = BuiltInFunctionsUtils::matchFunction(name, inputTypes,
-            entry->ptrCast<FunctionCatalogEntry>());
-    } break;
-    case FileType::UNKNOWN: {
-        try {
-            auto name = stringFormat("{}_SCAN", typeInfo.fileTypeStr);
-            auto entry = catalog->getFunctionEntry(transaction, name);
-            func = BuiltInFunctionsUtils::matchFunction(name, inputTypes,
-                entry->ptrCast<FunctionCatalogEntry>());
-        } catch (...) {
-            if (typeInfo.fileTypeStr == "") {
-                throw BinderException{"Cannot infer the format of the given file. Please "
-                                      "set the file format explicitly by (file_format=<type>)."};
-            }
-            throw BinderException{
-                stringFormat("Cannot load from file type {}. If this file type is part of a kuzu "
-                             "extension please load the extension then try again.",
-                    typeInfo.fileTypeStr)};
-        }
-    } break;
-    default:
-        KU_UNREACHABLE;
-    }
-    return *func->ptrCast<TableFunction>();
+    throw std::runtime_error("getScanFunction is not implemented: removed dependency on processor module");
 }
 
 } // namespace binder
