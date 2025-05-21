@@ -6,7 +6,7 @@
 #include "function/gds/gds_state.h"
 #include "graph/graph_entry.h"
 // todo: remove include path
-#include "processor/operator/recursive_extend_shared_state.h"
+// #include "processor/operator/recursive_extend_shared_state.h"
 #include "rj_output_writer.h"
 
 namespace kuzu {
@@ -49,11 +49,11 @@ public:
     virtual std::string getFunctionName() const = 0;
     virtual binder::expression_vector getResultColumns(const RJBindData& bindData) const = 0;
 
-    virtual std::unique_ptr<GDSComputeState> getComputeState(processor::ExecutionContext* context,
-        const RJBindData& bindData, processor::RecursiveExtendSharedState* sharedState) = 0;
-    virtual std::unique_ptr<RJOutputWriter> getOutputWriter(processor::ExecutionContext* context,
-        const RJBindData& bindData, GDSComputeState& computeState, common::nodeID_t sourceNodeID,
-        processor::RecursiveExtendSharedState* sharedState) = 0;
+    // virtual std::unique_ptr<GDSComputeState> getComputeState(processor::ExecutionContext* context,
+    //     const RJBindData& bindData, processor::RecursiveExtendSharedState* sharedState) = 0;
+    // virtual std::unique_ptr<RJOutputWriter> getOutputWriter(processor::ExecutionContext* context,
+    //     const RJBindData& bindData, GDSComputeState& computeState, common::nodeID_t sourceNodeID,
+    //     processor::RecursiveExtendSharedState* sharedState) = 0;
 
     virtual std::unique_ptr<RJAlgorithm> copy() const = 0;
 };

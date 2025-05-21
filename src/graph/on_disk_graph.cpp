@@ -10,18 +10,18 @@
 #include "common/enums/rel_direction.h"
 #include "common/types/types.h"
 #include "common/vector/value_vector.h"
-#include "expression_evaluator/expression_evaluator.h"
+// #include "expression_evaluator/expression_evaluator.h"
 #include "graph/graph.h"
 #include "main/client_context.h"
 #include "planner/operator/schema.h"
 // #include "processor/expression_mapper.h"
+#include "processor/result/result_set.h"
 #include "storage/local_storage/local_rel_table.h"
 #include "storage/local_storage/local_storage.h"
 #include "storage/storage_manager.h"
 #include "storage/storage_utils.h"
 #include "storage/store/node_table.h"
 #include "storage/store/rel_table.h"
-#include "processor/result/result_set.h"
 
 using namespace kuzu::catalog;
 using namespace kuzu::storage;
@@ -69,7 +69,8 @@ static Schema getSchema(const expression_vector& exprs) {
 static kuzu::processor::ResultSet getResultSet(Schema* schema, MemoryManager* mm) {
     // auto descriptor = ResultSetDescriptor(schema);
     // return ResultSet(&descriptor, mm);
-    throw new std::runtime_error("getResultSet is not implemented, remove dependency of processor module");
+    throw new std::runtime_error(
+        "getResultSet is not implemented, remove dependency of processor module");
 }
 
 static std::unique_ptr<ValueVector> getValueVector(const LogicalType& type, MemoryManager* mm,
@@ -86,18 +87,21 @@ OnDiskGraphNbrScanState::OnDiskGraphNbrScanState(ClientContext* context,
 OnDiskGraphNbrScanState::OnDiskGraphNbrScanState(ClientContext* context,
     TableCatalogEntry* tableEntry, std::shared_ptr<Expression> predicate,
     std::vector<std::string> relProperties, bool randomLookup) {
-    // Mock implementation
-    srcNodeIDVector = std::make_unique<ValueVector>(LogicalType::INTERNAL_ID().copy(), context->getMemoryManager());
-    dstNodeIDVector = std::make_unique<ValueVector>(LogicalType::INTERNAL_ID().copy(), context->getMemoryManager());
-    propertyVectors.resize(relProperties.size());
-    for (auto i = 0u; i < relProperties.size(); ++i) {
-        auto& property = tableEntry->getProperty(relProperties[i]);
-        propertyVectors[i] = std::make_unique<ValueVector>(property.getType().copy(), context->getMemoryManager());
-    }
-    if (predicate != nullptr) {
-        // Mock predicate evaluator - set to nullptr since we don't need actual evaluation
-        relPredicateEvaluator = nullptr;
-    }
+    // // Mock implementation
+    // srcNodeIDVector = std::make_unique<ValueVector>(LogicalType::INTERNAL_ID().copy(),
+    //     context->getMemoryManager());
+    // dstNodeIDVector = std::make_unique<ValueVector>(LogicalType::INTERNAL_ID().copy(),
+    //     context->getMemoryManager());
+    // propertyVectors.resize(relProperties.size());
+    // for (auto i = 0u; i < relProperties.size(); ++i) {
+    //     auto& property = tableEntry->getProperty(relProperties[i]);
+    //     propertyVectors[i] =
+    //         std::make_unique<ValueVector>(property.getType().copy(), context->getMemoryManager());
+    // }
+    // if (predicate != nullptr) {
+    //     // Mock predicate evaluator - set to nullptr since we don't need actual evaluation
+    //     relPredicateEvaluator = nullptr;
+    // }
 }
 
 // Removed InnerIterator and directedIterators implementations

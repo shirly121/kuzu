@@ -12,7 +12,7 @@
 #include "common/type_utils.h"
 #include "common/types/types.h"
 #include "common/vector/value_vector.h"
-#include "expression_evaluator/expression_evaluator.h"
+// #include "expression_evaluator/expression_evaluator.h"
 #include "storage/buffer_manager/buffer_manager.h"
 #include "storage/buffer_manager/memory_manager.h"
 #include "storage/buffer_manager/spiller.h"
@@ -503,20 +503,20 @@ void ColumnChunkData::resizeWithoutPreserve(uint64_t newCapacity) {
 
 void ColumnChunkData::populateWithDefaultVal(ExpressionEvaluator& defaultEvaluator,
     uint64_t& numValues_, ColumnStats* newColumnStats) {
-    auto numValuesAppended = 0u;
-    const auto numValuesToPopulate = numValues_;
-    while (numValuesAppended < numValuesToPopulate) {
-        const auto numValuesToAppend =
-            std::min(DEFAULT_VECTOR_CAPACITY, numValuesToPopulate - numValuesAppended);
-        defaultEvaluator.evaluate(numValuesToAppend);
-        auto resultVector = defaultEvaluator.resultVector.get();
-        KU_ASSERT(resultVector->state->getSelVector().getSelSize() == numValuesToAppend);
-        append(resultVector, resultVector->state->getSelVector());
-        if (newColumnStats) {
-            newColumnStats->update(resultVector);
-        }
-        numValuesAppended += numValuesToAppend;
-    }
+    // auto numValuesAppended = 0u;
+    // const auto numValuesToPopulate = numValues_;
+    // while (numValuesAppended < numValuesToPopulate) {
+    //     const auto numValuesToAppend =
+    //         std::min(DEFAULT_VECTOR_CAPACITY, numValuesToPopulate - numValuesAppended);
+    //     defaultEvaluator.evaluate(numValuesToAppend);
+    //     auto resultVector = defaultEvaluator.resultVector.get();
+    //     KU_ASSERT(resultVector->state->getSelVector().getSelSize() == numValuesToAppend);
+    //     append(resultVector, resultVector->state->getSelVector());
+    //     if (newColumnStats) {
+    //         newColumnStats->update(resultVector);
+    //     }
+    //     numValuesAppended += numValuesToAppend;
+    // }
 }
 
 void ColumnChunkData::copyVectorToBuffer(ValueVector* vector, offset_t startPosInChunk,

@@ -59,7 +59,7 @@ private:
     std::unique_ptr<common::ValueVector> dstNodeIDVector;
     std::vector<std::unique_ptr<common::ValueVector>> propertyVectors;
 
-    std::unique_ptr<evaluator::ExpressionEvaluator> relPredicateEvaluator;
+    // std::unique_ptr<evaluator::ExpressionEvaluator> relPredicateEvaluator;
     common::SemiMask* nbrNodeMask = nullptr;
 };
 

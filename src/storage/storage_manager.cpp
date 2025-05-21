@@ -75,24 +75,24 @@ void StorageManager::loadTables(const Catalog& catalog, VirtualFileSystem* vfs,
 }
 
 void StorageManager::recover(main::ClientContext& clientContext) {
-    if (clientContext.getDatabasePath().empty()) {
-        // In-memory mode. Nothing to recover from.
-        return;
-    }
-    const auto vfs = clientContext.getVFSUnsafe();
-    const auto walFilePath =
-        vfs->joinPath(clientContext.getDatabasePath(), StorageConstants::WAL_FILE_SUFFIX);
-    if (!vfs->fileOrPathExists(walFilePath, &clientContext)) {
-        return;
-    }
-    try {
-        // TODO(Guodong): We should first check if there is CHECKPOINT record at the end.
-        // If so, we can skip replaying the WAL, instead directly replacing shadow files/pages.
-        const auto walReplayer = std::make_unique<WALReplayer>(clientContext);
-        walReplayer->replay();
-    } catch (std::exception& e) {
-        throw Exception(stringFormat("Error during recovery: {}", e.what()));
-    }
+    // if (clientContext.getDatabasePath().empty()) {
+    //     // In-memory mode. Nothing to recover from.
+    //     return;
+    // }
+    // const auto vfs = clientContext.getVFSUnsafe();
+    // const auto walFilePath =
+    //     vfs->joinPath(clientContext.getDatabasePath(), StorageConstants::WAL_FILE_SUFFIX);
+    // if (!vfs->fileOrPathExists(walFilePath, &clientContext)) {
+    //     return;
+    // }
+    // try {
+    //     // TODO(Guodong): We should first check if there is CHECKPOINT record at the end.
+    //     // If so, we can skip replaying the WAL, instead directly replacing shadow files/pages.
+    //     const auto walReplayer = std::make_unique<WALReplayer>(clientContext);
+    //     walReplayer->replay();
+    // } catch (std::exception& e) {
+    //     throw Exception(stringFormat("Error during recovery: {}", e.what()));
+    // }
 }
 
 void StorageManager::createNodeTable(NodeTableCatalogEntry* entry, main::ClientContext* context) {

@@ -7,12 +7,14 @@
 #include "function/table/standalone_call_function.h"
 #include "graph/graph_entry.h"
 #include "parser/parser.h"
+#include "common/types/value/value.h"
 // #include "processor/execution_context.h"
 
 using namespace kuzu::binder;
 using namespace kuzu::common;
 using namespace kuzu::catalog;
 using namespace kuzu::graph;
+using namespace kuzu::common;
 
 namespace kuzu {
 namespace function {

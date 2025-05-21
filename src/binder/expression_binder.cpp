@@ -7,7 +7,7 @@
 #include "common/exception/binder.h"
 #include "common/exception/not_implemented.h"
 #include "common/string_format.h"
-#include "expression_evaluator/expression_evaluator_utils.h"
+// #include "expression_evaluator/expression_evaluator_utils.h"
 #include "function/cast/vector_cast_functions.h"
 #include "main/client_context.h"
 #include "parser/expression/parsed_expression_visitor.h"
@@ -87,19 +87,20 @@ std::shared_ptr<Expression> ExpressionBinder::bindExpression(
 
 std::shared_ptr<Expression> ExpressionBinder::foldExpression(
     const std::shared_ptr<Expression>& expression) const {
-    auto value =
-        evaluator::ExpressionEvaluatorUtils::evaluateConstantExpression(expression, context);
-    auto result = createLiteralExpression(value);
-    // Fold result should preserve the alias original expression. E.g.
-    // RETURN 2, 1 + 1 AS x
-    // Once folded, 1 + 1 will become 2 and have the same identifier as the first RETURN element.
-    // We preserve alias (x) to avoid such conflict.
-    if (expression->hasAlias()) {
-        result->setAlias(expression->getAlias());
-    } else {
-        result->setAlias(expression->toString());
-    }
-    return result;
+    // auto value =
+    //     evaluator::ExpressionEvaluatorUtils::evaluateConstantExpression(expression, context);
+    // auto result = createLiteralExpression(value);
+    // // Fold result should preserve the alias original expression. E.g.
+    // // RETURN 2, 1 + 1 AS x
+    // // Once folded, 1 + 1 will become 2 and have the same identifier as the first RETURN element.
+    // // We preserve alias (x) to avoid such conflict.
+    // if (expression->hasAlias()) {
+    //     result->setAlias(expression->getAlias());
+    // } else {
+    //     result->setAlias(expression->toString());
+    // }
+    // return result;
+    return nullptr;
 }
 
 static std::string unsupportedImplicitCastException(const Expression& expression,

@@ -5,7 +5,7 @@
 #include "graph/graph.h"
 #include "graph/graph_entry.h"
 // todo: remove include path
-#include "processor/result/factorized_table_pool.h"
+// #include "processor/result/factorized_table_pool.h"
 
 namespace kuzu {
 

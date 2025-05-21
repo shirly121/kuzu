@@ -1,6 +1,6 @@
 #include "binder/expression/expression_util.h"
 #include "common/exception/binder.h"
-#include "expression_evaluator/expression_evaluator_utils.h"
+// #include "expression_evaluator/expression_evaluator_utils.h"
 #include "function/string/functions/base_regexp_function.h"
 #include "function/string/vector_string_functions.h"
 #include "re2.h"
@@ -104,20 +104,21 @@ scalar_func_exec_t getExecFunc(const binder::expression_vector& expr) {
 }
 
 std::unique_ptr<FunctionBindData> bindFunc(ScalarBindFuncInput input) {
-    auto definition = input.definition->ptrCast<ScalarFunction>();
-    re2_replace_func_t replaceFunc = bindReplaceFunc(input.arguments);
-    if (input.arguments[1]->expressionType == ExpressionType::LITERAL) {
-        definition->execFunc = getExecFunc<RegexpReplaceStaticPattern>(input.arguments);
-        auto value = evaluator::ExpressionEvaluatorUtils::evaluateConstantExpression(
-            input.arguments[1], input.context);
-        return std::make_unique<RegexReplaceBindDataStaticPattern>(
-            binder::ExpressionUtil::getDataTypes(input.arguments), std::move(replaceFunc),
-            BaseRegexpOperation::parseCypherPattern(value.getValue<std::string>()));
-    } else {
-        definition->execFunc = getExecFunc<RegexpReplace>(input.arguments);
-        return std::make_unique<RegexReplaceBindData>(
-            binder::ExpressionUtil::getDataTypes(input.arguments), std::move(replaceFunc));
-    }
+    // auto definition = input.definition->ptrCast<ScalarFunction>();
+    // re2_replace_func_t replaceFunc = bindReplaceFunc(input.arguments);
+    // if (input.arguments[1]->expressionType == ExpressionType::LITERAL) {
+    //     definition->execFunc = getExecFunc<RegexpReplaceStaticPattern>(input.arguments);
+    //     auto value = evaluator::ExpressionEvaluatorUtils::evaluateConstantExpression(
+    //         input.arguments[1], input.context);
+    //     return std::make_unique<RegexReplaceBindDataStaticPattern>(
+    //         binder::ExpressionUtil::getDataTypes(input.arguments), std::move(replaceFunc),
+    //         BaseRegexpOperation::parseCypherPattern(value.getValue<std::string>()));
+    // } else {
+    //     definition->execFunc = getExecFunc<RegexpReplace>(input.arguments);
+    //     return std::make_unique<RegexReplaceBindData>(
+    //         binder::ExpressionUtil::getDataTypes(input.arguments), std::move(replaceFunc));
+    // }
+    return nullptr;
 }
 
 function_set RegexpReplaceFunction::getFunctionSet() {

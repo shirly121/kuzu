@@ -6,7 +6,7 @@
 #include "common/mask.h"
 #include "common/types/types.h"
 // todo: remove include path
-#include "processor/result/factorized_table.h"
+// #include "processor/result/factorized_table.h"
 
 namespace kuzu {
 namespace function {
