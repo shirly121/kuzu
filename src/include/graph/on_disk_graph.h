@@ -83,7 +83,7 @@ private:
 
     common::DataChunk propertyVectors;
     std::unique_ptr<common::ValueVector> nodeIDVector;
-    std::unique_ptr<storage::NodeTableScanState> tableScanState;
+    // std::unique_ptr<storage::NodeTableScanState> tableScanState;
 
     common::offset_t numNodesScanned;
     common::offset_t currentOffset;

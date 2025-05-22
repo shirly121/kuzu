@@ -24,8 +24,8 @@
 #include "planner/planner.h"
 // #include "processor/plan_mapper.h"
 // #include "processor/processor.h"
-#include "storage/buffer_manager/buffer_manager.h"
-#include "storage/buffer_manager/spiller.h"
+// #include "storage/buffer_manager/buffer_manager.h"
+// #include "storage/buffer_manager/spiller.h"
 #include "storage/storage_manager.h"
 #include "transaction/transaction_context.h"
 #include "main/plan_printer.h"
@@ -296,7 +296,7 @@ const graph::GraphEntrySet& ClientContext::getGraphEntrySet() const {
 }
 
 void ClientContext::cleanUp() {
-    getVFSUnsafe()->cleanUP(this);
+    // getVFSUnsafe()->cleanUP(this);
 }
 
 std::unique_ptr<PreparedStatement> ClientContext::prepare(std::string_view query) {
@@ -574,12 +574,13 @@ std::unique_ptr<QueryResult> ClientContext::executeNoLock(PreparedStatement* pre
 
 std::unique_ptr<QueryResult> ClientContext::handleFailedExecution(std::optional<uint64_t> queryID,
     const std::exception& e) const {
-    getMemoryManager()->getBufferManager()->getSpillerOrSkip(
-        [](auto& spiller) { spiller.clearFile(); });
-    if (queryID.has_value()) {
-        progressBar->endProgress(queryID.value());
-    }
-    return queryResultWithError(e.what());
+    // getMemoryManager()->getBufferManager()->getSpillerOrSkip(
+    //     [](auto& spiller) { spiller.clearFile(); });
+    // if (queryID.has_value()) {
+    //     progressBar->endProgress(queryID.value());
+    // }
+    // return queryResultWithError(e.what());
+    return nullptr;
 }
 
 ClientContext::TransactionHelper::TransactionCommitAction

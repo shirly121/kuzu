@@ -6,6 +6,7 @@
 #include "common/enums/rel_direction.h"
 #include "common/serializer/buffered_file.h"
 #include "storage/wal/wal_record.h"
+#include "common/file_system/file_info.h"
 
 namespace kuzu {
 namespace binder {
@@ -29,11 +30,11 @@ class WAL {
     friend class WALReplayer;
 
 public:
-    WAL();
+    WAL() {}
     WAL(const std::string& directory, bool readOnly, common::VirtualFileSystem* vfs,
-        main::ClientContext* context);
+        main::ClientContext* context) {}
 
-    ~WAL();
+    ~WAL() = default;
 
     // Currently, only creating a table entry has its own WAL record. Eventually,
     // we want to log minimal info into the WAL, so each entry type should have its

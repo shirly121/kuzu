@@ -1,7 +1,7 @@
 #include "binder/binder.h"
 #include "function/table/bind_data.h"
 #include "function/table/simple_table_function.h"
-#include "storage/page_manager.h"
+// #include "storage/page_manager.h"
 #include "storage/storage_manager.h"
 #include "storage/store/node_table.h"
 
@@ -21,27 +21,29 @@ struct FreeSpaceInfoBindData final : TableFuncBindData {
 
 static common::offset_t internalTableFunc(const TableFuncMorsel& morsel,
     const TableFuncInput& input, common::DataChunk& output) {
-    const auto bindData = input.bindData->constPtrCast<FreeSpaceInfoBindData>();
-    const auto entries =
-        bindData->ctx->getStorageManager()->getDataFH()->getPageManager()->getFreeEntries(
-            morsel.startOffset, morsel.endOffset);
-    for (common::row_idx_t i = 0; i < entries.size(); ++i) {
-        const auto& freeEntry = entries[i];
-        output.getValueVectorMutable(0).setValue<uint64_t>(i, freeEntry.startPageIdx);
-        output.getValueVectorMutable(1).setValue<uint64_t>(i, freeEntry.numPages);
-    }
-    return entries.size();
+    // const auto bindData = input.bindData->constPtrCast<FreeSpaceInfoBindData>();
+    // const auto entries =
+    //     bindData->ctx->getStorageManager()->getDataFH()->getPageManager()->getFreeEntries(
+    //         morsel.startOffset, morsel.endOffset);
+    // for (common::row_idx_t i = 0; i < entries.size(); ++i) {
+    //     const auto& freeEntry = entries[i];
+    //     output.getValueVectorMutable(0).setValue<uint64_t>(i, freeEntry.startPageIdx);
+    //     output.getValueVectorMutable(1).setValue<uint64_t>(i, freeEntry.numPages);
+    // }
+    // return entries.size();
+    return 0;
 }
 
 static std::unique_ptr<TableFuncBindData> bindFunc(const main::ClientContext* context,
     const TableFuncBindInput* input) {
-    std::vector<std::string> columnNames = {"start_page_idx", "num_pages"};
-    std::vector<common::LogicalType> columnTypes;
-    columnTypes.push_back(common::LogicalType::UINT64());
-    columnTypes.push_back(common::LogicalType::UINT64());
-    auto columns = input->binder->createVariables(columnNames, columnTypes);
-    return std::make_unique<FreeSpaceInfoBindData>(columns,
-        context->getStorageManager()->getDataFH()->getPageManager()->getNumFreeEntries(), context);
+    // std::vector<std::string> columnNames = {"start_page_idx", "num_pages"};
+    // std::vector<common::LogicalType> columnTypes;
+    // columnTypes.push_back(common::LogicalType::UINT64());
+    // columnTypes.push_back(common::LogicalType::UINT64());
+    // auto columns = input->binder->createVariables(columnNames, columnTypes);
+    // return std::make_unique<FreeSpaceInfoBindData>(columns,
+    //     context->getStorageManager()->getDataFH()->getPageManager()->getNumFreeEntries(), context);
+    return nullptr;
 }
 
 function_set FreeSpaceInfoFunction::getFunctionSet() {

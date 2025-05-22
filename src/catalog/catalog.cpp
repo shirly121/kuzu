@@ -20,8 +20,8 @@
 #include "extension/extension_manager.h"
 #include "function/function_collection.h"
 #include "main/db_config.h"
-#include "storage/storage_utils.h"
-#include "storage/storage_version_info.h"
+// #include "storage/storage_utils.h"
+// #include "storage/storage_version_info.h"
 #include "transaction/transaction.h"
 
 using namespace kuzu::binder;
@@ -488,76 +488,76 @@ void Catalog::checkpoint(const std::string& databasePath, VirtualFileSystem* fs)
     saveToFile(databasePath, fs, FileVersionType::WAL_VERSION);
 }
 
-static void validateStorageVersion(storage_version_t savedStorageVersion) {
-    const auto storageVersion = StorageVersionInfo::getStorageVersion();
-    if (savedStorageVersion != storageVersion) {
-        // LCOV_EXCL_START
-        throw RuntimeException(
-            stringFormat("Trying to read a database file with a different version. "
-                         "Database file version: {}, Current build storage version: {}",
-                savedStorageVersion, storageVersion));
-        // LCOV_EXCL_STOP
-    }
-}
+// static void validateStorageVersion(storage_version_t savedStorageVersion) {
+//     const auto storageVersion = StorageVersionInfo::getStorageVersion();
+//     if (savedStorageVersion != storageVersion) {
+//         // LCOV_EXCL_START
+//         throw RuntimeException(
+//             stringFormat("Trying to read a database file with a different version. "
+//                          "Database file version: {}, Current build storage version: {}",
+//                 savedStorageVersion, storageVersion));
+//         // LCOV_EXCL_STOP
+//     }
+// }
 
-static void validateMagicBytes(Deserializer& deserializer) {
-    const auto numMagicBytes = strlen(StorageVersionInfo::MAGIC_BYTES);
-    uint8_t magicBytes[4];
-    for (auto i = 0u; i < numMagicBytes; i++) {
-        deserializer.deserializeValue<uint8_t>(magicBytes[i]);
-    }
-    if (memcmp(magicBytes, StorageVersionInfo::MAGIC_BYTES, numMagicBytes) != 0) {
-        throw RuntimeException(
-            "This is not a valid Kuzu database directory for the current version of Kuzu.");
-    }
-}
+// static void validateMagicBytes(Deserializer& deserializer) {
+//     const auto numMagicBytes = strlen(StorageVersionInfo::MAGIC_BYTES);
+//     uint8_t magicBytes[4];
+//     for (auto i = 0u; i < numMagicBytes; i++) {
+//         deserializer.deserializeValue<uint8_t>(magicBytes[i]);
+//     }
+//     if (memcmp(magicBytes, StorageVersionInfo::MAGIC_BYTES, numMagicBytes) != 0) {
+//         throw RuntimeException(
+//             "This is not a valid Kuzu database directory for the current version of Kuzu.");
+//     }
+// }
 
-static void writeMagicBytes(Serializer& serializer) {
-    const auto numMagicBytes = strlen(StorageVersionInfo::MAGIC_BYTES);
-    for (auto i = 0u; i < numMagicBytes; i++) {
-        serializer.serializeValue<uint8_t>(StorageVersionInfo::MAGIC_BYTES[i]);
-    }
-}
+// static void writeMagicBytes(Serializer& serializer) {
+//     const auto numMagicBytes = strlen(StorageVersionInfo::MAGIC_BYTES);
+//     for (auto i = 0u; i < numMagicBytes; i++) {
+//         serializer.serializeValue<uint8_t>(StorageVersionInfo::MAGIC_BYTES[i]);
+//     }
+// }
 
 void Catalog::saveToFile(const std::string& directory, VirtualFileSystem* fs,
     FileVersionType versionType) const {
-    KU_ASSERT(!directory.empty());
-    const auto catalogPath = StorageUtils::getCatalogFilePath(fs, directory, versionType);
-    const auto catalogFile = fs->openFile(catalogPath,
-        FileOpenFlags{FileFlags::CREATE_IF_NOT_EXISTS | FileFlags::READ_ONLY | FileFlags::WRITE});
-    Serializer serializer(std::make_unique<BufferedFileWriter>(*catalogFile));
-    writeMagicBytes(serializer);
-    serializer.serializeValue(StorageVersionInfo::getStorageVersion());
-    tables->serialize(serializer);
-    relGroups->serialize(serializer);
-    sequences->serialize(serializer);
-    functions->serialize(serializer);
-    types->serialize(serializer);
-    indexes->serialize(serializer);
-    internalTables->serialize(serializer);
-    internalSequences->serialize(serializer);
-    internalFunctions->serialize(serializer);
+    // KU_ASSERT(!directory.empty());
+    // const auto catalogPath = StorageUtils::getCatalogFilePath(fs, directory, versionType);
+    // const auto catalogFile = fs->openFile(catalogPath,
+    //     FileOpenFlags{FileFlags::CREATE_IF_NOT_EXISTS | FileFlags::READ_ONLY | FileFlags::WRITE});
+    // Serializer serializer(std::make_unique<BufferedFileWriter>(*catalogFile));
+    // writeMagicBytes(serializer);
+    // serializer.serializeValue(StorageVersionInfo::getStorageVersion());
+    // tables->serialize(serializer);
+    // relGroups->serialize(serializer);
+    // sequences->serialize(serializer);
+    // functions->serialize(serializer);
+    // types->serialize(serializer);
+    // indexes->serialize(serializer);
+    // internalTables->serialize(serializer);
+    // internalSequences->serialize(serializer);
+    // internalFunctions->serialize(serializer);
 }
 
 void Catalog::readFromFile(const std::string& directory, VirtualFileSystem* fs,
     FileVersionType versionType, main::ClientContext* context) {
-    KU_ASSERT(!directory.empty());
-    const auto catalogPath = StorageUtils::getCatalogFilePath(fs, directory, versionType);
-    Deserializer deserializer(std::make_unique<BufferedFileReader>(
-        fs->openFile(catalogPath, FileOpenFlags{FileFlags::READ_ONLY}, context)));
-    validateMagicBytes(deserializer);
-    storage_version_t savedStorageVersion = 0;
-    deserializer.deserializeValue(savedStorageVersion);
-    validateStorageVersion(savedStorageVersion);
-    tables = CatalogSet::deserialize(deserializer);
-    relGroups = CatalogSet::deserialize(deserializer);
-    sequences = CatalogSet::deserialize(deserializer);
-    functions = CatalogSet::deserialize(deserializer);
-    types = CatalogSet::deserialize(deserializer);
-    indexes = CatalogSet::deserialize(deserializer);
-    internalTables = CatalogSet::deserialize(deserializer);
-    internalSequences = CatalogSet::deserialize(deserializer);
-    internalFunctions = CatalogSet::deserialize(deserializer);
+    // KU_ASSERT(!directory.empty());
+    // const auto catalogPath = StorageUtils::getCatalogFilePath(fs, directory, versionType);
+    // Deserializer deserializer(std::make_unique<BufferedFileReader>(
+    //     fs->openFile(catalogPath, FileOpenFlags{FileFlags::READ_ONLY}, context)));
+    // validateMagicBytes(deserializer);
+    // storage_version_t savedStorageVersion = 0;
+    // deserializer.deserializeValue(savedStorageVersion);
+    // validateStorageVersion(savedStorageVersion);
+    // tables = CatalogSet::deserialize(deserializer);
+    // relGroups = CatalogSet::deserialize(deserializer);
+    // sequences = CatalogSet::deserialize(deserializer);
+    // functions = CatalogSet::deserialize(deserializer);
+    // types = CatalogSet::deserialize(deserializer);
+    // indexes = CatalogSet::deserialize(deserializer);
+    // internalTables = CatalogSet::deserialize(deserializer);
+    // internalSequences = CatalogSet::deserialize(deserializer);
+    // internalFunctions = CatalogSet::deserialize(deserializer);
 }
 
 void Catalog::registerBuiltInFunctions() {

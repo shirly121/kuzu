@@ -62,21 +62,21 @@ const main::ExtensionOption* ExtensionManager::getExtensionOption(std::string na
     return extensionOptions.contains(name) ? &extensionOptions.at(name) : nullptr;
 }
 
-void ExtensionManager::registerStorageExtension(std::string name,
-    std::unique_ptr<storage::StorageExtension> storageExtension) {
-    if (storageExtensions.contains(name)) {
-        return;
-    }
-    storageExtensions.emplace(std::move(name), std::move(storageExtension));
-}
+// void ExtensionManager::registerStorageExtension(std::string name,
+//     std::unique_ptr<storage::StorageExtension> storageExtension) {
+//     if (storageExtensions.contains(name)) {
+//         return;
+//     }
+//     storageExtensions.emplace(std::move(name), std::move(storageExtension));
+// }
 
-std::vector<storage::StorageExtension*> ExtensionManager::getStorageExtensions() {
-    std::vector<storage::StorageExtension*> storageExtensionsToReturn;
-    for (auto& [name, storageExtension] : storageExtensions) {
-        storageExtensionsToReturn.push_back(storageExtension.get());
-    }
-    return storageExtensionsToReturn;
-}
+// std::vector<storage::StorageExtension*> ExtensionManager::getStorageExtensions() {
+//     std::vector<storage::StorageExtension*> storageExtensionsToReturn;
+//     for (auto& [name, storageExtension] : storageExtensions) {
+//         storageExtensionsToReturn.push_back(storageExtension.get());
+//     }
+//     return storageExtensionsToReturn;
+// }
 
 void ExtensionManager::autoLoadLinkedExtensions(main::ClientContext* context) {
     loadLinkedExtensions(context);

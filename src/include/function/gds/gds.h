@@ -4,6 +4,7 @@
 #include "function/table/bind_data.h"
 #include "graph/graph.h"
 #include "graph/graph_entry.h"
+#include "catalog/catalog.h"
 // todo: remove include path
 // #include "processor/result/factorized_table_pool.h"
 

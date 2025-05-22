@@ -1,35 +1,35 @@
-#pragma once
+// #pragma once
 
-#include "database.h"
+// #include "database.h"
 
-namespace kuzu {
-namespace storage {
-class Table;
-}
+// namespace kuzu {
+// namespace storage {
+// class Table;
+// }
 
-namespace main {
+// namespace main {
 
-class ClientContext;
-class KUZU_API StorageDriver {
-public:
-    explicit StorageDriver(Database* database);
+// class ClientContext;
+// class KUZU_API StorageDriver {
+// public:
+//     explicit StorageDriver(Database* database);
 
-    ~StorageDriver();
+//     ~StorageDriver();
 
-    void scan(const std::string& nodeName, const std::string& propertyName,
-        common::offset_t* offsets, size_t numOffsets, uint8_t* result, size_t numThreads);
+//     void scan(const std::string& nodeName, const std::string& propertyName,
+//         common::offset_t* offsets, size_t numOffsets, uint8_t* result, size_t numThreads);
 
-    // TODO: Should merge following two functions into a single one.
-    uint64_t getNumNodes(const std::string& nodeName) const;
-    uint64_t getNumRels(const std::string& relName) const;
+//     // TODO: Should merge following two functions into a single one.
+//     uint64_t getNumNodes(const std::string& nodeName) const;
+//     uint64_t getNumRels(const std::string& relName) const;
 
-private:
-    void scanColumn(storage::Table* table, common::column_id_t columnID,
-        const common::offset_t* offsets, size_t size, uint8_t* result) const;
+// private:
+//     void scanColumn(storage::Table* table, common::column_id_t columnID,
+//         const common::offset_t* offsets, size_t size, uint8_t* result) const;
 
-private:
-    std::unique_ptr<ClientContext> clientContext;
-};
+// private:
+//     std::unique_ptr<ClientContext> clientContext;
+// };
 
-} // namespace main
-} // namespace kuzu
+// } // namespace main
+// } // namespace kuzu

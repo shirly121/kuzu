@@ -7,7 +7,7 @@
 #include "common/types/value/node.h"
 #include "common/types/value/rel.h"
 #include "common/types/value/value.h"
-#include "storage/storage_utils.h"
+// #include "storage/storage_utils.h"
 
 namespace kuzu {
 namespace common {
@@ -253,15 +253,15 @@ void ArrowRowBatch::appendValue(ArrowVector* vector, const LogicalType& type, Va
 template<LogicalTypeID DT>
 void ArrowRowBatch::templateCopyNonNullValue(ArrowVector* vector, const LogicalType& /*type*/,
     Value* value, std::int64_t pos) {
-    auto valSize = storage::StorageUtils::getDataTypeSize(LogicalType{DT});
-    std::memcpy(vector->data.data() + pos * valSize, &value->val, valSize);
+    // auto valSize = storage::StorageUtils::getDataTypeSize(LogicalType{DT});
+    // std::memcpy(vector->data.data() + pos * valSize, &value->val, valSize);
 }
 
 template<>
 void ArrowRowBatch::templateCopyNonNullValue<LogicalTypeID::DECIMAL>(ArrowVector* vector,
     const LogicalType& type, Value* value, std::int64_t pos) {
-    auto valSize = storage::StorageUtils::getDataTypeSize(type);
-    std::memcpy(vector->data.data() + pos * 16, &value->val, valSize);
+    // auto valSize = storage::StorageUtils::getDataTypeSize(type);
+    // std::memcpy(vector->data.data() + pos * 16, &value->val, valSize);
 }
 
 template<>

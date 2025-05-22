@@ -18,7 +18,7 @@
 #include "function/built_in_function_utils.h"
 #include "function/cast/functions/numeric_limits.h"
 #include "main/client_context.h"
-#include "storage/compression/float_compression.h"
+// #include "storage/compression/float_compression.h"
 
 using kuzu::function::BuiltInFunctionsUtils;
 
@@ -303,10 +303,10 @@ uint32_t PhysicalTypeUtils::getFixedTypeSize(PhysicalTypeID physicalType) {
         return sizeof(interval_t);
     case PhysicalTypeID::INTERNAL_ID:
         return sizeof(internalID_t);
-    case PhysicalTypeID::ALP_EXCEPTION_FLOAT:
-        return storage::EncodeException<float>::sizeInBytes();
-    case PhysicalTypeID::ALP_EXCEPTION_DOUBLE:
-        return storage::EncodeException<double>::sizeInBytes();
+    // case PhysicalTypeID::ALP_EXCEPTION_FLOAT:
+    //     return storage::EncodeException<float>::sizeInBytes();
+    // case PhysicalTypeID::ALP_EXCEPTION_DOUBLE:
+    //     return storage::EncodeException<double>::sizeInBytes();
     default:
         KU_UNREACHABLE;
     }

@@ -21,8 +21,7 @@ struct KUZU_API TableFuncBindData {
     TableFuncBindData(binder::expression_vector columns, common::row_idx_t numRows)
         : columns{std::move(columns)}, numRows{numRows} {}
     TableFuncBindData(const TableFuncBindData& other)
-        : columns{other.columns}, numRows{other.numRows}, columnSkips{other.columnSkips},
-          columnPredicates{copyVector(other.columnPredicates)} {}
+        : columns{other.columns}, numRows{other.numRows}, columnSkips{other.columnSkips} {}
     TableFuncBindData& operator=(const TableFuncBindData& other) = delete;
     virtual ~TableFuncBindData() = default;
 
@@ -30,12 +29,12 @@ struct KUZU_API TableFuncBindData {
     void setColumnSkips(std::vector<bool> skips) { columnSkips = std::move(skips); }
     std::vector<bool> getColumnSkips() const;
 
-    void setColumnPredicates(std::vector<storage::ColumnPredicateSet> predicates) {
-        columnPredicates = std::move(predicates);
-    }
-    const std::vector<storage::ColumnPredicateSet>& getColumnPredicates() const {
-        return columnPredicates;
-    }
+    // void setColumnPredicates(std::vector<storage::ColumnPredicateSet> predicates) {
+    //     columnPredicates = std::move(predicates);
+    // }
+    // const std::vector<storage::ColumnPredicateSet>& getColumnPredicates() const {
+    //     return columnPredicates;
+    // }
 
     virtual std::shared_ptr<binder::Expression> getNodeOutput() const { return nullptr; }
 
@@ -55,7 +54,7 @@ struct KUZU_API TableFuncBindData {
 
 protected:
     std::vector<bool> columnSkips;
-    std::vector<storage::ColumnPredicateSet> columnPredicates;
+    // std::vector<storage::ColumnPredicateSet> columnPredicates;
 };
 
 } // namespace function

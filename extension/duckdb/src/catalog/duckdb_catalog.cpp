@@ -6,7 +6,7 @@
 #include "common/exception/runtime.h"
 #include "connector/duckdb_type_converter.h"
 #include "function/duckdb_scan.h"
-#include "storage/duckdb_storage.h"
+// #include "storage/duckdb_storage.h"
 
 namespace kuzu {
 namespace duckdb_extension {
@@ -18,16 +18,16 @@ DuckDBCatalog::DuckDBCatalog(std::string dbPath, std::string catalogName,
       defaultSchemaName{std::move(defaultSchemaName)},
       tableNamesVector{common::LogicalType::STRING(), context->getMemoryManager()},
       connector{connector} {
-    skipUnsupportedTable = DuckDBStorageExtension::SKIP_UNSUPPORTED_TABLE_DEFAULT_VAL;
-    auto& options = attachOption.options;
-    if (options.contains(DuckDBStorageExtension::SKIP_UNSUPPORTED_TABLE_KEY)) {
-        auto val = options.at(DuckDBStorageExtension::SKIP_UNSUPPORTED_TABLE_KEY);
-        if (val.getDataType().getLogicalTypeID() != common::LogicalTypeID::BOOL) {
-            throw common::RuntimeException{common::stringFormat("Invalid option value for {}",
-                DuckDBStorageExtension::SKIP_UNSUPPORTED_TABLE_KEY)};
-        }
-        skipUnsupportedTable = val.getValue<bool>();
-    }
+    // skipUnsupportedTable = DuckDBStorageExtension::SKIP_UNSUPPORTED_TABLE_DEFAULT_VAL;
+    // auto& options = attachOption.options;
+    // if (options.contains(DuckDBStorageExtension::SKIP_UNSUPPORTED_TABLE_KEY)) {
+    //     auto val = options.at(DuckDBStorageExtension::SKIP_UNSUPPORTED_TABLE_KEY);
+    //     if (val.getDataType().getLogicalTypeID() != common::LogicalTypeID::BOOL) {
+    //         throw common::RuntimeException{common::stringFormat("Invalid option value for {}",
+    //             DuckDBStorageExtension::SKIP_UNSUPPORTED_TABLE_KEY)};
+    //     }
+    //     skipUnsupportedTable = val.getValue<bool>();
+    // }
 }
 
 void DuckDBCatalog::init() {
@@ -57,14 +57,14 @@ void DuckDBCatalog::init() {
 
 std::string DuckDBCatalog::bindSchemaName(const binder::AttachOption& options,
     const std::string& defaultName) {
-    if (options.options.contains(DuckDBStorageExtension::SCHEMA_OPTION)) {
-        auto val = options.options.at(DuckDBStorageExtension::SCHEMA_OPTION);
-        if (val.getDataType().getLogicalTypeID() != common::LogicalTypeID::STRING) {
-            throw common::RuntimeException{common::stringFormat("Invalid option value for {}",
-                DuckDBStorageExtension::SCHEMA_OPTION)};
-        }
-        return val.getValue<std::string>();
-    }
+    // if (options.options.contains(DuckDBStorageExtension::SCHEMA_OPTION)) {
+    //     auto val = options.options.at(DuckDBStorageExtension::SCHEMA_OPTION);
+    //     if (val.getDataType().getLogicalTypeID() != common::LogicalTypeID::STRING) {
+    //         throw common::RuntimeException{common::stringFormat("Invalid option value for {}",
+    //             DuckDBStorageExtension::SCHEMA_OPTION)};
+    //     }
+    //     return val.getValue<std::string>();
+    // }
     return defaultName;
 }
 

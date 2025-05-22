@@ -119,7 +119,7 @@ public:
     void rollback(storage::WAL* wal);
 
     uint64_t getEstimatedMemUsage() const;
-    storage::LocalStorage* getLocalStorage() const { return localStorage.get(); }
+    // storage::LocalStorage* getLocalStorage() const { return localStorage.get(); }
     LocalCacheManager& getLocalCacheManager() { return localCacheManager; }
     bool isUnCommitted(common::table_id_t tableID, common::offset_t nodeOffset) const {
         return nodeOffset >= getMinUncommittedNodeOffset(tableID);
@@ -167,8 +167,8 @@ private:
     common::transaction_t commitTS;
     int64_t currentTS;
     main::ClientContext* clientContext;
-    std::unique_ptr<storage::LocalStorage> localStorage;
-    std::unique_ptr<storage::UndoBuffer> undoBuffer;
+    // std::unique_ptr<storage::LocalStorage> localStorage;
+    // std::unique_ptr<storage::UndoBuffer> undoBuffer;
     LocalCacheManager localCacheManager;
     bool forceCheckpoint;
     bool hasCatalogChanges;

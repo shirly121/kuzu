@@ -12,7 +12,7 @@
 #include "common/types/uuid.h"
 #include "common/vector/value_vector.h"
 #include "function/hash/hash_functions.h"
-#include "storage/storage_utils.h"
+// #include "storage/storage_utils.h"
 
 namespace kuzu {
 namespace common {
@@ -667,21 +667,21 @@ void Value::resizeChildrenVector(uint64_t size, const LogicalType& childType) {
 }
 
 void Value::copyFromRowLayoutList(const ku_list_t& list, const LogicalType& childType) {
-    resizeChildrenVector(list.size, childType);
-    auto numBytesPerElement = storage::StorageUtils::getDataTypeSize(childType);
-    auto listNullBytes = reinterpret_cast<uint8_t*>(list.overflowPtr);
-    auto numBytesForNullValues = NullBuffer::getNumBytesForNullValues(list.size);
-    auto listValues = listNullBytes + numBytesForNullValues;
-    for (auto i = 0u; i < list.size; i++) {
-        auto childValue = children[i].get();
-        if (NullBuffer::isNull(listNullBytes, i)) {
-            childValue->setNull(true);
-        } else {
-            childValue->setNull(false);
-            childValue->copyFromRowLayout(listValues);
-        }
-        listValues += numBytesPerElement;
-    }
+    // resizeChildrenVector(list.size, childType);
+    // auto numBytesPerElement = storage::StorageUtils::getDataTypeSize(childType);
+    // auto listNullBytes = reinterpret_cast<uint8_t*>(list.overflowPtr);
+    // auto numBytesForNullValues = NullBuffer::getNumBytesForNullValues(list.size);
+    // auto listValues = listNullBytes + numBytesForNullValues;
+    // for (auto i = 0u; i < list.size; i++) {
+    //     auto childValue = children[i].get();
+    //     if (NullBuffer::isNull(listNullBytes, i)) {
+    //         childValue->setNull(true);
+    //     } else {
+    //         childValue->setNull(false);
+    //         childValue->copyFromRowLayout(listValues);
+    //     }
+    //     listValues += numBytesPerElement;
+    // }
 }
 
 void Value::copyFromColLayoutList(const list_entry_t& listEntry, ValueVector* vec) {
@@ -698,19 +698,19 @@ void Value::copyFromColLayoutList(const list_entry_t& listEntry, ValueVector* ve
 }
 
 void Value::copyFromRowLayoutStruct(const uint8_t* kuStruct) {
-    auto numFields = childrenSize;
-    auto structNullValues = kuStruct;
-    auto structValues = structNullValues + NullBuffer::getNumBytesForNullValues(numFields);
-    for (auto i = 0u; i < numFields; i++) {
-        auto childValue = children[i].get();
-        if (NullBuffer::isNull(structNullValues, i)) {
-            childValue->setNull(true);
-        } else {
-            childValue->setNull(false);
-            childValue->copyFromRowLayout(structValues);
-        }
-        structValues += storage::StorageUtils::getDataTypeSize(childValue->dataType);
-    }
+    // auto numFields = childrenSize;
+    // auto structNullValues = kuStruct;
+    // auto structValues = structNullValues + NullBuffer::getNumBytesForNullValues(numFields);
+    // for (auto i = 0u; i < numFields; i++) {
+    //     auto childValue = children[i].get();
+    //     if (NullBuffer::isNull(structNullValues, i)) {
+    //         childValue->setNull(true);
+    //     } else {
+    //         childValue->setNull(false);
+    //         childValue->copyFromRowLayout(structValues);
+    //     }
+    //     structValues += storage::StorageUtils::getDataTypeSize(childValue->dataType);
+    // }
 }
 
 void Value::copyFromColLayoutStruct(const struct_entry_t& structEntry, ValueVector* vec) {
@@ -726,26 +726,26 @@ void Value::copyFromColLayoutStruct(const struct_entry_t& structEntry, ValueVect
 }
 
 void Value::copyFromUnion(const uint8_t* kuUnion) {
-    auto childrenTypes = StructType::getFieldTypes(dataType);
-    auto unionNullValues = kuUnion;
-    auto unionValues = unionNullValues + NullBuffer::getNumBytesForNullValues(childrenTypes.size());
-    // For union dataType, only one member can be active at a time. So we don't need to copy all
-    // union fields into value.
-    auto activeFieldIdx = UnionType::getInternalFieldIdx(*(union_field_idx_t*)unionValues);
-    auto childValue = children[0].get();
-    childValue->dataType = childrenTypes[activeFieldIdx]->copy();
-    auto curMemberIdx = 0u;
-    // Seek to the current active member value.
-    while (curMemberIdx < activeFieldIdx) {
-        unionValues += storage::StorageUtils::getDataTypeSize(*childrenTypes[curMemberIdx]);
-        curMemberIdx++;
-    }
-    if (NullBuffer::isNull(unionNullValues, activeFieldIdx)) {
-        childValue->setNull(true);
-    } else {
-        childValue->setNull(false);
-        childValue->copyFromRowLayout(unionValues);
-    }
+    // auto childrenTypes = StructType::getFieldTypes(dataType);
+    // auto unionNullValues = kuUnion;
+    // auto unionValues = unionNullValues + NullBuffer::getNumBytesForNullValues(childrenTypes.size());
+    // // For union dataType, only one member can be active at a time. So we don't need to copy all
+    // // union fields into value.
+    // auto activeFieldIdx = UnionType::getInternalFieldIdx(*(union_field_idx_t*)unionValues);
+    // auto childValue = children[0].get();
+    // childValue->dataType = childrenTypes[activeFieldIdx]->copy();
+    // auto curMemberIdx = 0u;
+    // // Seek to the current active member value.
+    // while (curMemberIdx < activeFieldIdx) {
+    //     unionValues += storage::StorageUtils::getDataTypeSize(*childrenTypes[curMemberIdx]);
+    //     curMemberIdx++;
+    // }
+    // if (NullBuffer::isNull(unionNullValues, activeFieldIdx)) {
+    //     childValue->setNull(true);
+    // } else {
+    //     childValue->setNull(false);
+    //     childValue->copyFromRowLayout(unionValues);
+    // }
 }
 
 void Value::serialize(Serializer& serializer) const {

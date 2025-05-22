@@ -31,10 +31,10 @@ public:
         : wal{wal}, lastTransactionID{Transaction::START_TRANSACTION_ID}, lastTimestamp{1} {};
 
     virtual std::unique_ptr<Transaction> beginTransaction(main::ClientContext& clientContext,
-        TransactionType type);
+        TransactionType type) = 0;
 
-    virtual void commit(main::ClientContext& clientContext);
-    virtual void rollback(main::ClientContext& clientContext, Transaction* transaction);
+    virtual void commit(main::ClientContext& clientContext) = 0;
+    virtual void rollback(main::ClientContext& clientContext, Transaction* transaction) = 0;
 
     virtual void checkpoint(main::ClientContext& clientContext);
 

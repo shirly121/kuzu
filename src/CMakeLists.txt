@@ -17,7 +17,7 @@ add_subdirectory(optimizer)
 add_subdirectory(parser)
 add_subdirectory(planner)
 #add_subdirectory(processor)
-add_subdirectory(storage)
+#add_subdirectory(storage)
 add_subdirectory(transaction)
 add_subdirectory(extension)
 add_subdirectory(gopt)
@@ -60,19 +60,19 @@ endif()
 
 install(TARGETS kuzu kuzu_shared)
 
-if(${BUILD_SINGLE_FILE_HEADER})
-        # Create a command to generate kuzu.hpp, and then create a target that is
-        # always built that depends on it. This allows our generator to detect when
-        # exactly to build kuzu.hpp, while still building the target by default.
-        find_package(Python3 3.9...4 REQUIRED)
-        add_custom_command(
-                OUTPUT kuzu.hpp
-                COMMAND
-                        ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/collect-single-file-header.py ${CMAKE_CURRENT_BINARY_DIR}/..
-                DEPENDS
-                        ${PROJECT_SOURCE_DIR}/scripts/collect-single-file-header.py kuzu_shared)
-        add_custom_target(single_file_header ALL DEPENDS kuzu.hpp)
-endif()
+#if(${BUILD_SINGLE_FILE_HEADER})
+#        # Create a command to generate kuzu.hpp, and then create a target that is
+#        # always built that depends on it. This allows our generator to detect when
+#        # exactly to build kuzu.hpp, while still building the target by default.
+#        find_package(Python3 3.9...4 REQUIRED)
+#        add_custom_command(
+#                OUTPUT kuzu.hpp
+#                COMMAND
+#                        ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/collect-single-file-header.py ${CMAKE_CURRENT_BINARY_DIR}/..
+#                DEPENDS
+#                        ${PROJECT_SOURCE_DIR}/scripts/collect-single-file-header.py kuzu_shared)
+#        add_custom_target(single_file_header ALL DEPENDS kuzu.hpp)
+#endif()
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/c_api/kuzu.h TYPE INCLUDE)
 

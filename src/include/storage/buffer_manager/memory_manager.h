@@ -27,8 +27,8 @@ class MemoryBuffer {
 
 public:
     KUZU_API MemoryBuffer(MemoryManager* mm, common::page_idx_t blockIdx, uint8_t* buffer,
-        uint64_t size = common::TEMP_PAGE_SIZE);
-    KUZU_API ~MemoryBuffer();
+        uint64_t size = common::TEMP_PAGE_SIZE) {}
+    KUZU_API ~MemoryBuffer() = default;
     DELETE_COPY_AND_MOVE(MemoryBuffer);
 
     std::span<uint8_t> getBuffer() const {
@@ -74,7 +74,7 @@ class KUZU_API MemoryManager {
 
 public:
     MemoryManager() = default;
-    MemoryManager(BufferManager* bm, common::VirtualFileSystem* vfs);
+    MemoryManager(BufferManager* bm, common::VirtualFileSystem* vfs) {}
 
     ~MemoryManager() = default;
 

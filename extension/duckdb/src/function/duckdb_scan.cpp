@@ -53,26 +53,27 @@ struct DuckDBScanFunction {
 
 std::unique_ptr<TableFuncSharedState> DuckDBScanFunction::initSharedState(
     const TableFuncInitSharedStateInput& input) {
-    auto scanBindData = input.bindData->constPtrCast<DuckDBScanBindData>();
-    auto columnNames = scanBindData->getColumnsToSelect();
-    std::string predicatesString = "";
-    for (auto& predicates : scanBindData->getColumnPredicates()) {
-        if (predicates.isEmpty()) {
-            continue;
-        }
-        if (predicatesString.empty()) {
-            predicatesString = " WHERE " + predicates.toString();
-        } else {
-            predicatesString += stringFormat(" AND {}", predicates.toString());
-        }
-    }
-    auto finalQuery = stringFormat(scanBindData->query, columnNames) + predicatesString;
-    auto result = scanBindData->connector.executeQuery(finalQuery);
-    if (result->HasError()) {
-        throw RuntimeException(
-            stringFormat("Failed to execute query due to error: {}", result->GetError()));
-    }
-    return std::make_unique<DuckDBScanSharedState>(std::move(result));
+    // auto scanBindData = input.bindData->constPtrCast<DuckDBScanBindData>();
+    // auto columnNames = scanBindData->getColumnsToSelect();
+    // std::string predicatesString = "";
+    // for (auto& predicates : scanBindData->getColumnPredicates()) {
+    //     if (predicates.isEmpty()) {
+    //         continue;
+    //     }
+    //     if (predicatesString.empty()) {
+    //         predicatesString = " WHERE " + predicates.toString();
+    //     } else {
+    //         predicatesString += stringFormat(" AND {}", predicates.toString());
+    //     }
+    // }
+    // auto finalQuery = stringFormat(scanBindData->query, columnNames) + predicatesString;
+    // auto result = scanBindData->connector.executeQuery(finalQuery);
+    // if (result->HasError()) {
+    //     throw RuntimeException(
+    //         stringFormat("Failed to execute query due to error: {}", result->GetError()));
+    // }
+    // return std::make_unique<DuckDBScanSharedState>(std::move(result));
+    return nullptr;
 }
 
 std::unique_ptr<TableFuncLocalState> DuckDBScanFunction::initLocalState(

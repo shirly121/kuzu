@@ -46,16 +46,16 @@ bool InMemEmbeddings::isNull(common::offset_t offset) const {
 
 OnDiskEmbeddingScanState::OnDiskEmbeddingScanState(const transaction::Transaction* transaction,
     MemoryManager* mm, NodeTable& nodeTable, common::column_id_t columnID) {
-    std::vector columnIDs{columnID};
-    // The first ValueVector in scanChunk is reserved for nodeIDs.
-    std::vector<common::LogicalType> types;
-    types.emplace_back(common::LogicalType::INTERNAL_ID());
-    types.emplace_back(nodeTable.getColumn(columnID).getDataType().copy());
-    scanChunk = Table::constructDataChunk(mm, std::move(types));
-    std::vector outVectors{&scanChunk.getValueVectorMutable(1)};
-    scanState = std::make_unique<NodeTableScanState>(&scanChunk.getValueVectorMutable(0),
-        outVectors, scanChunk.state);
-    scanState->setToTable(transaction, &nodeTable, std::move(columnIDs));
+    // std::vector columnIDs{columnID};
+    // // The first ValueVector in scanChunk is reserved for nodeIDs.
+    // std::vector<common::LogicalType> types;
+    // types.emplace_back(common::LogicalType::INTERNAL_ID());
+    // types.emplace_back(nodeTable.getColumn(columnID).getDataType().copy());
+    // scanChunk = Table::constructDataChunk(mm, std::move(types));
+    // std::vector outVectors{&scanChunk.getValueVectorMutable(1)};
+    // scanState = std::make_unique<NodeTableScanState>(&scanChunk.getValueVectorMutable(0),
+    //     outVectors, scanChunk.state);
+    // scanState->setToTable(transaction, &nodeTable, std::move(columnIDs));
 }
 
 void* OnDiskEmbeddings::getEmbedding(transaction::Transaction* transaction,

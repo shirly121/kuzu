@@ -30,49 +30,50 @@ struct StatsInfoBindData final : TableFuncBindData {
 
 static offset_t internalTableFunc(const TableFuncMorsel& /*morsel*/, const TableFuncInput& input,
     DataChunk& output) {
-    const auto bindData = input.bindData->constPtrCast<StatsInfoBindData>();
-    const auto table = bindData->table;
-    switch (table->getTableType()) {
-    case TableType::NODE: {
-        const auto& nodeTable = table->cast<storage::NodeTable>();
-        const auto stats = nodeTable.getStats(bindData->context->getTransaction());
-        output.getValueVectorMutable(0).setValue<cardinality_t>(0, stats.getTableCard());
-        for (auto i = 0u; i < nodeTable.getNumColumns(); ++i) {
-            output.getValueVectorMutable(i + 1).setValue(0, stats.getNumDistinctValues(i));
-        }
-    } break;
-    default: {
-        KU_UNREACHABLE;
-    }
-    }
+    // const auto bindData = input.bindData->constPtrCast<StatsInfoBindData>();
+    // const auto table = bindData->table;
+    // switch (table->getTableType()) {
+    // case TableType::NODE: {
+    //     const auto& nodeTable = table->cast<storage::NodeTable>();
+    //     const auto stats = nodeTable.getStats(bindData->context->getTransaction());
+    //     output.getValueVectorMutable(0).setValue<cardinality_t>(0, stats.getTableCard());
+    //     for (auto i = 0u; i < nodeTable.getNumColumns(); ++i) {
+    //         output.getValueVectorMutable(i + 1).setValue(0, stats.getNumDistinctValues(i));
+    //     }
+    // } break;
+    // default: {
+    //     KU_UNREACHABLE;
+    // }
+    // }
     return 1;
 }
 
 static std::unique_ptr<TableFuncBindData> bindFunc(const ClientContext* context,
     const TableFuncBindInput* input) {
-    const auto tableName = input->getLiteralVal<std::string>(0);
-    const auto catalog = context->getCatalog();
-    if (!catalog->containsTable(context->getTransaction(), tableName)) {
-        throw BinderException{"Table " + tableName + " does not exist!"};
-    }
-    auto tableEntry = catalog->getTableCatalogEntry(context->getTransaction(), tableName);
-    if (tableEntry->getTableType() != TableType::NODE) {
-        throw BinderException{
-            "Stats from a non-node table " + tableName + " is not supported yet!"};
-    }
+    // const auto tableName = input->getLiteralVal<std::string>(0);
+    // const auto catalog = context->getCatalog();
+    // if (!catalog->containsTable(context->getTransaction(), tableName)) {
+    //     throw BinderException{"Table " + tableName + " does not exist!"};
+    // }
+    // auto tableEntry = catalog->getTableCatalogEntry(context->getTransaction(), tableName);
+    // if (tableEntry->getTableType() != TableType::NODE) {
+    //     throw BinderException{
+    //         "Stats from a non-node table " + tableName + " is not supported yet!"};
+    // }
 
-    std::vector<std::string> columnNames = {"cardinality"};
-    std::vector<LogicalType> columnTypes;
-    columnTypes.push_back(LogicalType::INT64());
-    for (auto& propDef : tableEntry->getProperties()) {
-        columnNames.push_back(propDef.getName() + "_distinct_count");
-        columnTypes.push_back(LogicalType::INT64());
-    }
-    const auto storageManager = context->getStorageManager();
-    auto table = storageManager->getTable(tableEntry->getTableID());
-    columnNames = TableFunction::extractYieldVariables(columnNames, input->yieldVariables);
-    auto columns = input->binder->createVariables(columnNames, columnTypes);
-    return std::make_unique<StatsInfoBindData>(columns, tableEntry, table, context);
+    // std::vector<std::string> columnNames = {"cardinality"};
+    // std::vector<LogicalType> columnTypes;
+    // columnTypes.push_back(LogicalType::INT64());
+    // for (auto& propDef : tableEntry->getProperties()) {
+    //     columnNames.push_back(propDef.getName() + "_distinct_count");
+    //     columnTypes.push_back(LogicalType::INT64());
+    // }
+    // const auto storageManager = context->getStorageManager();
+    // auto table = storageManager->getTable(tableEntry->getTableID());
+    // columnNames = TableFunction::extractYieldVariables(columnNames, input->yieldVariables);
+    // auto columns = input->binder->createVariables(columnNames, columnTypes);
+    // return std::make_unique<StatsInfoBindData>(columns, tableEntry, table, context);
+    return nullptr;
 }
 
 function_set StatsInfoFunction::getFunctionSet() {

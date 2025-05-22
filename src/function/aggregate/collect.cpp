@@ -1,6 +1,6 @@
 #include "function/aggregate_function.h"
 // #include "processor/result/factorized_table.h"
-#include "storage/storage_utils.h"
+// #include "storage/storage_utils.h"
 
 using namespace kuzu::binder;
 using namespace kuzu::common;
