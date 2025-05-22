@@ -1,4 +1,0 @@
-PROJECTION[k.k_creationDate]
-EXTEND[-->pl]
-EXTEND[p1<-k->]
-SCAN_NODE_TABLE[p1._ID p1.p_personid PK_SCAN(933)]
