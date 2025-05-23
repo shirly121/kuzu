@@ -14,10 +14,10 @@ class CatalogEntry;
 class CatalogSet;
 class SequenceCatalogEntry;
 struct SequenceRollbackData;
-} 
+} // namespace catalog
 namespace main {
 class ClientContext;
-} 
+}
 namespace storage {
 class LocalStorage;
 class UndoBuffer;
@@ -27,7 +27,7 @@ class UpdateInfo;
 struct VectorUpdateInfo;
 class ChunkedNodeGroup;
 class VersionRecordHandler;
-} 
+} // namespace storage
 namespace transaction {
 class TransactionManager;
 
@@ -172,5 +172,5 @@ private:
 extern KUZU_API Transaction DUMMY_TRANSACTION;
 extern KUZU_API Transaction DUMMY_CHECKPOINT_TRANSACTION;
 
-} 
-} 
+} // namespace transaction
+} // namespace kuzu

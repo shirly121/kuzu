@@ -45,31 +45,22 @@ static std::unique_ptr<TableFuncBindData> bindFunc(main::ClientContext* context,
     return nullptr;
 }
 
-
-
-
 static std::unique_ptr<TableFuncSharedState> initSharedState(
     const TableFuncInitSharedStateInput& input) {
     return nullptr;
 }
-
-
 
 static std::unique_ptr<TableFuncLocalState> initLocalState(
     const TableFuncInitLocalStateInput& input) {
     return nullptr;
 }
 
-
-
 static offset_t tableFunc(const TableFuncInput& input, TableFuncOutput&) {
     return 0;
 }
 
-
 static void finalizeFunc(const processor::ExecutionContext* context,
-    TableFuncSharedState* sharedState) {
-}
+    TableFuncSharedState* sharedState) {}
 
 function_set LocalCacheArrayColumnFunction::getFunctionSet() {
     function_set functionSet;
@@ -85,5 +76,5 @@ function_set LocalCacheArrayColumnFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

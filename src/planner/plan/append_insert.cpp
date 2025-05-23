@@ -1,10 +1,10 @@
 #include <iostream>
 
 #include "binder/query/updating_clause/bound_insert_info.h"
+#include "catalog/catalog_entry/rel_table_catalog_entry.h"
+#include "catalog/catalog_entry/table_catalog_entry.h"
 #include "planner/operator/persistent/logical_insert.h"
 #include "planner/planner.h"
-#include "catalog/catalog_entry/table_catalog_entry.h"
-#include "catalog/catalog_entry/rel_table_catalog_entry.h"
 
 using namespace kuzu::common;
 using namespace kuzu::binder;
@@ -47,7 +47,8 @@ void printLabelInfo(const std::vector<catalog::TableCatalogEntry*>& entries) {
             std::cout << entry->getTableID() << std::endl;
         } else if (entry->getTableType() == TableType::REL) {
             auto relTable = dynamic_cast<catalog::RelTableCatalogEntry*>(entry);
-            std::cout << relTable->getTableID() << ", " << relTable->getSrcTableID() << ", " << relTable->getDstTableID() << std::endl;
+            std::cout << relTable->getTableID() << ", " << relTable->getSrcTableID() << ", "
+                      << relTable->getDstTableID() << std::endl;
         }
     }
 }

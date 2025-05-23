@@ -9,8 +9,8 @@ namespace parser {
 class StandaloneCallFunction : public Statement {
 public:
     explicit StandaloneCallFunction(std::unique_ptr<ParsedExpression> functionExpression)
-        : Statement{common::StatementType::STANDALONE_CALL_FUNCTION},
-          functionExpression{std::move(functionExpression)} {}
+        : Statement{common::StatementType::STANDALONE_CALL_FUNCTION}, functionExpression{std::move(
+                                                                          functionExpression)} {}
 
     const ParsedExpression* getFunctionExpression() const { return functionExpression.get(); }
 

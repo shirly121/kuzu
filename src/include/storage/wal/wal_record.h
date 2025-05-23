@@ -121,8 +121,8 @@ struct DropCatalogEntryRecord final : WALRecord {
         : WALRecord{WALRecordType::DROP_CATALOG_ENTRY_RECORD}, entryID{common::INVALID_OID},
           entryType{} {}
     DropCatalogEntryRecord(common::table_id_t entryID, catalog::CatalogEntryType entryType)
-        : WALRecord{WALRecordType::DROP_CATALOG_ENTRY_RECORD}, entryID{entryID},
-          entryType{entryType} {}
+        : WALRecord{WALRecordType::DROP_CATALOG_ENTRY_RECORD}, entryID{entryID}, entryType{
+                                                                                     entryType} {}
 
     void serialize(common::Serializer& serializer) const override;
     static std::unique_ptr<DropCatalogEntryRecord> deserialize(common::Deserializer& deserializer);
@@ -190,12 +190,12 @@ struct NodeDeletionRecord final : WALRecord {
           nodeOffset{common::INVALID_OFFSET}, pkVector{nullptr} {}
     NodeDeletionRecord(common::table_id_t tableID, common::offset_t nodeOffset,
         common::ValueVector* pkVector)
-        : WALRecord{WALRecordType::NODE_DELETION_RECORD}, tableID{tableID}, nodeOffset{nodeOffset},
-          pkVector{pkVector} {}
+        : WALRecord{WALRecordType::NODE_DELETION_RECORD}, tableID{tableID},
+          nodeOffset{nodeOffset}, pkVector{pkVector} {}
     NodeDeletionRecord(common::table_id_t tableID, common::offset_t nodeOffset,
         std::unique_ptr<common::ValueVector> pkVector)
-        : WALRecord{WALRecordType::NODE_DELETION_RECORD}, tableID{tableID}, nodeOffset{nodeOffset},
-          pkVector{nullptr}, ownedPKVector{std::move(pkVector)} {}
+        : WALRecord{WALRecordType::NODE_DELETION_RECORD}, tableID{tableID},
+          nodeOffset{nodeOffset}, pkVector{nullptr}, ownedPKVector{std::move(pkVector)} {}
 
     void serialize(common::Serializer& serializer) const override;
     static std::unique_ptr<NodeDeletionRecord> deserialize(common::Deserializer& deserializer,
@@ -211,8 +211,8 @@ struct NodeUpdateRecord final : WALRecord {
 
     NodeUpdateRecord()
         : WALRecord{WALRecordType::NODE_UDPATE_RECORD}, tableID{common::INVALID_TABLE_ID},
-          columnID{common::INVALID_COLUMN_ID}, nodeOffset{common::INVALID_OFFSET},
-          propertyVector{nullptr} {}
+          columnID{common::INVALID_COLUMN_ID}, nodeOffset{common::INVALID_OFFSET}, propertyVector{
+                                                                                       nullptr} {}
     NodeUpdateRecord(common::table_id_t tableID, common::column_id_t columnID,
         common::offset_t nodeOffset, common::ValueVector* propertyVector)
         : WALRecord{WALRecordType::NODE_UDPATE_RECORD}, tableID{tableID}, columnID{columnID},
@@ -220,8 +220,8 @@ struct NodeUpdateRecord final : WALRecord {
     NodeUpdateRecord(common::table_id_t tableID, common::column_id_t columnID,
         common::offset_t nodeOffset, std::unique_ptr<common::ValueVector> propertyVector)
         : WALRecord{WALRecordType::NODE_UDPATE_RECORD}, tableID{tableID}, columnID{columnID},
-          nodeOffset{nodeOffset}, propertyVector{nullptr},
-          ownedPropertyVector{std::move(propertyVector)} {}
+          nodeOffset{nodeOffset}, propertyVector{nullptr}, ownedPropertyVector{
+                                                               std::move(propertyVector)} {}
 
     void serialize(common::Serializer& serializer) const override;
     static std::unique_ptr<NodeUpdateRecord> deserialize(common::Deserializer& deserializer,
@@ -243,17 +243,17 @@ struct RelDeletionRecord final : WALRecord {
     RelDeletionRecord(common::table_id_t tableID, common::ValueVector* srcNodeIDVector,
         common::ValueVector* dstNodeIDVector, common::ValueVector* relIDVector)
         : WALRecord{WALRecordType::REL_DELETION_RECORD}, tableID{tableID},
-          srcNodeIDVector{srcNodeIDVector}, dstNodeIDVector{dstNodeIDVector},
-          relIDVector{relIDVector} {}
+          srcNodeIDVector{srcNodeIDVector}, dstNodeIDVector{dstNodeIDVector}, relIDVector{
+                                                                                  relIDVector} {}
     RelDeletionRecord(common::table_id_t tableID,
         std::unique_ptr<common::ValueVector> srcNodeIDVector,
         std::unique_ptr<common::ValueVector> dstNodeIDVector,
         std::unique_ptr<common::ValueVector> relIDVector)
         : WALRecord{WALRecordType::REL_DELETION_RECORD}, tableID{tableID}, srcNodeIDVector{nullptr},
-          dstNodeIDVector{nullptr}, relIDVector{nullptr},
-          ownedSrcNodeIDVector{std::move(srcNodeIDVector)},
-          ownedDstNodeIDVector{std::move(dstNodeIDVector)},
-          ownedRelIDVector{std::move(relIDVector)} {}
+          dstNodeIDVector{nullptr}, relIDVector{nullptr}, ownedSrcNodeIDVector{std::move(
+                                                              srcNodeIDVector)},
+          ownedDstNodeIDVector{std::move(dstNodeIDVector)}, ownedRelIDVector{
+                                                                std::move(relIDVector)} {}
 
     void serialize(common::Serializer& serializer) const override;
     static std::unique_ptr<RelDeletionRecord> deserialize(common::Deserializer& deserializer,
@@ -276,8 +276,8 @@ struct RelDetachDeleteRecord final : WALRecord {
     RelDetachDeleteRecord(common::table_id_t tableID, common::RelDataDirection direction,
         std::unique_ptr<common::ValueVector> srcNodeIDVector)
         : WALRecord{WALRecordType::REL_DETACH_DELETE_RECORD}, tableID{tableID},
-          direction{direction}, srcNodeIDVector{nullptr},
-          ownedSrcNodeIDVector{std::move(srcNodeIDVector)} {}
+          direction{direction}, srcNodeIDVector{nullptr}, ownedSrcNodeIDVector{
+                                                              std::move(srcNodeIDVector)} {}
 
     void serialize(common::Serializer& serializer) const override;
     static std::unique_ptr<RelDetachDeleteRecord> deserialize(common::Deserializer& deserializer,

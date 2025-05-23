@@ -14,8 +14,8 @@ public:
     LogicalExportDatabase(common::FileScanInfo boundFileInfo,
         std::shared_ptr<binder::Expression> outputExpression,
         const std::vector<std::shared_ptr<LogicalOperator>>& plans)
-        : LogicalSimple{type_, plans, std::move(outputExpression)},
-          boundFileInfo{std::move(boundFileInfo)} {}
+        : LogicalSimple{type_, plans, std::move(outputExpression)}, boundFileInfo{
+                                                                        std::move(boundFileInfo)} {}
 
     std::string getFilePath() const { return boundFileInfo.filePaths[0]; }
     common::FileType getFileType() const { return boundFileInfo.fileTypeInfo.fileType; }

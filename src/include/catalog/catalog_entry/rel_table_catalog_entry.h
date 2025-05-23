@@ -26,8 +26,8 @@ public:
         common::RelMultiplicity dstMultiplicity, common::table_id_t srcTableID,
         common::table_id_t dstTableID, common::ExtendDirection storageDirection)
         : TableCatalogEntry{entryType_, std::move(name)}, srcMultiplicity{srcMultiplicity},
-          dstMultiplicity{dstMultiplicity}, storageDirection(storageDirection),
-          srcTableID{srcTableID}, dstTableID{dstTableID} {
+          dstMultiplicity{dstMultiplicity},
+          storageDirection(storageDirection), srcTableID{srcTableID}, dstTableID{dstTableID} {
         propertyCollection =
             PropertyDefinitionCollection{1}; // Skip NBR_NODE_ID column as the first one.
     }

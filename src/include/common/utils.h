@@ -15,7 +15,7 @@ namespace common {
 class BitmaskUtils {
 public:
     template<typename T>
-        requires std::integral<T>
+    requires std::integral<T>
     static T all1sMaskForLeastSignificantBits(uint32_t numBits) {
         KU_ASSERT(numBits <= 64);
         using U = numeric_utils::MakeUnSignedT<T>;
@@ -25,7 +25,7 @@ public:
 
     // constructs all 1s mask while avoiding overflow/underflow for int128
     template<typename T>
-        requires std::same_as<std::remove_cvref_t<T>, int128_t>
+    requires std::same_as<std::remove_cvref_t<T>, int128_t>
     static T all1sMaskForLeastSignificantBits(uint32_t numBits) {
         static constexpr uint8_t numBitsInT = sizeof(T) * 8;
 

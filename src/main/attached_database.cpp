@@ -17,16 +17,13 @@ void AttachedDatabase::invalidateCache() {
     }
 }
 
-void AttachedKuzuDatabase::initCatalog(const std::string& path, ClientContext* context) {
-}
+void AttachedKuzuDatabase::initCatalog(const std::string& path, ClientContext* context) {}
 
-static void validateEmptyWAL(const std::string& path, ClientContext* context) {
-}
+static void validateEmptyWAL(const std::string& path, ClientContext* context) {}
 
 AttachedKuzuDatabase::AttachedKuzuDatabase(std::string dbPath, std::string dbName,
     std::string dbType, ClientContext* clientContext)
-    : AttachedDatabase{std::move(dbName), std::move(dbType), nullptr /* catalog */} {
-}
+    : AttachedDatabase{std::move(dbName), std::move(dbType), nullptr /* catalog */} {}
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

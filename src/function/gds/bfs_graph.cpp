@@ -42,8 +42,7 @@ private:
     DenseBFSGraph& bfsGraph;
 };
 
-void DenseBFSGraph::init(ExecutionContext* context, Graph* graph) {
-}
+void DenseBFSGraph::init(ExecutionContext* context, Graph* graph) {}
 
 void DenseBFSGraph::pinTableID(table_id_t tableID) {
     curData = denseObjects.getData(tableID);
@@ -256,5 +255,5 @@ void BFSGraphManager::switchToDense(ExecutionContext* context, Graph* graph) {
     curGraph = denseBFSGraph.get();
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

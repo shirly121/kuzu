@@ -165,7 +165,7 @@ void OpProfileTree::printOpProfileBoxes(uint32_t rowIdx, std::ostringstream& oss
                 unsigned int numParams = opProfileBox->getNumParams();
                 if (i == 0) {
                     textToPrint = opProfileBox->getOpName();
-                } else if (i == 1) { 
+                } else if (i == 1) {
                     textToPrint = dashedLineAccountingForIndex(opProfileBoxWidth, INDENT_WIDTH);
                 } else if (i <= numParams + 1) {
                     textToPrint = opProfileBox->getParamsName(i - 2);
@@ -334,5 +334,5 @@ nlohmann::json PlanPrinter::toJson(const LogicalOperator* logicalOperator) {
     return json;
 }
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

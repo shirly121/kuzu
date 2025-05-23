@@ -22,10 +22,8 @@ public:
     bool finished() const { return reader->finished(); }
 
     template<typename T>
-        requires std::is_trivially_destructible_v<T> || std::is_same_v<std::string, T>
-    void deserializeValue(T& value) {
-        reader->read(reinterpret_cast<uint8_t*>(&value), sizeof(T));
-    }
+    requires std::is_trivially_destructible_v<T> || std::is_same_v<std::string, T>
+    void deserializeValue(T& value) { reader->read(reinterpret_cast<uint8_t*>(&value), sizeof(T)); }
 
     void read(uint8_t* data, uint64_t size) { reader->read(data, size); }
 
@@ -84,7 +82,7 @@ public:
         deserializeValue(vectorSize);
         values.resize(vectorSize);
         for (auto& value : values) {
-            if constexpr (requires(Deserializer& deser) { T::deserialize(deser); }) {
+            if constexpr (requires(Deserializer & deser) { T::deserialize(deser); }) {
                 value = T::deserialize(*this);
             } else {
                 deserializeValue(value);
@@ -96,7 +94,7 @@ public:
     void deserializeArray(std::array<T, ARRAY_SIZE>& values) {
         KU_ASSERT(values.size() == ARRAY_SIZE);
         for (auto& value : values) {
-            if constexpr (requires(Deserializer& deser) { T::deserialize(deser); }) {
+            if constexpr (requires(Deserializer & deser) { T::deserialize(deser); }) {
                 value = T::deserialize(*this);
             } else {
                 deserializeValue(value);

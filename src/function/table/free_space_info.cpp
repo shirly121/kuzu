@@ -39,5 +39,5 @@ function_set FreeSpaceInfoFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

@@ -50,8 +50,8 @@ struct BoundCreateTableInfo {
 private:
     BoundCreateTableInfo(const BoundCreateTableInfo& other)
         : type{other.type}, tableName{other.tableName}, onConflict{other.onConflict},
-          extraInfo{other.extraInfo->copy()}, isInternal{other.isInternal},
-          hasParent{other.hasParent} {}
+          extraInfo{other.extraInfo->copy()}, isInternal{other.isInternal}, hasParent{
+                                                                                other.hasParent} {}
 };
 
 struct KUZU_API BoundExtraCreateTableInfo : public BoundExtraCreateCatalogEntryInfo {
@@ -74,8 +74,8 @@ struct BoundExtraCreateNodeTableInfo final : BoundExtraCreateTableInfo {
 
     BoundExtraCreateNodeTableInfo(std::string primaryKeyName,
         std::vector<PropertyDefinition> definitions)
-        : BoundExtraCreateTableInfo{std::move(definitions)},
-          primaryKeyName{std::move(primaryKeyName)} {}
+        : BoundExtraCreateTableInfo{std::move(definitions)}, primaryKeyName{
+                                                                 std::move(primaryKeyName)} {}
     BoundExtraCreateNodeTableInfo(const BoundExtraCreateNodeTableInfo& other)
         : BoundExtraCreateTableInfo{copyVector(other.propertyDefinitions)},
           primaryKeyName{other.primaryKeyName} {}

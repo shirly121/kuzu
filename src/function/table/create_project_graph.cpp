@@ -2,12 +2,12 @@
 #include "common/exception/runtime.h"
 #include "common/string_utils.h"
 #include "common/types/value/nested.h"
+#include "common/types/value/value.h"
 #include "function/gds/gds.h"
 #include "function/table/bind_data.h"
 #include "function/table/standalone_call_function.h"
 #include "graph/graph_entry.h"
 #include "parser/parser.h"
-#include "common/types/value/value.h"
 
 using namespace kuzu::binder;
 using namespace kuzu::common;
@@ -109,5 +109,5 @@ function_set CreateProjectedGraphFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

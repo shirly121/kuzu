@@ -12,8 +12,8 @@ class BoundStandaloneCallFunction final : public BoundStatement {
 
 public:
     explicit BoundStandaloneCallFunction(BoundTableScanInfo info)
-        : BoundStatement{statementType, BoundStatementResult::createEmptyResult()},
-          info{std::move(info)} {}
+        : BoundStatement{statementType, BoundStatementResult::createEmptyResult()}, info{std::move(
+                                                                                        info)} {}
 
     const function::TableFunction& getTableFunction() const { return info.func; }
 

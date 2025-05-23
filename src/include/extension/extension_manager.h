@@ -23,8 +23,6 @@ public:
 
     const main::ExtensionOption* getExtensionOption(std::string name) const;
 
-
-
     KUZU_API const std::vector<LoadedExtension>& getLoadedExtensions() const {
         return loadedExtensions;
     }
@@ -40,5 +38,5 @@ private:
     std::unordered_map<std::string, main::ExtensionOption> extensionOptions;
 };
 
-} 
-} 
+} // namespace extension
+} // namespace kuzu

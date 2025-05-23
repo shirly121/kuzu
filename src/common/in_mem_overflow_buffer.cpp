@@ -43,8 +43,7 @@ void InMemOverflowBuffer::resetBuffer() {
     }
 }
 
-void InMemOverflowBuffer::allocateNewBlock(uint64_t size) {
-}
+void InMemOverflowBuffer::allocateNewBlock(uint64_t size) {}
 
-} 
-} 
+} // namespace common
+} // namespace kuzu

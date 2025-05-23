@@ -56,8 +56,8 @@ struct TableFuncScanSource : public BaseScanSource {
     std::unique_ptr<ParsedExpression> functionExpression = nullptr;
 
     explicit TableFuncScanSource(std::unique_ptr<ParsedExpression> functionExpression)
-        : BaseScanSource{common::ScanSourceType::TABLE_FUNC},
-          functionExpression{std::move(functionExpression)} {}
+        : BaseScanSource{common::ScanSourceType::TABLE_FUNC}, functionExpression{
+                                                                  std::move(functionExpression)} {}
 };
 
 } // namespace parser

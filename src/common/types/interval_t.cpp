@@ -220,7 +220,7 @@ interval_parse_number:
     }
     goto interval_parse_identifier;
 
-interval_parse_time: {
+interval_parse_time : {
     // parse the remainder of the time as a Time type
     dtime_t time;
     uint64_t tmpPos = 0;

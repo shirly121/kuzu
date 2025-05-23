@@ -14,8 +14,8 @@ struct ExportCSVBindData : public ExportFuncBindData {
     CSVOption exportOption;
 
     ExportCSVBindData(std::vector<std::string> names, std::string fileName, CSVOption exportOption)
-        : ExportFuncBindData{std::move(names), std::move(fileName)},
-          exportOption{std::move(exportOption)} {}
+        : ExportFuncBindData{std::move(names), std::move(fileName)}, exportOption{
+                                                                         std::move(exportOption)} {}
 
     std::unique_ptr<ExportFuncBindData> copy() const override {
         auto bindData =

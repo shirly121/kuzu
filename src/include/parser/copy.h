@@ -55,8 +55,8 @@ private:
 class CopyTo : public Copy {
 public:
     CopyTo(std::string filePath, std::unique_ptr<Statement> statement)
-        : Copy{common::StatementType::COPY_TO}, filePath{std::move(filePath)},
-          statement{std::move(statement)} {}
+        : Copy{common::StatementType::COPY_TO}, filePath{std::move(filePath)}, statement{std::move(
+                                                                                   statement)} {}
 
     std::string getFilePath() const { return filePath; }
     const Statement* getStatement() const { return statement.get(); }

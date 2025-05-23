@@ -74,8 +74,8 @@ public:
     QueryGraph() = default;
     QueryGraph(const QueryGraph& other)
         : queryNodeNameToPosMap{other.queryNodeNameToPosMap},
-          queryRelNameToPosMap{other.queryRelNameToPosMap}, queryNodes{other.queryNodes},
-          queryRels{other.queryRels} {}
+          queryRelNameToPosMap{other.queryRelNameToPosMap},
+          queryNodes{other.queryNodes}, queryRels{other.queryRels} {}
 
     EXPLICIT_COPY_DEFAULT_MOVE(QueryGraph);
 

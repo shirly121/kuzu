@@ -1,10 +1,10 @@
 #pragma once
 
+#include "catalog/catalog.h"
 #include "common/mask.h"
 #include "function/table/bind_data.h"
 #include "graph/graph.h"
 #include "graph/graph_entry.h"
-#include "catalog/catalog.h"
 
 namespace kuzu {
 
@@ -43,9 +43,9 @@ struct KUZU_API GDSBindData : public TableFuncBindData {
 
     GDSBindData(const GDSBindData& other)
         : TableFuncBindData{other}, graphEntry{other.graphEntry.copy()},
-          nodeOutput{other.nodeOutput},
-          optionalParams{other.optionalParams == nullptr ? nullptr : other.optionalParams->copy()} {}
-
+          nodeOutput{other.nodeOutput}, optionalParams{other.optionalParams == nullptr ?
+                                                           nullptr :
+                                                           other.optionalParams->copy()} {}
 
     std::unique_ptr<GDSConfig> getConfig() const { return optionalParams->getConfig(); }
 
@@ -59,7 +59,6 @@ private:
 struct KUZU_API GDSFuncSharedState : public TableFuncSharedState {
     std::unique_ptr<graph::Graph> graph;
 
-
     GDSFuncSharedState(std::unique_ptr<graph::Graph> graph)
         : TableFuncSharedState{}, graph{std::move(graph)} {}
 
@@ -67,7 +66,6 @@ struct KUZU_API GDSFuncSharedState : public TableFuncSharedState {
     common::NodeOffsetMaskMap* getGraphNodeMaskMap() const { return graphNodeMask.get(); }
 
 public:
-
 private:
     std::unique_ptr<common::NodeOffsetMaskMap> graphNodeMask = nullptr;
 };
@@ -91,5 +89,5 @@ public:
         std::vector<std::unique_ptr<planner::LogicalPlan>>& logicalPlans);
 };
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

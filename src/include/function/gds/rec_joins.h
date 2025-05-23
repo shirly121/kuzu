@@ -21,7 +21,7 @@ struct RJBindData {
 
     common::ExtendDirection extendDirection = common::ExtendDirection::FWD;
 
-    bool flipPath = false; 
+    bool flipPath = false;
     bool writePath = true;
 
     std::shared_ptr<binder::Expression> directionExpr = nullptr;
@@ -45,9 +45,8 @@ public:
     virtual std::string getFunctionName() const = 0;
     virtual binder::expression_vector getResultColumns(const RJBindData& bindData) const = 0;
 
-
     virtual std::unique_ptr<RJAlgorithm> copy() const = 0;
 };
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

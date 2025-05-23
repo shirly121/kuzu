@@ -25,8 +25,8 @@ struct FrontierTaskInfo {
         common::ExtendDirection direction, EdgeCompute& edgeCompute,
         std::vector<std::string> propertiesToScan)
         : boundEntry{boundEntry}, nbrEntry{nbrEntry}, relEntry{relEntry}, graph{graph},
-          direction{direction}, edgeCompute{edgeCompute},
-          propertiesToScan{std::move(propertiesToScan)} {}
+          direction{direction}, edgeCompute{edgeCompute}, propertiesToScan{
+                                                              std::move(propertiesToScan)} {}
     FrontierTaskInfo(const FrontierTaskInfo& other)
         : boundEntry{other.boundEntry}, nbrEntry{other.nbrEntry}, relEntry{other.relEntry},
           graph{other.graph}, direction{other.direction}, edgeCompute{other.edgeCompute},
@@ -72,8 +72,8 @@ struct VertexComputeTaskInfo {
 
     VertexComputeTaskInfo(VertexCompute& vc, graph::Graph* graph,
         catalog::TableCatalogEntry* tableEntry, std::vector<std::string> propertiesToScan)
-        : vc{vc}, graph{graph}, tableEntry{tableEntry},
-          propertiesToScan{std::move(propertiesToScan)} {}
+        : vc{vc}, graph{graph}, tableEntry{tableEntry}, propertiesToScan{
+                                                            std::move(propertiesToScan)} {}
     VertexComputeTaskInfo(const VertexComputeTaskInfo& other)
         : vc{other.vc}, graph{other.graph}, tableEntry{other.tableEntry},
           propertiesToScan{other.propertiesToScan} {}

@@ -11,8 +11,8 @@ class UnwindClause : public ReadingClause {
 
 public:
     UnwindClause(std::unique_ptr<ParsedExpression> expression, std::string listAlias)
-        : ReadingClause{clauseType_}, expression{std::move(expression)},
-          alias{std::move(listAlias)} {}
+        : ReadingClause{clauseType_}, expression{std::move(expression)}, alias{std::move(
+                                                                             listAlias)} {}
 
     const ParsedExpression* getExpression() const { return expression.get(); }
 

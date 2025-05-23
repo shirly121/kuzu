@@ -109,7 +109,9 @@ public:
         return pathStr;
     }
 
-    static bool isSystemEnvValid(const char* env) { return env != nullptr && strlen(env) > 0; }
+    static bool isSystemEnvValid(const char* env) {
+        return env != nullptr && strlen(env) > 0;
+    }
     static std::string getSystemEnv(const char* key) {
         const auto env = std::getenv(key);
         if (isSystemEnvValid(env)) {

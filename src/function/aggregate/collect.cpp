@@ -8,32 +8,26 @@ using namespace kuzu::processor;
 namespace kuzu {
 namespace function {
 
-
-
 struct CollectState : public AggregateState {
     CollectState() : AggregateState() {}
     uint32_t getStateSize() const override { return sizeof(*this); }
     void moveResultToVector(common::ValueVector* outputVector, uint64_t pos) override;
 };
 
-void CollectState::moveResultToVector(common::ValueVector* outputVector, uint64_t pos) {
-}
+void CollectState::moveResultToVector(common::ValueVector* outputVector, uint64_t pos) {}
 
 static std::unique_ptr<AggregateState> initialize() {
     return std::make_unique<CollectState>();
 }
 
 static void initCollectStateIfNecessary(CollectState* state, InMemOverflowBuffer* overflowBuffer,
-    LogicalType& dataType) {
-}
+    LogicalType& dataType) {}
 
 static void updateSingleValue(CollectState* state, ValueVector* input, uint32_t pos,
-    uint64_t multiplicity, InMemOverflowBuffer* overflowBuffer) {
-}
+    uint64_t multiplicity, InMemOverflowBuffer* overflowBuffer) {}
 
 static void updateAll(uint8_t* state_, ValueVector* input, uint64_t multiplicity,
-    InMemOverflowBuffer* overflowBuffer) {
-}
+    InMemOverflowBuffer* overflowBuffer) {}
 
 static void updatePos(uint8_t* state_, ValueVector* input, uint64_t multiplicity, uint32_t pos,
     InMemOverflowBuffer* overflowBuffer) {
@@ -44,8 +38,7 @@ static void updatePos(uint8_t* state_, ValueVector* input, uint64_t multiplicity
 static void finalize(uint8_t* /*state_*/) {}
 
 static void combine(uint8_t* state_, uint8_t* otherState_,
-    InMemOverflowBuffer* /*overflowBuffer*/) {
-}
+    InMemOverflowBuffer* /*overflowBuffer*/) {}
 
 static std::unique_ptr<FunctionBindData> bindFunc(const ScalarBindFuncInput& input) {
     KU_ASSERT(input.arguments.size() == 1);
@@ -66,5 +59,5 @@ function_set CollectFunction::getFunctionSet() {
     return result;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

@@ -20,8 +20,8 @@ public:
           variableName{std::move(variableName)} {}
 
     explicit ParsedVariableExpression(std::string variableName)
-        : ParsedExpression{common::ExpressionType::VARIABLE},
-          variableName{std::move(variableName)} {}
+        : ParsedExpression{common::ExpressionType::VARIABLE}, variableName{
+                                                                  std::move(variableName)} {}
 
     inline std::string getVariableName() const { return variableName; }
 

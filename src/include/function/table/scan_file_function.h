@@ -20,8 +20,8 @@ struct ScanFileSharedState : public TableFuncSharedState {
     uint64_t blockIdx;
 
     ScanFileSharedState(common::FileScanInfo fileScanInfo, uint64_t numRows)
-        : TableFuncSharedState{numRows}, fileScanInfo{std::move(fileScanInfo)}, fileIdx{0},
-          blockIdx{0} {}
+        : TableFuncSharedState{numRows},
+          fileScanInfo{std::move(fileScanInfo)}, fileIdx{0}, blockIdx{0} {}
 
     std::pair<uint64_t, uint64_t> getNext() {
         std::lock_guard guard{mtx};
@@ -47,8 +47,8 @@ struct KUZU_API ScanFileBindData : public TableFuncBindData {
 
     ScanFileBindData(binder::expression_vector columns, uint64_t numRows,
         common::FileScanInfo fileScanInfo, main::ClientContext* context)
-        : TableFuncBindData{std::move(columns), numRows}, fileScanInfo{std::move(fileScanInfo)},
-          context{context} {}
+        : TableFuncBindData{std::move(columns), numRows},
+          fileScanInfo{std::move(fileScanInfo)}, context{context} {}
     ScanFileBindData(binder::expression_vector columns, uint64_t numRows,
         common::FileScanInfo fileScanInfo, main::ClientContext* context,
         common::column_id_t numWarningDataColumns)

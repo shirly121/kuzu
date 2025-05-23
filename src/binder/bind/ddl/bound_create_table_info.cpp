@@ -80,8 +80,8 @@ BoundExtraCreateRelTableInfo::BoundExtraCreateRelTableInfo(common::RelMultiplici
     common::table_id_t srcTableID, common::table_id_t dstTableID,
     std::vector<PropertyDefinition> definitions)
     : BoundExtraCreateTableInfo{std::move(definitions)}, srcMultiplicity{srcMultiplicity},
-      dstMultiplicity{dstMultiplicity}, storageDirection(storageDirection), srcTableID{srcTableID},
-      dstTableID{dstTableID} {}
+      dstMultiplicity{dstMultiplicity},
+      storageDirection(storageDirection), srcTableID{srcTableID}, dstTableID{dstTableID} {}
 
 BoundExtraCreateRelTableInfo::BoundExtraCreateRelTableInfo(
     const BoundExtraCreateRelTableInfo& other)

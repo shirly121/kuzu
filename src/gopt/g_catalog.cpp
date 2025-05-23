@@ -45,7 +45,7 @@ GCatalog::GCatalog(const std::string& yamlPath) : Catalog() {
     // rel type id and the src/dst node table id
     std::unordered_map<std::string, std::vector<std::unique_ptr<GRelTableCatalogEntry>>>
         nameToSDPairMap;
-    std::unordered_map<std::string, common::table_id_t> labelNameToIdMap; 
+    std::unordered_map<std::string, common::table_id_t> labelNameToIdMap;
     for (const auto& edgeType : edgeTypes) {
         auto labelName = edgeType["type_name"].as<std::string>();
         auto labelId = edgeType["type_id"].as<common::table_id_t>();
@@ -53,7 +53,8 @@ GCatalog::GCatalog(const std::string& yamlPath) : Catalog() {
         labelNameToIdMap[labelName] = labelId;
         for (auto& sDPair : sDPairs) {
             auto tableId = ++maxLabelId;
-            auto relTableEntry = createRelTableEntry(tableId, labelId, labelName, sDPair, nameToVertexMap);
+            auto relTableEntry =
+                createRelTableEntry(tableId, labelId, labelName, sDPair, nameToVertexMap);
             setTableEntry(edgeType, static_cast<TableCatalogEntry*>(relTableEntry.get()),
                 common::TableType::REL);
             // table id of each rel table entry is a combination of rel type id and src/dst node
@@ -107,8 +108,8 @@ std::unique_ptr<NodeTableCatalogEntry> GCatalog::createNodeTableEntry(const YAML
     return result;
 }
 
-std::unique_ptr<GRelTableCatalogEntry> GCatalog::createRelTableEntry(common::table_id_t tableId, common::table_id_t labelId,
-    const std::string& labelName, const YAML::Node& relation,
+std::unique_ptr<GRelTableCatalogEntry> GCatalog::createRelTableEntry(common::table_id_t tableId,
+    common::table_id_t labelId, const std::string& labelName, const YAML::Node& relation,
     const std::unordered_map<std::string, NodeTableCatalogEntry*>& nodeTableMap) {
     auto srcName = relation["source_vertex"].as<std::string>();
     auto dstName = relation["destination_vertex"].as<std::string>();

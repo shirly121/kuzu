@@ -35,8 +35,7 @@ Catalog::Catalog() : version{0} {
     registerBuiltInFunctions();
 }
 
-Catalog::Catalog(const std::string& directory, VirtualFileSystem* vfs) : version{0} {
-}
+Catalog::Catalog(const std::string& directory, VirtualFileSystem* vfs) : version{0} {}
 
 void Catalog::initCatalogSets() {
     tables = std::make_unique<CatalogSet>();
@@ -468,16 +467,11 @@ void Catalog::checkpoint(const std::string& databasePath, VirtualFileSystem* fs)
     saveToFile(databasePath, fs, FileVersionType::WAL_VERSION);
 }
 
-
-
-
 void Catalog::saveToFile(const std::string& directory, VirtualFileSystem* fs,
-    FileVersionType versionType) const {
-}
+    FileVersionType versionType) const {}
 
 void Catalog::readFromFile(const std::string& directory, VirtualFileSystem* fs,
-    FileVersionType versionType, main::ClientContext* context) {
-}
+    FileVersionType versionType, main::ClientContext* context) {}
 
 void Catalog::registerBuiltInFunctions() {
     auto functionCollection = function::FunctionCollection::getFunctions();
@@ -560,5 +554,5 @@ void Catalog::dropSerialSequence(Transaction* transaction, const TableCatalogEnt
     }
 }
 
-} 
-} 
+} // namespace catalog
+} // namespace kuzu

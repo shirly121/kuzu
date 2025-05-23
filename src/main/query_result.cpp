@@ -103,5 +103,5 @@ std::unique_ptr<ArrowArray> QueryResult::getNextArrowChunk(int64_t chunkSize) {
     return data;
 }
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

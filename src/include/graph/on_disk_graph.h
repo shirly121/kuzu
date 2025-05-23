@@ -2,22 +2,22 @@
 
 #include <cstddef>
 
+#include "binder/expression/expression.h"
 #include "common/assert.h"
 #include "common/copy_constructors.h"
 #include "common/data_chunk/sel_vector.h"
+#include "common/enums/extend_direction.h"
+#include "common/enums/path_semantic.h"
 #include "common/enums/rel_direction.h"
 #include "common/mask.h"
 #include "common/types/types.h"
 #include "common/vector/value_vector.h"
+#include "function/gds/gds_state.h"
 #include "graph.h"
 #include "graph_entry.h"
 #include "main/client_context.h"
 #include "storage/store/node_table.h"
 #include "storage/store/rel_table.h"
-#include "binder/expression/expression.h"
-#include "common/enums/extend_direction.h"
-#include "common/enums/path_semantic.h"
-#include "function/gds/gds_state.h"
 
 namespace kuzu {
 namespace storage {
@@ -44,12 +44,9 @@ public:
         common::SelectionVector selVector;
         return createChunk(std::span<const common::nodeID_t>(), selVector, vectors);
     }
-    bool next() override {
-        return false;
-    }
+    bool next() override { return false; }
 
-    void startScan(common::RelDataDirection direction) {
-    }
+    void startScan(common::RelDataDirection direction) {}
 
 private:
     std::unique_ptr<common::ValueVector> srcNodeIDVector;
@@ -130,5 +127,5 @@ private:
     common::table_id_map_t<std::vector<NbrTableInfo>> nodeIDToNbrTableInfos;
 };
 
-} 
-} 
+} // namespace graph
+} // namespace kuzu

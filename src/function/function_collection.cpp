@@ -210,7 +210,6 @@ FunctionCollection* FunctionCollection::getFunctions() {
         STANDALONE_TABLE_FUNCTION(CreateProjectedGraphFunction),
         STANDALONE_TABLE_FUNCTION(DropProjectedGraphFunction),
 
-
         EXPORT_FUNCTION(ExportCSVFunction), EXPORT_FUNCTION(ExportParquetFunction),
 
         FINAL_FUNCTION};
@@ -218,5 +217,5 @@ FunctionCollection* FunctionCollection::getFunctions() {
     return functions;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

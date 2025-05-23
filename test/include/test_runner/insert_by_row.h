@@ -29,8 +29,8 @@ private:
         std::vector<std::pair<std::string, std::string>> properties;
         TableInfo(std::string name, std::string filePath,
             std::vector<std::pair<std::string, std::string>> properties)
-            : name{std::move(name)}, filePath{std::move(filePath)},
-              properties{std::move(properties)} {}
+            : name{std::move(name)}, filePath{std::move(filePath)}, properties{
+                                                                        std::move(properties)} {}
         virtual std::string getLoadFromQuery() const = 0;
         virtual ~TableInfo() = default;
 

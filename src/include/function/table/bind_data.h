@@ -29,7 +29,6 @@ struct KUZU_API TableFuncBindData {
     void setColumnSkips(std::vector<bool> skips) { columnSkips = std::move(skips); }
     std::vector<bool> getColumnSkips() const;
 
-
     virtual std::shared_ptr<binder::Expression> getNodeOutput() const { return nullptr; }
 
     virtual bool getIgnoreErrorsOption() const;
@@ -50,5 +49,5 @@ protected:
     std::vector<bool> columnSkips;
 };
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

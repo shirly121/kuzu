@@ -12,8 +12,8 @@ class LogicalAccumulate final : public LogicalOperator {
 public:
     LogicalAccumulate(common::AccumulateType accumulateType, binder::expression_vector flatExprs,
         std::shared_ptr<binder::Expression> mark, std::shared_ptr<LogicalOperator> child)
-        : LogicalOperator{type, std::move(child)}, accumulateType{accumulateType},
-          flatExprs{std::move(flatExprs)}, mark{std::move(mark)} {}
+        : LogicalOperator{type, std::move(child)},
+          accumulateType{accumulateType}, flatExprs{std::move(flatExprs)}, mark{std::move(mark)} {}
 
     void computeFactorizedSchema() override;
     void computeFlatSchema() override;

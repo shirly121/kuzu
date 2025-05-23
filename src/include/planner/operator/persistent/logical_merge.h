@@ -13,8 +13,8 @@ class LogicalMerge final : public LogicalOperator {
 public:
     LogicalMerge(std::shared_ptr<binder::Expression> existenceMark, binder::expression_vector keys,
         std::shared_ptr<LogicalOperator> child)
-        : LogicalOperator{type_, std::move(child)}, existenceMark{std::move(existenceMark)},
-          keys{std::move(keys)} {}
+        : LogicalOperator{type_, std::move(child)},
+          existenceMark{std::move(existenceMark)}, keys{std::move(keys)} {}
 
     void computeFactorizedSchema() override;
     void computeFlatSchema() override;

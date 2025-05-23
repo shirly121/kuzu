@@ -24,11 +24,11 @@ void RJOutputWriter::pinOutputNodeMask(table_id_t tableID) {
 }
 
 bool RJOutputWriter::inOutputNodeMask(common::offset_t offset) {
-    if (outputNodeMask == nullptr) { 
+    if (outputNodeMask == nullptr) {
         return true;
     }
     auto mask = outputNodeMask->getPinnedMask();
-    if (!mask->isEnabled()) { 
+    if (!mask->isEnabled()) {
         return true;
     }
     return mask->isMasked(offset);
@@ -65,10 +65,6 @@ static void addListEntry(ValueVector* vector, uint64_t length) {
 static ParentList* getTop(const std::vector<ParentList*>& path) {
     return path[path.size() - 1];
 }
-
-
-
-
 
 bool PathsOutputWriter::updateCounterAndTerminate(LimitCounter* counter) {
     if (counter != nullptr) {
@@ -244,6 +240,5 @@ void PathsOutputWriter::addNode(nodeID_t nodeID, sel_t pos) const {
     ListVector::getDataVector(pathNodeIDsVector.get())->setValue(pos, nodeID);
 }
 
-
-} 
-} 
+} // namespace function
+} // namespace kuzu

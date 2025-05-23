@@ -95,5 +95,5 @@ private:
     static nlohmann::json toJson(const planner::LogicalOperator* logicalOperator);
 };
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

@@ -11,8 +11,8 @@ public:
     BoundCopyTo(std::unique_ptr<function::ExportFuncBindData> bindData,
         function::ExportFunction exportFunc, std::unique_ptr<BoundStatement> query)
         : BoundStatement{common::StatementType::COPY_TO, BoundStatementResult::createEmptyResult()},
-          bindData{std::move(bindData)}, exportFunc{std::move(exportFunc)},
-          query{std::move(query)} {}
+          bindData{std::move(bindData)}, exportFunc{std::move(exportFunc)}, query{
+                                                                                std::move(query)} {}
 
     std::unique_ptr<function::ExportFuncBindData> getBindData() const { return bindData->copy(); }
 

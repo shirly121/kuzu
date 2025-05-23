@@ -20,7 +20,6 @@ static std::unique_ptr<FunctionBindData> bindFunc(const ScalarBindFuncInput& inp
         LogicalType::LIST(input.arguments[1]->getDataType().copy()));
 }
 
-
 static void copyListEntriesToResult(const common::ValueVector& inputVector,
     const common::SelectionVector& inputSelVector, common::ValueVector& result) {
     for (uint64_t i = 0; i < inputSelVector.getSelSize(); ++i) {
@@ -35,11 +34,7 @@ static void copyListEntriesToResult(const common::ValueVector& inputVector,
 
 static void execFunc(const std::vector<std::shared_ptr<common::ValueVector>>& input,
     const std::vector<common::SelectionVector*>& inputSelVectors, common::ValueVector& result,
-    common::SelectionVector* resultSelVector, void* bindData) {
-
-
-
-}
+    common::SelectionVector* resultSelVector, void* bindData) {}
 
 function_set ListTransformFunction::getFunctionSet() {
     function_set result;
@@ -52,5 +47,5 @@ function_set ListTransformFunction::getFunctionSet() {
     return result;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

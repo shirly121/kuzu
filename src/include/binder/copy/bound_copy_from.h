@@ -38,8 +38,8 @@ struct KUZU_API BoundCopyFromInfo {
         expression_vector columnExprs, std::vector<common::ColumnEvaluateType> columnEvaluateTypes,
         std::unique_ptr<ExtraBoundCopyFromInfo> extraInfo)
         : tableEntry{tableEntry}, source{std::move(source)}, offset{std::move(offset)},
-          columnExprs{std::move(columnExprs)}, columnEvaluateTypes{std::move(columnEvaluateTypes)},
-          extraInfo{std::move(extraInfo)} {}
+          columnExprs{std::move(columnExprs)},
+          columnEvaluateTypes{std::move(columnEvaluateTypes)}, extraInfo{std::move(extraInfo)} {}
     EXPLICIT_COPY_DEFAULT_MOVE(BoundCopyFromInfo);
 
     expression_vector getSourceColumns() const {

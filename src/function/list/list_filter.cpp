@@ -24,20 +24,9 @@ static std::unique_ptr<FunctionBindData> bindFunc(const ScalarBindFuncInput& inp
         LogicalType::LIST(ListType::getChildType(input.arguments[0]->getDataType()).copy()));
 }
 
-
-
-
-
-
 static void execFunc(const std::vector<std::shared_ptr<common::ValueVector>>& input,
     const std::vector<common::SelectionVector*>& inputSelVectors, common::ValueVector& result,
-    common::SelectionVector* resultSelVector, void* bindData) {
-
-
-
-
-
-}
+    common::SelectionVector* resultSelVector, void* bindData) {}
 
 function_set ListFilterFunction::getFunctionSet() {
     function_set result;
@@ -50,5 +39,5 @@ function_set ListFilterFunction::getFunctionSet() {
     return result;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

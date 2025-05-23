@@ -1,5 +1,6 @@
-#include <thread>
 #include "main/database.h"
+
+#include <thread>
 
 #include "extension/extension_manager.h"
 #include "main/client_context.h"
@@ -72,24 +73,18 @@ static void getLockFileFlagsAndType(bool readOnly, bool createNew, int& flags, F
 Database::Database(const SystemConfig& systemConfig) : dbConfig{systemConfig} {}
 
 Database::Database(std::string_view databasePath, SystemConfig systemConfig)
-    : dbConfig{systemConfig} {
-}
+    : dbConfig{systemConfig} {}
 
 Database::Database(std::string_view databasePath, SystemConfig systemConfig,
     construct_bm_func_t constructBMFunc)
-    : dbConfig(systemConfig) {
-}
-
-
-
-
+    : dbConfig(systemConfig) {}
 
 Database::~Database() {
     if (!dbConfig.readOnly && dbConfig.forceCheckpointOnClose) {
         try {
             ClientContext clientContext(this);
             transactionManager->checkpoint(clientContext);
-        } catch (...) {} 
+        } catch (...) {}
     }
 }
 
@@ -97,15 +92,12 @@ void Database::registerFileSystem(std::unique_ptr<FileSystem> fs) {
     vfs->registerFileSystem(std::move(fs));
 }
 
-
 void Database::addExtensionOption(std::string name, LogicalTypeID type, Value defaultValue,
     bool isConfidential) {
     extensionManager->addExtensionOption(name, type, std::move(defaultValue), isConfidential);
 }
 
-
-void Database::openLockFile() {
-}
+void Database::openLockFile() {}
 
 void Database::initAndLockDBDir() {
     if (DBConfig::isDBPathInMemory(databasePath)) {
@@ -128,5 +120,5 @@ uint64_t Database::getNextQueryID() {
     return queryIDGenerator.queryID++;
 }
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

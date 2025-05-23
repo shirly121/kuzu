@@ -205,6 +205,5 @@ void GDSFunction::getLogicalPlan(Planner* planner, const BoundReadingClause& rea
     }
 }
 
-
-} 
-} 
+} // namespace function
+} // namespace kuzu

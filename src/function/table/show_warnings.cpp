@@ -52,5 +52,5 @@ function_set ShowWarningsFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

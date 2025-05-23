@@ -85,10 +85,9 @@ void TableFunction::getLogicalPlan(planner::Planner* planner,
     }
 }
 
-
 offset_t TableFunction::emptyTableFunc(const TableFuncInput&, TableFuncOutput&) {
     return 0;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

@@ -7,33 +7,10 @@
 namespace kuzu {
 namespace evaluator {
 class ExpressionEvaluator;
-} 
+}
 namespace storage {
 class MemoryManager;
 class Table;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class LocalTable;
 class StorageManager;
@@ -47,17 +24,11 @@ public:
         MemoryManager* memoryManager);
     virtual ~Table() = default;
 
-
     common::TableType getTableType() const { return tableType; }
     common::table_id_t getTableID() const { return tableID; }
     std::string getTableName() const { return tableName; }
 
-
-
-
-
     virtual common::row_idx_t getNumTotalRows(const transaction::Transaction* transaction) = 0;
-
 
     template<class TARGET>
     TARGET& cast() {
@@ -73,10 +44,8 @@ public:
     }
 
     MemoryManager& getMemoryManager() const { return *memoryManager; }
-    
+
 protected:
-
-
 protected:
     common::TableType tableType;
     common::table_id_t tableID;
@@ -86,5 +55,5 @@ protected:
     bool hasChanges;
 };
 
-} 
-} 
+} // namespace storage
+} // namespace kuzu

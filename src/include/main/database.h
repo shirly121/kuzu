@@ -13,24 +13,24 @@ namespace kuzu {
 namespace common {
 class FileSystem;
 enum class LogicalTypeID : uint8_t;
-} 
+} // namespace common
 
 namespace catalog {
 class CatalogEntry;
-} 
+}
 
 namespace function {
 struct Function;
-} 
+}
 
 namespace extension {
 struct ExtensionUtils;
 class ExtensionManager;
-} 
+} // namespace extension
 
 namespace storage {
 class StorageExtension;
-} 
+}
 
 namespace main {
 struct ExtensionOption;
@@ -89,7 +89,7 @@ class Database {
     friend struct extension::ExtensionUtils;
 
 public:
-    Database(const SystemConfig &systemConfig);
+    Database(const SystemConfig& systemConfig);
     /**
      * @brief Creates a database object.
      * @param databasePath Database path. If left empty, or :memory: is specified, this will create
@@ -128,7 +128,6 @@ private:
         std::mutex queryIDLock;
     };
 
-
     Database(std::string_view databasePath, SystemConfig systemConfig,
         construct_bm_func_t constructBMFunc);
 
@@ -151,5 +150,5 @@ private:
     QueryIDGenerator queryIDGenerator;
 };
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

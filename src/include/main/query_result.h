@@ -139,5 +139,5 @@ private:
     QueryResultIterator queryResultIterator;
 };
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

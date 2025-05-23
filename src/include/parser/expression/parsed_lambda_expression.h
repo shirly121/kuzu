@@ -12,8 +12,8 @@ class ParsedLambdaExpression : public ParsedExpression {
 public:
     ParsedLambdaExpression(std::vector<std::string> varNames,
         std::unique_ptr<ParsedExpression> expr, std::string rawName)
-        : ParsedExpression{type_, rawName}, varNames{std::move(varNames)},
-          functionExpr{std::move(expr)} {}
+        : ParsedExpression{type_, rawName}, varNames{std::move(varNames)}, functionExpr{
+                                                                               std::move(expr)} {}
 
     std::vector<std::string> getVarNames() const { return varNames; }
 

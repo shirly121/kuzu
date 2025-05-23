@@ -3,14 +3,14 @@
 #include <mutex>
 
 #include "catalog/catalog.h"
-#include "storage/wal/wal.h"
-#include "storage/store/table.h"
 #include "storage/buffer_manager/memory_manager.h"
+#include "storage/store/table.h"
+#include "storage/wal/wal.h"
 
 namespace kuzu {
 namespace main {
 class Database;
-} 
+}
 
 namespace catalog {
 class CatalogEntry;
@@ -26,7 +26,8 @@ public:
 
     StorageManager(const std::string& databasePath, bool readOnly, const catalog::Catalog& catalog,
         MemoryManager& memoryManager, bool enableCompression, common::VirtualFileSystem* vfs,
-        main::ClientContext* context) : memoryManager(memoryManager) {}
+        main::ClientContext* context)
+        : memoryManager(memoryManager) {}
 
     virtual ~StorageManager() = default;
 
@@ -43,7 +44,7 @@ public:
         KU_ASSERT(tables.contains(tableID));
         return tables.at(tableID).get();
     }
-    
+
     virtual WAL& getWAL() const = 0;
     std::string getDatabasePath() const { return databasePath; }
     bool isReadOnly() const { return readOnly; }
@@ -53,9 +54,6 @@ public:
         main::ClientContext* context) = 0;
 
 private:
-
-
-
 protected:
     std::unordered_map<common::table_id_t, std::unique_ptr<Table>> tables;
     MemoryManager& memoryManager;
@@ -67,5 +65,5 @@ private:
     bool enableCompression;
 };
 
-} 
-} 
+} // namespace storage
+} // namespace kuzu

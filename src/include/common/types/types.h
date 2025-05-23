@@ -127,14 +127,12 @@ struct int128_t;
 struct ku_string_t;
 
 template<typename T>
-concept SignedIntegerTypes =
-    std::is_same_v<T, int8_t> || std::is_same_v<T, int16_t> || std::is_same_v<T, int32_t> ||
-    std::is_same_v<T, int64_t> || std::is_same_v<T, int128_t>;
+concept SignedIntegerTypes = std::is_same_v<T, int8_t> || std::is_same_v<T, int16_t> ||
+    std::is_same_v<T, int32_t> || std::is_same_v<T, int64_t> || std::is_same_v<T, int128_t>;
 
 template<typename T>
-concept IntegerTypes =
-    SignedIntegerTypes<T> || std::is_same_v<T, uint8_t> || std::is_same_v<T, uint16_t> ||
-    std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>;
+concept IntegerTypes = SignedIntegerTypes<T> || std::is_same_v<T, uint8_t> ||
+    std::is_same_v<T, uint16_t> || std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>;
 
 template<typename T>
 concept FloatingPointTypes = std::is_same_v<T, float> || std::is_same_v<T, double>;
@@ -144,7 +142,7 @@ concept NumericTypes = IntegerTypes<T> || std::floating_point<T>;
 
 template<typename T>
 concept ComparableTypes = NumericTypes<T> || std::is_same_v<T, ku_string_t> ||
-                          std::is_same_v<T, interval_t> || std::is_same_v<T, bool>;
+    std::is_same_v<T, interval_t> || std::is_same_v<T, bool>;
 
 template<typename T>
 concept HashablePrimitive = ((std::integral<T> && !std::is_same_v<T, bool>) ||
@@ -160,8 +158,8 @@ concept HashableNonNestedTypes = (std::integral<T> || std::floating_point<T> ||
                                   std::is_same_v<T, interval_t> || std::is_same_v<T, ku_string_t>);
 
 template<typename T>
-concept HashableNestedTypes =
-    (std::is_same_v<T, list_entry_t> || std::is_same_v<T, struct_entry_t>);
+concept HashableNestedTypes = (std::is_same_v<T, list_entry_t> ||
+                               std::is_same_v<T, struct_entry_t>);
 
 template<typename T>
 concept HashableTypes = (HashableNestedTypes<T> || HashableNonNestedTypes<T>);
@@ -636,5 +634,5 @@ private:
 
 enum class FileVersionType : uint8_t { ORIGINAL = 0, WAL_VERSION = 1 };
 
-} 
-} 
+} // namespace common
+} // namespace kuzu

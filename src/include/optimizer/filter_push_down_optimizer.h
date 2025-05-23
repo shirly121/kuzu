@@ -28,8 +28,8 @@ struct PredicateSet {
 
 private:
     PredicateSet(const PredicateSet& other)
-        : equalityPredicates{other.equalityPredicates},
-          nonEqualityPredicates{other.nonEqualityPredicates} {}
+        : equalityPredicates{other.equalityPredicates}, nonEqualityPredicates{
+                                                            other.nonEqualityPredicates} {}
 };
 
 class FilterPushDownOptimizer {

@@ -53,8 +53,8 @@ public:
             std::vector<common::ValueVector*> propertyVectors);
 
         Chunk(const Chunk& other) noexcept
-            : nbrNodes{other.nbrNodes}, selVector{other.selVector},
-              propertyVectors{other.propertyVectors} {}
+            : nbrNodes{other.nbrNodes}, selVector{other.selVector}, propertyVectors{
+                                                                        other.propertyVectors} {}
 
     private:
         std::span<const common::nodeID_t> nbrNodes;

@@ -69,5 +69,5 @@ function_set ShowConnectionFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

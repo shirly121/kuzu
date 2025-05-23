@@ -15,8 +15,8 @@ struct ShowAttachedDatabasesBindData final : TableFuncBindData {
 
     ShowAttachedDatabasesBindData(std::vector<main::AttachedDatabase*> attachedDatabases,
         binder::expression_vector columns, offset_t maxOffset)
-        : TableFuncBindData{std::move(columns), maxOffset},
-          attachedDatabases{std::move(attachedDatabases)} {}
+        : TableFuncBindData{std::move(columns), maxOffset}, attachedDatabases{
+                                                                std::move(attachedDatabases)} {}
 
     std::unique_ptr<TableFuncBindData> copy() const override {
         return std::make_unique<ShowAttachedDatabasesBindData>(attachedDatabases, columns, numRows);

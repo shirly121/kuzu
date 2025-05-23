@@ -29,8 +29,8 @@ struct RewriteFunction final : Function {
 
     RewriteFunction(std::string name, std::vector<common::LogicalTypeID> parameterTypeIDs,
         rewrite_func_rewrite_t rewriteFunc)
-        : Function{std::move(name), std::move(parameterTypeIDs)},
-          rewriteFunc{std::move(rewriteFunc)} {}
+        : Function{std::move(name), std::move(parameterTypeIDs)}, rewriteFunc{
+                                                                      std::move(rewriteFunc)} {}
     EXPLICIT_COPY_DEFAULT_MOVE(RewriteFunction)
 
 private:

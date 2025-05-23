@@ -23,8 +23,7 @@ TaskScheduler::~TaskScheduler() {
 }
 
 void TaskScheduler::scheduleTaskAndWaitOrError(const std::shared_ptr<Task>& task,
-    processor::ExecutionContext* context, bool launchNewWorkerThread) {
-}
+    processor::ExecutionContext* context, bool launchNewWorkerThread) {}
 
 void TaskScheduler::runWorkerThread() {
     std::unique_lock<std::mutex> lck{taskSchedulerMtx, std::defer_lock};
@@ -91,9 +90,9 @@ std::shared_ptr<ScheduledTask> TaskScheduler::getTaskAndRegister() {
     while (it != taskQueue.end()) {
         auto task = (*it)->task;
         if (!task->registerThread()) {
-            if (task->isCompletedSuccessfully()) { 
+            if (task->isCompletedSuccessfully()) {
                 it = taskQueue.erase(it);
-            } else { 
+            } else {
                 ++it;
             }
         } else {
@@ -122,5 +121,5 @@ void TaskScheduler::runTask(Task* task) {
         task->deRegisterThreadAndFinalizeTask();
     }
 }
-} 
-} 
+} // namespace common
+} // namespace kuzu

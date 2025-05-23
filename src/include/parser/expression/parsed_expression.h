@@ -41,8 +41,8 @@ public:
 
     ParsedExpression(common::ExpressionType type, std::string alias, std::string rawName,
         parsed_expr_vector children)
-        : type{type}, alias{std::move(alias)}, rawName{std::move(rawName)},
-          children{std::move(children)} {}
+        : type{type}, alias{std::move(alias)}, rawName{std::move(rawName)}, children{std::move(
+                                                                                children)} {}
     DELETE_COPY_DEFAULT_MOVE(ParsedExpression);
     virtual ~ParsedExpression() = default;
 

@@ -49,7 +49,7 @@ void ProjectionPushDownOptimizer::visitPathPropertyProbe(LogicalOperator* op) {
     auto child = pathPropertyProbe.getChild(0);
     KU_ASSERT(child->getOperatorType() == LogicalOperatorType::RECURSIVE_EXTEND);
     if (nodeOrRelInUse.contains(pathPropertyProbe.getRel())) {
-        return; 
+        return;
     }
     pathPropertyProbe.setJoinType(planner::RecursiveJoinType::TRACK_NONE);
     auto extend = child->ptrCast<LogicalRecursiveExtend>();
@@ -94,7 +94,7 @@ void ProjectionPushDownOptimizer::visitHashJoin(LogicalOperator* op) {
         collectExpressionsInUse(probeJoinKey);
         collectExpressionsInUse(buildJoinKey);
     }
-    if (hashJoin.getJoinType() == JoinType::MARK) { 
+    if (hashJoin.getJoinType() == JoinType::MARK) {
         return;
     }
     auto expressionsBeforePruning = hashJoin.getExpressionsToMaterialize();
@@ -109,7 +109,7 @@ void ProjectionPushDownOptimizer::visitIntersect(LogicalOperator* op) {
     auto& intersect = op->constCast<LogicalIntersect>();
     collectExpressionsInUse(intersect.getIntersectNodeID());
     for (auto i = 0u; i < intersect.getNumBuilds(); ++i) {
-        auto childIdx = i + 1; 
+        auto childIdx = i + 1;
         auto keyNodeID = intersect.getKeyNodeID(i);
         collectExpressionsInUse(keyNodeID);
         expression_vector expressionsBeforePruning;
@@ -329,7 +329,7 @@ binder::expression_vector ProjectionPushDownOptimizer::pruneExpressions(
                 expressionsAfterPruning.insert(expression);
             }
         } break;
-        default: 
+        default:
             expressionsAfterPruning.insert(expression);
         }
     }
@@ -347,5 +347,5 @@ void ProjectionPushDownOptimizer::preAppendProjection(LogicalOperator* op, idx_t
     op->setChild(childIdx, std::move(projection));
 }
 
-} 
-} 
+} // namespace optimizer
+} // namespace kuzu

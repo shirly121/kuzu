@@ -29,5 +29,5 @@ std::unique_ptr<function::RJAlgorithm> QueryRelTypeUtils::getFunction(QueryRelTy
     KU_UNREACHABLE;
 }
 
-} 
-} 
+} // namespace common
+} // namespace kuzu

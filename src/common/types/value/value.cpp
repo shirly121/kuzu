@@ -663,8 +663,7 @@ void Value::resizeChildrenVector(uint64_t size, const LogicalType& childType) {
     childrenSize = size;
 }
 
-void Value::copyFromRowLayoutList(const ku_list_t& list, const LogicalType& childType) {
-}
+void Value::copyFromRowLayoutList(const ku_list_t& list, const LogicalType& childType) {}
 
 void Value::copyFromColLayoutList(const list_entry_t& listEntry, ValueVector* vec) {
     auto dataVec = ListVector::getDataVector(vec);
@@ -679,8 +678,7 @@ void Value::copyFromColLayoutList(const list_entry_t& listEntry, ValueVector* ve
     }
 }
 
-void Value::copyFromRowLayoutStruct(const uint8_t* kuStruct) {
-}
+void Value::copyFromRowLayoutStruct(const uint8_t* kuStruct) {}
 
 void Value::copyFromColLayoutStruct(const struct_entry_t& structEntry, ValueVector* vec) {
     for (auto i = 0u; i < childrenSize; i++) {
@@ -694,8 +692,7 @@ void Value::copyFromColLayoutStruct(const struct_entry_t& structEntry, ValueVect
     }
 }
 
-void Value::copyFromUnion(const uint8_t* kuUnion) {
-}
+void Value::copyFromUnion(const uint8_t* kuUnion) {}
 
 void Value::serialize(Serializer& serializer) const {
     dataType.serialize(serializer);
@@ -1056,5 +1053,5 @@ std::string Value::decimalToString() const {
     }
 }
 
-} 
-} 
+} // namespace common
+} // namespace kuzu

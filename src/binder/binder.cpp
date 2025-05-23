@@ -211,8 +211,9 @@ void Binder::replaceExpressionInScope(const std::string& oldName, const std::str
 
 TableFunction Binder::getScanFunction(const FileTypeInfo& typeInfo,
     const FileScanInfo& fileScanInfo) const {
-    throw std::runtime_error("getScanFunction is not implemented: removed dependency on processor module");
+    throw std::runtime_error(
+        "getScanFunction is not implemented: removed dependency on processor module");
 }
 
-} 
-} 
+} // namespace binder
+} // namespace kuzu

@@ -30,8 +30,8 @@ public:
         ArrowDirection arrowDirection, std::vector<s_parsed_expr_pair> propertyKeyValPairs,
         RecursiveRelPatternInfo recursiveInfo)
         : NodePattern{std::move(name), std::move(tableNames), std::move(propertyKeyValPairs)},
-          relType{relType}, arrowDirection{arrowDirection},
-          recursiveInfo{std::move(recursiveInfo)} {}
+          relType{relType}, arrowDirection{arrowDirection}, recursiveInfo{
+                                                                std::move(recursiveInfo)} {}
     DELETE_COPY_DEFAULT_MOVE(RelPattern);
 
     common::QueryRelType getRelType() const { return relType; }

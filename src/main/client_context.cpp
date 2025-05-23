@@ -1,7 +1,6 @@
-#include <fstream>
-#include <nlohmann/json.hpp>
-
 #include "main/client_context.h"
+
+#include <fstream>
 
 #include "binder/binder.h"
 #include "common/exception/checkpoint.h"
@@ -10,13 +9,16 @@
 #include "common/random_engine.h"
 #include "common/string_utils.h"
 #include "common/task_system/progress_bar.h"
+#include "common/task_system/task.h"
 #include "extension/extension.h"
 #include "extension/extension_manager.h"
 #include "graph/graph_entry.h"
+#include "json_fwd.hpp"
 #include "main/attached_database.h"
 #include "main/database.h"
 #include "main/database_manager.h"
 #include "main/db_config.h"
+#include "main/plan_printer.h"
 #include "optimizer/optimizer.h"
 #include "parser/parser.h"
 #include "parser/visitor/standalone_call_rewriter.h"
@@ -24,9 +26,6 @@
 #include "planner/planner.h"
 #include "storage/storage_manager.h"
 #include "transaction/transaction_context.h"
-#include "main/plan_printer.h"
-#include "common/task_system/task.h"
-
 
 #if defined(_WIN32)
 #include "common/windows_utils.h"
@@ -149,7 +148,7 @@ std::unique_ptr<function::ScanReplacementData> ClientContext::tryReplace(
     for (auto& scanReplacement : scanReplacements) {
         auto replaceData = scanReplacement.replaceFunc(objectName);
         if (replaceData == nullptr) {
-            continue; 
+            continue;
         }
         return replaceData;
     }
@@ -236,7 +235,7 @@ std::string ClientContext::getEnvVariable(const std::string& name) {
     }
     return WindowsUtils::unicodeToUTF8(result);
 #else
-    const char* env = getenv(name.c_str()); 
+    const char* env = getenv(name.c_str());
     if (!env) {
         return std::string();
     }
@@ -287,8 +286,7 @@ const graph::GraphEntrySet& ClientContext::getGraphEntrySet() const {
     return *graphEntrySet;
 }
 
-void ClientContext::cleanUp() {
-}
+void ClientContext::cleanUp() {}
 
 std::unique_ptr<PreparedStatement> ClientContext::prepare(std::string_view query) {
     std::unique_lock lck{mtx};
@@ -309,7 +307,7 @@ std::unique_ptr<PreparedStatement> ClientContext::prepare(std::string_view query
 
 std::unique_ptr<QueryResult> ClientContext::executeWithParams(PreparedStatement* preparedStatement,
     std::unordered_map<std::string, std::unique_ptr<Value>> inputParams,
-    std::optional<uint64_t> queryID) { 
+    std::optional<uint64_t> queryID) {
     lock_t lck{mtx};
     if (!preparedStatement->isSuccess()) {
         return queryResultWithError(preparedStatement->errMsg);
@@ -500,7 +498,8 @@ std::unique_ptr<PreparedStatement> ClientContext::prepareNoLock(
 
 std::unique_ptr<QueryResult> ClientContext::executeNoLock(PreparedStatement* preparedStatement,
     std::optional<uint64_t> queryID) {
-    throw std::runtime_error("executeNoLock is not implemented, to remove dependency of processor module");
+    throw std::runtime_error(
+        "executeNoLock is not implemented, to remove dependency of processor module");
 }
 
 std::unique_ptr<QueryResult> ClientContext::handleFailedExecution(std::optional<uint64_t> queryID,
@@ -559,5 +558,5 @@ bool ClientContext::canExecuteWriteQuery() const {
     return true;
 }
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

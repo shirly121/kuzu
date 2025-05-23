@@ -55,8 +55,8 @@ struct ExportParquetBindData final : public ExportFuncBindData {
 
     ExportParquetBindData(std::vector<std::string> names, std::string fileName,
         ParquetOptions parquetOptions)
-        : ExportFuncBindData{std::move(names), std::move(fileName)},
-          parquetOptions{parquetOptions} {}
+        : ExportFuncBindData{std::move(names), std::move(fileName)}, parquetOptions{
+                                                                         parquetOptions} {}
 
     std::unique_ptr<ExportFuncBindData> copy() const override {
         auto bindData =
@@ -72,8 +72,7 @@ struct ExportParquetLocalState final : public ExportFuncLocalState {
 
     ExportParquetLocalState(const ExportFuncBindData& bindData, main::ClientContext& context,
         std::vector<bool> isFlatVec)
-        : mm{context.getMemoryManager()} {
-    }
+        : mm{context.getMemoryManager()} {}
 };
 
 struct ExportParquetSharedState : public ExportFuncSharedState {
@@ -121,14 +120,11 @@ static std::vector<ValueVector*> extractSharedPtr(
 
 static void sinkFunc(ExportFuncSharedState& sharedState, ExportFuncLocalState& localState,
     const ExportFuncBindData& /*bindData*/,
-    std::vector<std::shared_ptr<ValueVector>> inputVectors) {
-}
+    std::vector<std::shared_ptr<ValueVector>> inputVectors) {}
 
-static void combineFunc(ExportFuncSharedState& sharedState, ExportFuncLocalState& localState) {
-}
+static void combineFunc(ExportFuncSharedState& sharedState, ExportFuncLocalState& localState) {}
 
-static void finalizeFunc(ExportFuncSharedState& sharedState) {
-}
+static void finalizeFunc(ExportFuncSharedState& sharedState) {}
 
 function_set ExportParquetFunction::getFunctionSet() {
     function_set functionSet;
@@ -144,5 +140,5 @@ function_set ExportParquetFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

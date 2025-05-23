@@ -4,25 +4,25 @@
 #include <unordered_set>
 
 #include "common/enums/rel_direction.h"
+#include "common/file_system/file_info.h"
 #include "common/serializer/buffered_file.h"
 #include "storage/wal/wal_record.h"
-#include "common/file_system/file_info.h"
 
 namespace kuzu {
 namespace binder {
 struct BoundAlterInfo;
 struct BoundCreateTableInfo;
-} 
+} // namespace binder
 namespace common {
 class BufferedFileWriter;
 class VirtualFileSystem;
 class ValueVector;
-} 
+} // namespace common
 
 namespace catalog {
 class CatalogEntry;
 struct SequenceRollbackData;
-} 
+} // namespace catalog
 
 namespace storage {
 class WALReplayer;
@@ -86,5 +86,5 @@ private:
     common::VirtualFileSystem* vfs;
 };
 
-} 
-} 
+} // namespace storage
+} // namespace kuzu

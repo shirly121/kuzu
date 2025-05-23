@@ -45,5 +45,5 @@ function_set BMInfoFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

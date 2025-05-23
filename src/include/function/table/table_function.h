@@ -14,18 +14,18 @@ class BoundReadingClause;
 namespace parser {
 struct YieldVariable;
 class ParsedExpression;
-} 
+} // namespace parser
 
 namespace planner {
 class LogicalOperator;
 class LogicalPlan;
 class Planner;
-} 
+} // namespace planner
 
 namespace processor {
 struct ExecutionContext;
 class PlanMapper;
-} 
+} // namespace processor
 
 namespace function {
 
@@ -172,5 +172,5 @@ struct KUZU_API TableFunction final : Function {
     static common::offset_t emptyTableFunc(const TableFuncInput& input, TableFuncOutput& output);
 };
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

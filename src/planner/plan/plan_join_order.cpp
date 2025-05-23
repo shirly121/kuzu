@@ -160,7 +160,7 @@ void Planner::planLevelExactly(uint32_t level) {
     auto maxLeftLevel = floor(level / 2.0);
     for (auto leftLevel = 1u; leftLevel <= maxLeftLevel; ++leftLevel) {
         auto rightLevel = level - leftLevel;
-        if (leftLevel > 1) { 
+        if (leftLevel > 1) {
             planWCOJoin(leftLevel, rightLevel);
         }
     }
@@ -359,7 +359,7 @@ static LogicalOperator* getSequentialScan(LogicalOperator* op) {
     case LogicalOperatorType::FLATTEN:
     case LogicalOperatorType::FILTER:
     case LogicalOperatorType::EXTEND:
-    case LogicalOperatorType::PROJECTION: { 
+    case LogicalOperatorType::PROJECTION: {
         return getSequentialScan(op->getChild(0).get());
     }
     case LogicalOperatorType::SCAN_NODE_TABLE: {
@@ -426,7 +426,7 @@ void Planner::planWCOJoin(const SubqueryGraph& subgraph,
         KU_ASSERT(context.subPlansTable->containSubgraphPlans(relSubgraph));
         auto& relPlanCandidates = context.subPlansTable->getSubgraphPlans(relSubgraph);
         auto relPlan = getWCOJBuildPlanForRel(relPlanCandidates, *boundNode);
-        if (relPlan == nullptr) { 
+        if (relPlan == nullptr) {
             return;
         }
         relPlans.push_back(std::move(relPlan));
@@ -496,7 +496,7 @@ bool Planner::tryPlanINLJoin(const SubqueryGraph& subgraph, const SubqueryGraph&
     if (!subgraph.isSingleRel() && !otherSubgraph.isSingleRel()) {
         return false;
     }
-    if (subgraph.isSingleRel()) { 
+    if (subgraph.isSingleRel()) {
         return tryPlanINLJoin(otherSubgraph, subgraph, joinNodes);
     }
     auto relPos = UINT32_MAX;
@@ -520,11 +520,11 @@ bool Planner::tryPlanINLJoin(const SubqueryGraph& subgraph, const SubqueryGraph&
     auto predicates = getNewlyMatchedExprs(subgraph, newSubgraph, context.getWhereExpressions());
     bool hasAppliedINLJoin = false;
     for (auto& prevPlan : context.getPlans(subgraph)) {
-            auto plan = prevPlan->shallowCopy();
-            appendExtend(boundNode, nbrNode, rel, extendDirection, getProperties(*rel), *plan);
-            appendFilters(predicates, *plan);
-            context.addPlan(newSubgraph, std::move(plan));
-            hasAppliedINLJoin = true;
+        auto plan = prevPlan->shallowCopy();
+        appendExtend(boundNode, nbrNode, rel, extendDirection, getProperties(*rel), *plan);
+        appendFilters(predicates, *plan);
+        context.addPlan(newSubgraph, std::move(plan));
+        hasAppliedINLJoin = true;
     }
     return hasAppliedINLJoin;
 }
@@ -577,7 +577,7 @@ static bool isExpressionNewlyMatched(const std::vector<SubqueryGraph>& prevs,
     auto variables = collector.getVarNames();
     for (auto& prev : prevs) {
         if (prev.containAllVariables(variables)) {
-            return false; 
+            return false;
         }
     }
     return newSubgraph.containAllVariables(variables);
@@ -604,5 +604,5 @@ expression_vector Planner::getNewlyMatchedExprs(const SubqueryGraph& leftPrev,
     return getNewlyMatchedExprs(std::vector<SubqueryGraph>{leftPrev, rightPrev}, new_, exprs);
 }
 
-} 
-} 
+} // namespace planner
+} // namespace kuzu

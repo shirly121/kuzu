@@ -94,5 +94,5 @@ private:
     std::mutex allocatorLock;
 };
 
-} 
-} 
+} // namespace storage
+} // namespace kuzu

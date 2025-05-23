@@ -75,8 +75,8 @@ struct KUZU_API ExportFunction : public Function {
         export_sink_t copyToSink, export_combine_t copyToCombine, export_finalize_t copyToFinalize)
         : Function{std::move(name), {}}, initLocalState{std::move(initLocal)},
           createSharedState{std::move(createShared)}, initSharedState{std::move(initShared)},
-          sink{std::move(copyToSink)}, combine{std::move(copyToCombine)},
-          finalize{std::move(copyToFinalize)} {}
+          sink{std::move(copyToSink)}, combine{std::move(copyToCombine)}, finalize{std::move(
+                                                                              copyToFinalize)} {}
 
     export_bind_t bind;
     export_init_local_t initLocalState;

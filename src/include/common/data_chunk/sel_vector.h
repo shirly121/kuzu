@@ -86,8 +86,8 @@ protected:
 
     // Intended to be used only as a subsequence of a SelectionVector in SelectionVector::slice
     explicit SelectionView(std::span<const sel_t> selectedPositions, State state)
-        : selectedPositions{selectedPositions.data()}, selectedSize{selectedPositions.size()},
-          state{state} {}
+        : selectedPositions{selectedPositions.data()},
+          selectedSize{selectedPositions.size()}, state{state} {}
 
 protected:
     const sel_t* selectedPositions;

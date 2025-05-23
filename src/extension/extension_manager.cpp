@@ -61,11 +61,9 @@ const main::ExtensionOption* ExtensionManager::getExtensionOption(std::string na
     return extensionOptions.contains(name) ? &extensionOptions.at(name) : nullptr;
 }
 
-
-
 void ExtensionManager::autoLoadLinkedExtensions(main::ClientContext* context) {
     loadLinkedExtensions(context);
 }
 
-} 
-} 
+} // namespace extension
+} // namespace kuzu

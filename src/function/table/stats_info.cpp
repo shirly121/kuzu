@@ -20,8 +20,8 @@ struct StatsInfoBindData final : TableFuncBindData {
 
     StatsInfoBindData(binder::expression_vector columns, TableCatalogEntry* tableEntry,
         storage::Table* table, const ClientContext* context)
-        : TableFuncBindData{std::move(columns), 1 /*numRows*/}, tableEntry{tableEntry},
-          table{table}, context{context} {}
+        : TableFuncBindData{std::move(columns), 1 /*numRows*/},
+          tableEntry{tableEntry}, table{table}, context{context} {}
 
     std::unique_ptr<TableFuncBindData> copy() const override {
         return std::make_unique<StatsInfoBindData>(columns, tableEntry, table, context);
@@ -50,5 +50,5 @@ function_set StatsInfoFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

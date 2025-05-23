@@ -65,8 +65,8 @@ class Binder {
 
 public:
     explicit Binder(main::ClientContext* clientContext)
-        : lastExpressionId{0}, scope{}, expressionBinder{this, clientContext},
-          clientContext{clientContext} {}
+        : lastExpressionId{0}, scope{}, expressionBinder{this, clientContext}, clientContext{
+                                                                                   clientContext} {}
 
     std::unique_ptr<BoundStatement> bind(const parser::Statement& statement);
 

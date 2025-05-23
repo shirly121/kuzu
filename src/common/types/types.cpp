@@ -1583,7 +1583,7 @@ static uint32_t internalTimeOrder(const LogicalTypeID& type) {
     case LogicalTypeID::TIMESTAMP_NS:
         return 55;
     default:
-        return 0; 
+        return 0;
     }
 }
 
@@ -1802,7 +1802,7 @@ bool LogicalTypeUtils::tryGetMaxLogicalType(const std::vector<LogicalType>& type
 }
 
 LogicalType LogicalTypeUtils::combineTypes(const common::LogicalType& lft,
-    const common::LogicalType& rit) { 
+    const common::LogicalType& rit) {
     if (lft.getLogicalTypeID() == LogicalTypeID::STRING ||
         rit.getLogicalTypeID() == LogicalTypeID::STRING) {
         return LogicalType::STRING();
@@ -1874,5 +1874,5 @@ LogicalType LogicalTypeUtils::purgeAny(const LogicalType& type, const LogicalTyp
     }
 }
 
-} 
-} 
+} // namespace common
+} // namespace kuzu

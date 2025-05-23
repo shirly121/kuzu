@@ -58,9 +58,7 @@ public:
 
     void beginWritingInternal(common::table_id_t tableID) override { bfsGraph.pinTableID(tableID); }
 
-
 protected:
-
     bool updateCounterAndTerminate(common::LimitCounter* counter);
 
     ParentList* findFirstParent(common::offset_t dstOffset) const;
@@ -99,12 +97,11 @@ public:
         common::nodeID_t sourceNodeID, PathsOutputWriterInfo info, BaseBFSGraph& bfsGraph)
         : PathsOutputWriter{context, outputNodeMask, sourceNodeID, info, bfsGraph} {}
 
-
     std::unique_ptr<RJOutputWriter> copy() override {
         return std::make_unique<SPPathsOutputWriter>(context, outputNodeMask, sourceNodeID_, info,
             bfsGraph);
     }
 };
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

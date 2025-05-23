@@ -18,8 +18,8 @@ struct LoadedExtensionInfo {
 
     LoadedExtensionInfo(std::string name, extension::ExtensionSource extensionSource,
         std::string extensionPath)
-        : name{std::move(name)}, extensionSource{extensionSource},
-          extensionPath{std::move(extensionPath)} {}
+        : name{std::move(name)}, extensionSource{extensionSource}, extensionPath{
+                                                                       std::move(extensionPath)} {}
 };
 
 struct ShowLoadedExtensionsBindData final : TableFuncBindData {
@@ -27,8 +27,8 @@ struct ShowLoadedExtensionsBindData final : TableFuncBindData {
 
     ShowLoadedExtensionsBindData(std::vector<LoadedExtensionInfo> loadedExtensionInfo,
         binder::expression_vector columns, offset_t maxOffset)
-        : TableFuncBindData{std::move(columns), maxOffset},
-          loadedExtensionInfo{std::move(loadedExtensionInfo)} {}
+        : TableFuncBindData{std::move(columns), maxOffset}, loadedExtensionInfo{
+                                                                std::move(loadedExtensionInfo)} {}
 
     std::unique_ptr<TableFuncBindData> copy() const override {
         return std::make_unique<ShowLoadedExtensionsBindData>(*this);

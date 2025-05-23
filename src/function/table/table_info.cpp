@@ -62,8 +62,8 @@ struct PropertyInfo {
 
 private:
     PropertyInfo(const PropertyInfo& other)
-        : propertyID{other.propertyID}, name{other.name}, type{other.type},
-          defaultVal{other.defaultVal} {
+        : propertyID{other.propertyID}, name{other.name}, type{other.type}, defaultVal{
+                                                                                other.defaultVal} {
         if (other.extraInfo) {
             extraInfo = other.extraInfo->copy();
         }

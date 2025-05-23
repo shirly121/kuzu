@@ -131,8 +131,8 @@ bool LogicalOperatorUtils::isAccHashJoin(const LogicalOperator& op) {
 
 LogicalOperator::LogicalOperator(LogicalOperatorType operatorType,
     std::shared_ptr<LogicalOperator> child, std::optional<common::cardinality_t> cardinality)
-    : operatorType{operatorType},
-      cardinality{cardinality.has_value() ? cardinality.value() : child->getCardinality()} {
+    : operatorType{operatorType}, cardinality{cardinality.has_value() ? cardinality.value() :
+                                                                        child->getCardinality()} {
     children.push_back(std::move(child));
 }
 

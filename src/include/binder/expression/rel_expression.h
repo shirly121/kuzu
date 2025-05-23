@@ -49,8 +49,8 @@ public:
         common::QueryRelType relType)
         : NodeOrRelExpression{std::move(dataType), std::move(uniqueName), std::move(variableName),
               std::move(entries)},
-          srcNode{std::move(srcNode)}, dstNode{std::move(dstNode)}, directionType{directionType},
-          relType{relType} {}
+          srcNode{std::move(srcNode)}, dstNode{std::move(dstNode)},
+          directionType{directionType}, relType{relType} {}
 
     bool isRecursive() const {
         return dataType.getLogicalTypeID() == common::LogicalTypeID::RECURSIVE_REL;

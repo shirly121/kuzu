@@ -1,11 +1,12 @@
-#include <nlohmann/json.hpp>
-#include <fstream>
 #include "gopt/g_storage_manager.h"
-#include "gopt/g_node_table.h"
-#include "gopt/g_constants.h"
+
+#include <fstream>
+
 #include "catalog/catalog_entry/rel_group_catalog_entry.h"
+#include "gopt/g_constants.h"
 #include "gopt/g_node_table.h"
 #include "gopt/g_rel_table.h"
+#include <nlohmann/json.hpp>
 
 namespace kuzu {
 namespace storage {
@@ -28,9 +29,11 @@ void GStorageManager::loadTables(const catalog::Catalog& catalog, common::Virtua
         if (!catalog.containsTable(&transaction, nodeName)) {
             throw std::runtime_error("Node table " + nodeName + " not found in catalog.");
         }
-        auto nodeTableEntry = dynamic_cast<catalog::NodeTableCatalogEntry*>(catalog.getTableCatalogEntry(&transaction, nodeName));
+        auto nodeTableEntry = dynamic_cast<catalog::NodeTableCatalogEntry*>(
+            catalog.getTableCatalogEntry(&transaction, nodeName));
         auto count = nodeStat["count"].get<common::row_idx_t>();
-        tables[nodeTableEntry->getTableID()] = std::make_unique<GNodeTable>(nodeTableEntry, this, &memoryManager, vfs, context, count);
+        tables[nodeTableEntry->getTableID()] =
+            std::make_unique<GNodeTable>(nodeTableEntry, this, &memoryManager, vfs, context, count);
     }
 
     for (const auto& relStat : jsonData["edge_type_statistics"]) {
@@ -42,9 +45,9 @@ void GStorageManager::loadTables(const catalog::Catalog& catalog, common::Virtua
             auto dstName = srcDst["destination_vertex"].get<std::string>();
             auto childName = relName;
             if (containsGroup) {
-                childName = kuzu::catalog::RelGroupCatalogEntry::getChildTableName(relName,
-                    srcName, dstName);
-            } 
+                childName = kuzu::catalog::RelGroupCatalogEntry::getChildTableName(relName, srcName,
+                    dstName);
+            }
             if (!catalog.containsTable(&transaction, childName)) {
                 throw std::runtime_error("Rel table " + childName + " not found in catalog.");
             }
@@ -54,8 +57,7 @@ void GStorageManager::loadTables(const catalog::Catalog& catalog, common::Virtua
             tables[relTableEntry->getTableID()] =
                 std::make_unique<kuzu::storage::GRelTable>(count, relTableEntry, this);
         }
-
     }
 }
-}
-}
+} // namespace storage
+} // namespace kuzu

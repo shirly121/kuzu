@@ -1,6 +1,6 @@
+#include <filesystem>
 #include <fstream>
 #include <sstream>
-#include <filesystem>
 
 #include "common/enums/table_type.h"
 #include "gopt/g_catalog.h"
@@ -9,10 +9,10 @@
 #include "gopt/g_node_table.h"
 #include "gopt/g_rel_table.h"
 #include "gopt/g_storage_manager.h"
+#include "main/client_context.h"
 #include "planner/operator/logical_plan.h"
 #include "storage/buffer_manager/memory_manager.h"
 #include "transaction/transaction.h"
-#include "main/client_context.h"
 #include <gtest/gtest.h>
 #include <ranges>
 
@@ -103,10 +103,7 @@ TEST(GOptTest, GStorageManager) {
     } else {
         throw std::runtime_error("invalid query path: " + queryPath);
     }
-
-
-
 }
 
-} 
-} 
+} // namespace testing
+} // namespace kuzu

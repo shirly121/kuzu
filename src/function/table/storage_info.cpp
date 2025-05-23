@@ -30,7 +30,6 @@ struct StorageInfoLocalState final : TableFuncLocalState {
     }
 };
 
-
 struct StorageInfoBindData final : TableFuncBindData {
     TableCatalogEntry* tableEntry;
     Table* table;
@@ -38,8 +37,8 @@ struct StorageInfoBindData final : TableFuncBindData {
 
     StorageInfoBindData(binder::expression_vector columns, TableCatalogEntry* tableEntry,
         Table* table, const ClientContext* context)
-        : TableFuncBindData{std::move(columns), 1 /*maxOffset*/}, tableEntry{tableEntry},
-          table{table}, context{context} {}
+        : TableFuncBindData{std::move(columns), 1 /*maxOffset*/},
+          tableEntry{tableEntry}, table{table}, context{context} {}
 
     std::unique_ptr<TableFuncBindData> copy() const override {
         return std::make_unique<StorageInfoBindData>(columns, tableEntry, table, context);
@@ -51,7 +50,6 @@ static std::unique_ptr<TableFuncLocalState> initLocalState(
     return nullptr;
 }
 
-
 static void resetOutputIfNecessary(const StorageInfoLocalState* localState,
     DataChunk& outputChunk) {
     if (outputChunk.state->getSelVector().getSelSize() == DEFAULT_VECTOR_CAPACITY) {
@@ -60,10 +58,6 @@ static void resetOutputIfNecessary(const StorageInfoLocalState* localState,
         outputChunk.state->getSelVectorUnsafe().setSelSize(0);
     }
 }
-
-
-
-
 
 static offset_t tableFunc(const TableFuncInput& input, TableFuncOutput& output) {
     return 0;
@@ -85,5 +79,5 @@ function_set StorageInfoFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

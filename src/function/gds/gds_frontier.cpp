@@ -100,8 +100,7 @@ private:
     iteration_t val;
 };
 
-void DenseFrontier::init(ExecutionContext* context, Graph* graph, iteration_t val) {
-}
+void DenseFrontier::init(ExecutionContext* context, Graph* graph, iteration_t val) {}
 
 void DenseFrontier::resetValue(ExecutionContext* context, Graph* graph, iteration_t val) {
     auto vc = DenseFrontierInitVertexCompute(*this, val);
@@ -359,8 +358,8 @@ void DenseSparseDynamicFrontierPair::switchToDense(ExecutionContext* context, Gr
 
 DenseFrontierPair::DenseFrontierPair(std::unique_ptr<DenseFrontier> curDenseFrontier,
     std::unique_ptr<DenseFrontier> nextDenseFrontier)
-    : curDenseFrontier{std::move(curDenseFrontier)},
-      nextDenseFrontier{std::move(nextDenseFrontier)} {
+    : curDenseFrontier{std::move(curDenseFrontier)}, nextDenseFrontier{
+                                                         std::move(nextDenseFrontier)} {
     currentFrontier = this->curDenseFrontier.get();
     nextFrontier = this->nextDenseFrontier.get();
 }
@@ -387,5 +386,5 @@ bool SPEdgeCompute::terminate(NodeOffsetMaskMap& maskMap) {
     return numNodesReached == targetNumNodes;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

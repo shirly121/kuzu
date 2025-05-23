@@ -104,7 +104,7 @@ std::shared_ptr<Expression> ExpressionBinder::implicitCastIfNecessary(
     if (checkUDTCast(type, targetType)) {
         return expression;
     }
-    if (type == targetType || targetType.containsAny()) { 
+    if (type == targetType || targetType.containsAny()) {
         return expression;
     }
     if (ExpressionUtil::canCastStatically(*expression, targetType)) {
@@ -135,5 +135,5 @@ std::string ExpressionBinder::getUniqueName(const std::string& name) const {
     return binder->getUniqueExpressionName(name);
 }
 
-} 
-} 
+} // namespace binder
+} // namespace kuzu

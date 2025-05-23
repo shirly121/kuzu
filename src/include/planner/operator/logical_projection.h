@@ -11,8 +11,8 @@ class LogicalProjection : public LogicalOperator {
 public:
     explicit LogicalProjection(binder::expression_vector expressions,
         std::shared_ptr<LogicalOperator> child)
-        : LogicalOperator{LogicalOperatorType::PROJECTION, std::move(child)},
-          expressions{std::move(expressions)} {}
+        : LogicalOperator{LogicalOperatorType::PROJECTION, std::move(child)}, expressions{std::move(
+                                                                                  expressions)} {}
 
     void computeFactorizedSchema() override;
     void computeFlatSchema() override;

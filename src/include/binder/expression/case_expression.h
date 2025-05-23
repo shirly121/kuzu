@@ -20,8 +20,8 @@ class CaseExpression final : public Expression {
 public:
     CaseExpression(common::LogicalType dataType, std::shared_ptr<Expression> elseExpression,
         const std::string& name)
-        : Expression{expressionType_, std::move(dataType), name},
-          elseExpression{std::move(elseExpression)} {}
+        : Expression{expressionType_, std::move(dataType), name}, elseExpression{
+                                                                      std::move(elseExpression)} {}
 
     void addCaseAlternative(std::shared_ptr<Expression> when, std::shared_ptr<Expression> then) {
         caseAlternatives.push_back(make_unique<CaseAlternative>(std::move(when), std::move(then)));

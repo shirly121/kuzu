@@ -67,9 +67,9 @@ static uint64_t getArrowMainBufferSize(const LogicalType& type, uint64_t capacit
     case LogicalTypeID::RECURSIVE_REL:
     case LogicalTypeID::NODE:
     case LogicalTypeID::REL:
-        return 0; 
+        return 0;
     default:
-        KU_UNREACHABLE; 
+        KU_UNREACHABLE;
     }
 }
 
@@ -249,13 +249,11 @@ void ArrowRowBatch::appendValue(ArrowVector* vector, const LogicalType& type, Va
 
 template<LogicalTypeID DT>
 void ArrowRowBatch::templateCopyNonNullValue(ArrowVector* vector, const LogicalType& /*type*/,
-    Value* value, std::int64_t pos) {
-}
+    Value* value, std::int64_t pos) {}
 
 template<>
 void ArrowRowBatch::templateCopyNonNullValue<LogicalTypeID::DECIMAL>(ArrowVector* vector,
-    const LogicalType& type, Value* value, std::int64_t pos) {
-}
+    const LogicalType& type, Value* value, std::int64_t pos) {}
 
 template<>
 void ArrowRowBatch::templateCopyNonNullValue<LogicalTypeID::INTERVAL>(ArrowVector* vector,
@@ -359,7 +357,7 @@ void ArrowRowBatch::templateCopyNonNullValue<LogicalTypeID::UNION>(ArrowVector* 
                 value->children[0].get());
         }
     }
-    KU_UNREACHABLE; 
+    KU_UNREACHABLE;
 }
 
 template<>
@@ -928,7 +926,7 @@ ArrowArray ArrowRowBatch::toArray() {
     result.n_children = (std::int64_t)types.size();
     result.length = numTuples;
     result.n_buffers = 1;
-    result.buffers = rootHolder->buffers.data(); 
+    result.buffers = rootHolder->buffers.data();
     result.offset = 0;
     result.null_count = 0;
     result.dictionary = nullptr;
@@ -945,5 +943,5 @@ ArrowArray ArrowRowBatch::append(main::QueryResult& queryResult, std::int64_t ch
     return toArray();
 }
 
-} 
-} 
+} // namespace common
+} // namespace kuzu

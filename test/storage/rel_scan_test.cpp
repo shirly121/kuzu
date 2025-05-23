@@ -85,8 +85,9 @@ TEST_F(RelScanTest, ScanFwd) {
         common::offset_vec_t resultNodeOffsets;
         std::vector<nodeID_t> expectedNodes;
         std::transform(expectedNodeOffsets.begin(), expectedNodeOffsets.end(),
-            std::back_inserter(expectedNodes),
-            [&](auto offset) { return nodeID_t{offset, tableID}; });
+            std::back_inserter(expectedNodes), [&](auto offset) {
+                return nodeID_t{offset, tableID};
+            });
 
         common::offset_vec_t resultRelOffsets;
         std::vector<date_t> resultDates;

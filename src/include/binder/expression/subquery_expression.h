@@ -15,8 +15,8 @@ public:
     SubqueryExpression(common::SubqueryType subqueryType, common::LogicalType dataType,
         QueryGraphCollection queryGraphCollection, std::string uniqueName, std::string rawName)
         : Expression{expressionType_, std::move(dataType), std::move(uniqueName)},
-          subqueryType{subqueryType}, queryGraphCollection{std::move(queryGraphCollection)},
-          rawName{std::move(rawName)} {}
+          subqueryType{subqueryType},
+          queryGraphCollection{std::move(queryGraphCollection)}, rawName{std::move(rawName)} {}
 
     common::SubqueryType getSubqueryType() const { return subqueryType; }
 

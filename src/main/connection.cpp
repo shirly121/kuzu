@@ -87,5 +87,5 @@ void Connection::removeScalarFunction(std::string name) {
     clientContext->removeScalarFunction(name);
 }
 
-} 
-} 
+} // namespace main
+} // namespace kuzu

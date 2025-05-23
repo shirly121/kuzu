@@ -12,12 +12,12 @@
 namespace kuzu {
 namespace main {
 class ClientContext;
-} 
+}
 
 namespace testing {
 class DBTest;
 class FlakyBufferManager;
-} 
+} // namespace testing
 
 namespace transaction {
 
@@ -62,5 +62,5 @@ private:
     std::mutex mtxForStartingNewTransactions;
     uint64_t checkpointWaitTimeoutInMicros = common::DEFAULT_CHECKPOINT_WAIT_TIMEOUT_IN_MICROS;
 };
-} 
-} 
+} // namespace transaction
+} // namespace kuzu

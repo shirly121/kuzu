@@ -39,7 +39,8 @@ static void appendPartitioner(const BoundCopyFromInfo& copyFromInfo, LogicalPlan
 
 static void appendCopyFrom(const BoundCopyFromInfo& info, expression_vector outExprs,
     LogicalPlan& plan) {
-    auto op = std::make_shared<LogicalCopyFrom>(info.copy(), std::move(outExprs), plan.getLastOperator());
+    auto op =
+        std::make_shared<LogicalCopyFrom>(info.copy(), std::move(outExprs), plan.getLastOperator());
     op->computeFactorizedSchema();
     plan.setLastOperator(std::move(op));
 }

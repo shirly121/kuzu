@@ -100,8 +100,8 @@ struct ScalarOrAggregateFunction : Function {
         : Function{std::move(name), std::move(parameterTypeIDs)}, returnTypeID{returnTypeID} {}
     ScalarOrAggregateFunction(std::string name, std::vector<common::LogicalTypeID> parameterTypeIDs,
         common::LogicalTypeID returnTypeID, scalar_bind_func bindFunc)
-        : Function{std::move(name), std::move(parameterTypeIDs)}, returnTypeID{returnTypeID},
-          bindFunc{std::move(bindFunc)} {}
+        : Function{std::move(name), std::move(parameterTypeIDs)},
+          returnTypeID{returnTypeID}, bindFunc{std::move(bindFunc)} {}
 
     std::string signatureToString() const override {
         auto result = Function::signatureToString();

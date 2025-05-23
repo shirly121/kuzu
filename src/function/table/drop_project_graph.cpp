@@ -40,5 +40,5 @@ function_set DropProjectedGraphFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

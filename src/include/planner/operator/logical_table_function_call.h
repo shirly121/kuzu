@@ -13,8 +13,8 @@ class KUZU_API LogicalTableFunctionCall final : public LogicalOperator {
 public:
     LogicalTableFunctionCall(function::TableFunction tableFunc,
         std::unique_ptr<function::TableFuncBindData> bindData)
-        : LogicalOperator{operatorType_}, tableFunc{std::move(tableFunc)},
-          bindData{std::move(bindData)} {
+        : LogicalOperator{operatorType_}, tableFunc{std::move(tableFunc)}, bindData{std::move(
+                                                                               bindData)} {
         setCardinality(this->bindData->numRows);
     }
 
@@ -46,5 +46,5 @@ private:
     std::vector<std::shared_ptr<LogicalOperator>> nodeMaskRoots;
 };
 
-} 
-} 
+} // namespace planner
+} // namespace kuzu

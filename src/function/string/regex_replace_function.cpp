@@ -41,8 +41,8 @@ struct RegexReplaceBindDataStaticPattern : public RegexReplaceBindData {
 
     RegexReplaceBindDataStaticPattern(common::logical_type_vec_t paramTypes,
         re2_replace_func_t replaceFunc, std::string patternInStr)
-        : RegexReplaceBindData{std::move(paramTypes), std::move(replaceFunc)},
-          pattern{patternInStr} {}
+        : RegexReplaceBindData{std::move(paramTypes), std::move(replaceFunc)}, pattern{
+                                                                                   patternInStr} {}
 
     std::unique_ptr<FunctionBindData> copy() const override {
         return std::make_unique<RegexReplaceBindDataStaticPattern>(copyVector(paramTypes),
@@ -124,5 +124,5 @@ function_set RegexpReplaceFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

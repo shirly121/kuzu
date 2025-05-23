@@ -41,7 +41,7 @@ std::shared_ptr<LogicalOperator> FilterPushDownOptimizer::visitOperator(
     case LogicalOperatorType::TABLE_FUNCTION_CALL: {
         return visitTableFunctionCallReplace(op);
     }
-    default: { 
+    default: {
         return visitChildren(op);
     }
     }
@@ -110,7 +110,7 @@ std::shared_ptr<LogicalOperator> FilterPushDownOptimizer::visitCrossProductRepla
             predicates.push_back(predicate);
         }
     }
-    if (joinConditions.empty()) { 
+    if (joinConditions.empty()) {
         return finishPushDown(op);
     }
     auto hashJoin = std::make_shared<LogicalHashJoin>(joinConditions, JoinType::INNER,
@@ -124,8 +124,6 @@ std::shared_ptr<LogicalOperator> FilterPushDownOptimizer::visitCrossProductRepla
     }
     return appendFilters(predicates, hashJoin);
 }
-
-
 
 static bool isConstantExpression(const std::shared_ptr<Expression> expression) {
     switch (expression->expressionType) {
@@ -155,7 +153,7 @@ std::shared_ptr<LogicalOperator> FilterPushDownOptimizer::visitScanNodeTableRepl
     if (tableIDs.size() == 1) {
         primaryKeyEqualityComparison = predicateSet.popNodePKEqualityComparison(*nodeID);
     }
-    if (primaryKeyEqualityComparison != nullptr) { 
+    if (primaryKeyEqualityComparison != nullptr) {
         auto rhs = primaryKeyEqualityComparison->getChild(1);
         if (isConstantExpression(rhs)) {
             auto extraInfo = std::make_unique<PrimaryKeyScanInfo>(rhs);
@@ -278,5 +276,5 @@ expression_vector PredicateSet::getAllPredicates() {
     return result;
 }
 
-} 
-} 
+} // namespace optimizer
+} // namespace kuzu

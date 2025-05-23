@@ -20,8 +20,8 @@ StructAuxiliaryBuffer::StructAuxiliaryBuffer(const LogicalType& type,
 
 ListAuxiliaryBuffer::ListAuxiliaryBuffer(const LogicalType& dataVectorType,
     storage::MemoryManager* memoryManager)
-    : capacity{DEFAULT_VECTOR_CAPACITY}, size{0},
-      dataVector{std::make_shared<ValueVector>(dataVectorType.copy(), memoryManager)} {}
+    : capacity{DEFAULT_VECTOR_CAPACITY}, size{0}, dataVector{std::make_shared<ValueVector>(
+                                                      dataVectorType.copy(), memoryManager)} {}
 
 list_entry_t ListAuxiliaryBuffer::addList(list_size_t listSize) {
     auto listEntry = list_entry_t{size, listSize};

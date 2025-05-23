@@ -64,5 +64,5 @@ private:
     std::vector<ColumnStats> columnStats;
 };
 
-} 
-} 
+} // namespace storage
+} // namespace kuzu

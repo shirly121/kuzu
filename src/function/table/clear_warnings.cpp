@@ -28,5 +28,5 @@ function_set ClearWarningsFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

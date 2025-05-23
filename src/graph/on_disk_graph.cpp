@@ -27,8 +27,7 @@ namespace kuzu {
 namespace graph {
 
 static std::vector<column_id_t> getColumnIDs(const expression_vector& propertyExprs,
-    const TableCatalogEntry& relEntry, const std::vector<column_id_t>& propertyColumnIDs) {
-}
+    const TableCatalogEntry& relEntry, const std::vector<column_id_t>& propertyColumnIDs) {}
 
 static expression_vector getProperties(std::shared_ptr<Expression> expr) {
     if (expr == nullptr) {
@@ -66,14 +65,10 @@ OnDiskGraphNbrScanState::OnDiskGraphNbrScanState(ClientContext* context,
 
 OnDiskGraphNbrScanState::OnDiskGraphNbrScanState(ClientContext* context,
     TableCatalogEntry* tableEntry, std::shared_ptr<Expression> predicate,
-    std::vector<std::string> relProperties, bool randomLookup) {
-}
-
-
+    std::vector<std::string> relProperties, bool randomLookup) {}
 
 OnDiskGraph::OnDiskGraph(ClientContext* context, GraphEntry entry)
-    : context{context}, graphEntry{std::move(entry)} {
-}
+    : context{context}, graphEntry{std::move(entry)} {}
 
 table_id_map_t<offset_t> OnDiskGraph::getMaxOffsetMap(transaction::Transaction* transaction) const {
     table_id_map_t<offset_t> result;
@@ -156,15 +151,11 @@ OnDiskGraphVertexScanState::OnDiskGraphVertexScanState(ClientContext& context,
     const TableCatalogEntry* tableEntry, const std::vector<std::string>& propertyNames)
     : context{context}, nodeTable{ku_dynamic_cast<const NodeTable&>(
                             *context.getStorageManager()->getTable(tableEntry->getTableID()))},
-      numNodesScanned{0}, currentOffset{0}, endOffsetExclusive{0} {
-}
+      numNodesScanned{0}, currentOffset{0}, endOffsetExclusive{0} {}
 
-void OnDiskGraphVertexScanState::startScan(offset_t beginOffset, offset_t endOffsetExclusive) {
-}
+void OnDiskGraphVertexScanState::startScan(offset_t beginOffset, offset_t endOffsetExclusive) {}
 
-bool OnDiskGraphVertexScanState::next() {
+bool OnDiskGraphVertexScanState::next() {}
 
-}
-
-} 
-} 
+} // namespace graph
+} // namespace kuzu

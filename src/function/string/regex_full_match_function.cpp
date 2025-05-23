@@ -12,8 +12,8 @@ struct RegexFullMatchBindData : public FunctionBindData {
     regex::RE2 pattern;
 
     explicit RegexFullMatchBindData(common::logical_type_vec_t paramTypes, std::string patternInStr)
-        : FunctionBindData{std::move(paramTypes), common::LogicalType::BOOL()},
-          pattern{patternInStr} {}
+        : FunctionBindData{std::move(paramTypes), common::LogicalType::BOOL()}, pattern{
+                                                                                    patternInStr} {}
 
     std::unique_ptr<FunctionBindData> copy() const override {
         return std::make_unique<RegexFullMatchBindData>(copyVector(paramTypes), pattern.pattern());
@@ -53,5 +53,5 @@ function_set RegexpFullMatchFunction::getFunctionSet() {
     return functionSet;
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

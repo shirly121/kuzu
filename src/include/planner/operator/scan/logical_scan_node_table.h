@@ -73,7 +73,7 @@ public:
         if (extraInfo != nullptr) {
             auto pkExtraInfo = dynamic_cast<PrimaryKeyScanInfo*>(extraInfo);
             if (pkExtraInfo != nullptr) {
-                message += " PK_SCAN(" + pkExtraInfo->key->toString() + ")"; 
+                message += " PK_SCAN(" + pkExtraInfo->key->toString() + ")";
             }
         }
         return message;

@@ -32,8 +32,8 @@ public:
           optionalArguments{std::move(optionalArguments)} {}
 
     ParsedFunctionExpression(std::string functionName, bool isDistinct)
-        : ParsedExpression{expressionType_}, isDistinct{isDistinct},
-          functionName{std::move(functionName)} {}
+        : ParsedExpression{expressionType_}, isDistinct{isDistinct}, functionName{
+                                                                         std::move(functionName)} {}
 
     bool getIsDistinct() const { return isDistinct; }
 

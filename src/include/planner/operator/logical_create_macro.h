@@ -26,9 +26,9 @@ class LogicalCreateMacro final : public LogicalOperator {
 public:
     LogicalCreateMacro(std::shared_ptr<binder::Expression> outputExpression, std::string macroName,
         std::unique_ptr<function::ScalarMacroFunction> macro)
-        : LogicalOperator{LogicalOperatorType::CREATE_MACRO},
-          outputExpression{std::move(outputExpression)}, macroName{std::move(macroName)},
-          macro{std::move(macro)} {}
+        : LogicalOperator{LogicalOperatorType::CREATE_MACRO}, outputExpression{std::move(
+                                                                  outputExpression)},
+          macroName{std::move(macroName)}, macro{std::move(macro)} {}
 
     void computeFactorizedSchema() override;
     void computeFlatSchema() override;

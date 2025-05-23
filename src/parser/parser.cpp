@@ -1,7 +1,7 @@
-#include <iostream>
-#include <fstream>
-
 #include "parser/parser.h"
+
+#include <fstream>
+#include <iostream>
 
 // ANTLR4 generates code with unused parameters.
 #pragma GCC diagnostic push

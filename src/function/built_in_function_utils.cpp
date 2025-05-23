@@ -353,7 +353,7 @@ uint32_t BuiltInFunctionsUtils::castFromString(LogicalTypeID inputTypeID) {
     case LogicalTypeID::REL:
     case LogicalTypeID::RECURSIVE_REL:
         return UNDEFINED_CAST_COST;
-    default: 
+    default:
         return getTargetTypeCost(LogicalTypeID::STRING);
     }
 }
@@ -521,5 +521,5 @@ void validateNonEmptyCandidateFunctions(std::vector<Function*>& candidateFunctio
     }
 }
 
-} 
-} 
+} // namespace function
+} // namespace kuzu

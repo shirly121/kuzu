@@ -19,17 +19,13 @@ std::unique_ptr<Transaction> TransactionManager::beginTransaction(
     return nullptr;
 }
 
-void TransactionManager::commit(main::ClientContext& clientContext) {
-}
+void TransactionManager::commit(main::ClientContext& clientContext) {}
 
-void TransactionManager::rollback(main::ClientContext& clientContext, Transaction* transaction) {
-}
+void TransactionManager::rollback(main::ClientContext& clientContext, Transaction* transaction) {}
 
-void TransactionManager::rollbackCheckpoint(main::ClientContext& clientContext) {
-}
+void TransactionManager::rollbackCheckpoint(main::ClientContext& clientContext) {}
 
-void TransactionManager::checkpoint(main::ClientContext& clientContext) {
-}
+void TransactionManager::checkpoint(main::ClientContext& clientContext) {}
 
 UniqLock TransactionManager::stopNewTransactionsAndWaitUntilAllTransactionsLeave() {
     UniqLock startTransactionLock{mtxForStartingNewTransactions};
@@ -72,11 +68,9 @@ bool TransactionManager::canCheckpointNoLock() const {
     return activeWriteTransactions.empty() && activeReadOnlyTransactions.empty();
 }
 
-void TransactionManager::finalizeCheckpointNoLock(main::ClientContext& clientContext) {
-}
+void TransactionManager::finalizeCheckpointNoLock(main::ClientContext& clientContext) {}
 
-void TransactionManager::checkpointNoLock(main::ClientContext& clientContext) {
-}
+void TransactionManager::checkpointNoLock(main::ClientContext& clientContext) {}
 
-} 
-} 
+} // namespace transaction
+} // namespace kuzu
