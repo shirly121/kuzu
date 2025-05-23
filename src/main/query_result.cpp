@@ -74,7 +74,6 @@ QueryResult* QueryResult::getNextQueryResult() {
 std::string QueryResult::toString() const {
     std::string result;
     if (isSuccess()) {
-        // print header
         for (auto i = 0u; i < columnNames.size(); ++i) {
             if (i != 0) {
                 result += "|";
@@ -104,5 +103,5 @@ std::unique_ptr<ArrowArray> QueryResult::getNextArrowChunk(int64_t chunkSize) {
     return data;
 }
 
-} // namespace main
-} // namespace kuzu
+} 
+} 

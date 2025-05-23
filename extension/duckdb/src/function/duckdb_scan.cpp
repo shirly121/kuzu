@@ -5,7 +5,6 @@
 #include "connector/duckdb_connector.h"
 #include "function/table/bind_input.h"
 #include "function/table/table_function.h"
-// #include "processor/execution_context.h"
 
 using namespace kuzu::function;
 using namespace kuzu::common;
@@ -53,26 +52,6 @@ struct DuckDBScanFunction {
 
 std::unique_ptr<TableFuncSharedState> DuckDBScanFunction::initSharedState(
     const TableFuncInitSharedStateInput& input) {
-    // auto scanBindData = input.bindData->constPtrCast<DuckDBScanBindData>();
-    // auto columnNames = scanBindData->getColumnsToSelect();
-    // std::string predicatesString = "";
-    // for (auto& predicates : scanBindData->getColumnPredicates()) {
-    //     if (predicates.isEmpty()) {
-    //         continue;
-    //     }
-    //     if (predicatesString.empty()) {
-    //         predicatesString = " WHERE " + predicates.toString();
-    //     } else {
-    //         predicatesString += stringFormat(" AND {}", predicates.toString());
-    //     }
-    // }
-    // auto finalQuery = stringFormat(scanBindData->query, columnNames) + predicatesString;
-    // auto result = scanBindData->connector.executeQuery(finalQuery);
-    // if (result->HasError()) {
-    //     throw RuntimeException(
-    //         stringFormat("Failed to execute query due to error: {}", result->GetError()));
-    // }
-    // return std::make_unique<DuckDBScanSharedState>(std::move(result));
     return nullptr;
 }
 
@@ -86,7 +65,6 @@ offset_t DuckDBScanFunction::tableFunc(const TableFuncInput& input, TableFuncOut
     auto duckdbScanBindData = input.bindData->constPtrCast<DuckDBScanBindData>();
     std::unique_ptr<duckdb::DataChunk> result;
     try {
-        // Duckdb queryResult.fetch() is not thread safe, we have to acquire a lock there.
         std::lock_guard<std::mutex> lock{duckdbScanSharedState->mtx};
         result = duckdbScanSharedState->queryResult->Fetch();
     } catch (std::exception& e) {
@@ -121,5 +99,5 @@ TableFunction getScanFunction(std::shared_ptr<DuckDBTableScanInfo> scanInfo) {
     return function;
 }
 
-} // namespace duckdb_extension
-} // namespace kuzu
+} 
+} 

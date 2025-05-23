@@ -12,17 +12,17 @@ namespace kuzu {
 namespace binder {
 struct BoundAlterInfo;
 struct BoundCreateTableInfo;
-} // namespace binder
+} 
 namespace common {
 class BufferedFileWriter;
 class VirtualFileSystem;
 class ValueVector;
-} // namespace common
+} 
 
 namespace catalog {
 class CatalogEntry;
 struct SequenceRollbackData;
-} // namespace catalog
+} 
 
 namespace storage {
 class WALReplayer;
@@ -36,9 +36,6 @@ public:
 
     ~WAL() = default;
 
-    // Currently, only creating a table entry has its own WAL record. Eventually,
-    // we want to log minimal info into the WAL, so each entry type should have its
-    // own WAL record
     void logCreateCatalogEntryRecord(catalog::CatalogEntry* catalogEntry, bool isInternal);
     void logCreateCatalogEntryRecord(catalog::CatalogEntry* catalogEntry,
         std::vector<catalog::CatalogEntry*> childrenEntries, bool isInternal);
@@ -66,7 +63,6 @@ public:
     void logRollback();
     void logAndFlushCheckpoint();
 
-    // Removes the contents of WAL file.
     void clearWAL();
 
     void flushAllPages();
@@ -82,9 +78,6 @@ private:
     void addNewWALRecordNoLock(const WALRecord& walRecord);
 
 private:
-    // Keep track of tables that has updates since last checkpoint. Ideally this is used to
-    // determine whether the table needs to be checkpointed or not. NOT fully done yet, will rework
-    // this later when working on logging and recovery.
     std::unordered_set<common::table_id_t> updatedTables;
     std::unique_ptr<common::FileInfo> fileInfo;
     std::shared_ptr<common::BufferedFileWriter> bufferedWriter;
@@ -93,5 +86,5 @@ private:
     common::VirtualFileSystem* vfs;
 };
 
-} // namespace storage
-} // namespace kuzu
+} 
+} 

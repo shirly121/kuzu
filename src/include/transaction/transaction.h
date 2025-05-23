@@ -14,10 +14,10 @@ class CatalogEntry;
 class CatalogSet;
 class SequenceCatalogEntry;
 struct SequenceRollbackData;
-} // namespace catalog
+} 
 namespace main {
 class ClientContext;
-} // namespace main
+} 
 namespace storage {
 class LocalStorage;
 class UndoBuffer;
@@ -27,7 +27,7 @@ class UpdateInfo;
 struct VectorUpdateInfo;
 class ChunkedNodeGroup;
 class VersionRecordHandler;
-} // namespace storage
+} 
 namespace transaction {
 class TransactionManager;
 
@@ -103,7 +103,6 @@ public:
     main::ClientContext* getClientContext() const { return clientContext; }
 
     void checkForceCheckpoint(common::StatementType statementType) {
-        // Note: We always force checkpoint for COPY_FROM statement.
         if (statementType == common::StatementType::COPY_FROM) {
             forceCheckpoint = true;
         }
@@ -119,7 +118,6 @@ public:
     void rollback(storage::WAL* wal);
 
     uint64_t getEstimatedMemUsage() const;
-    // storage::LocalStorage* getLocalStorage() const { return localStorage.get(); }
     LocalCacheManager& getLocalCacheManager() { return localCacheManager; }
     bool isUnCommitted(common::table_id_t tableID, common::offset_t nodeOffset) const {
         return nodeOffset >= getMinUncommittedNodeOffset(tableID);
@@ -134,9 +132,6 @@ public:
         return getMinUncommittedNodeOffset(tableID) + localRowIdx;
     }
     common::offset_t getMinUncommittedNodeOffset(common::table_id_t tableID) const {
-        // The only case that minUncommittedNodeOffsets doesn't track the given tableID is when the
-        // table is newly created within the same transaction, thus the minUncommittedNodeOffsets
-        // should be 0.
         return minUncommittedNodeOffsets.contains(tableID) ? minUncommittedNodeOffsets.at(tableID) :
                                                              0;
     }
@@ -167,21 +162,15 @@ private:
     common::transaction_t commitTS;
     int64_t currentTS;
     main::ClientContext* clientContext;
-    // std::unique_ptr<storage::LocalStorage> localStorage;
-    // std::unique_ptr<storage::UndoBuffer> undoBuffer;
     LocalCacheManager localCacheManager;
     bool forceCheckpoint;
     bool hasCatalogChanges;
 
-    // For each node table, we keep track of the minimum uncommitted node offset when the
-    // transaction starts. This is mainly used to assign offsets to local nodes and determine if a
-    // given node is transaction local or not.
     std::unordered_map<common::table_id_t, common::offset_t> minUncommittedNodeOffsets;
 };
 
-// TODO(bmwinger): These shouldn't need to be exported
 extern KUZU_API Transaction DUMMY_TRANSACTION;
 extern KUZU_API Transaction DUMMY_CHECKPOINT_TRANSACTION;
 
-} // namespace transaction
-} // namespace kuzu
+} 
+} 

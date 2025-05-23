@@ -40,10 +40,8 @@ public:
     MemoryManager* getMemoryManager() const { return mm; }
 
 private:
-    // Can be called multiple times safely
     void prepareLoadFromDisk();
 
-    // Must only be called once before loading from disk
     void setSpilledToDisk(uint64_t filePosition);
 
 private:
@@ -96,5 +94,5 @@ private:
     std::mutex allocatorLock;
 };
 
-} // namespace storage
-} // namespace kuzu
+} 
+} 

@@ -5,9 +5,6 @@
 #include "planner/operator/logical_table_function_call.h"
 #include "planner/operator/sip/logical_semi_masker.h"
 #include "planner/planner.h"
-// #include "processor/data_pos.h"
-// #include "processor/operator/table_function_call.h"
-// #include "processor/plan_mapper.h"
 
 using namespace kuzu::common;
 using namespace kuzu::planner;
@@ -88,38 +85,10 @@ void TableFunction::getLogicalPlan(planner::Planner* planner,
     }
 }
 
-// std::unique_ptr<PhysicalOperator> TableFunction::getPhysicalPlan(PlanMapper* planMapper,
-//     const LogicalOperator* logicalOp) {
-//     std::vector<DataPos> outPosV;
-//     auto& call = logicalOp->constCast<LogicalTableFunctionCall>();
-//     auto outSchema = call.getSchema();
-//     for (auto& expr : call.getBindData()->columns) {
-//         outPosV.emplace_back(planMapper->getDataPos(*expr, *outSchema));
-//     }
-//     auto info = TableFunctionCallInfo();
-//     info.function = call.getTableFunc();
-//     info.bindData = call.getBindData()->copy();
-//     info.outPosV = outPosV;
-//     auto initInput =
-//         TableFuncInitSharedStateInput(info.bindData.get(), planMapper->executionContext);
-//     auto sharedState = info.function.initSharedStateFunc(initInput);
-//     if (!sharedState->semiMasks.getMasks().empty()) {
-//         for (const auto& logicalRoot : call.getNodeMaskRoots()) {
-//             auto logicalSemiMasker = planMapper->findSemiMaskerInPlan(logicalRoot.get());
-//             KU_ASSERT(logicalSemiMasker);
-//             logicalSemiMasker->addTarget(logicalOp);
-//         }
-//     }
-//     auto printInfo = std::make_unique<TableFunctionCallPrintInfo>(call.getTableFunc().name,
-//         call.getBindData()->columns);
-//     return std::make_unique<TableFunctionCall>(std::move(info), sharedState,
-//         planMapper->getOperatorID(), std::move(printInfo));
-// }
 
 offset_t TableFunction::emptyTableFunc(const TableFuncInput&, TableFuncOutput&) {
-    // DO NOTHING.
     return 0;
 }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

@@ -46,16 +46,6 @@ bool InMemEmbeddings::isNull(common::offset_t offset) const {
 
 OnDiskEmbeddingScanState::OnDiskEmbeddingScanState(const transaction::Transaction* transaction,
     MemoryManager* mm, NodeTable& nodeTable, common::column_id_t columnID) {
-    // std::vector columnIDs{columnID};
-    // // The first ValueVector in scanChunk is reserved for nodeIDs.
-    // std::vector<common::LogicalType> types;
-    // types.emplace_back(common::LogicalType::INTERNAL_ID());
-    // types.emplace_back(nodeTable.getColumn(columnID).getDataType().copy());
-    // scanChunk = Table::constructDataChunk(mm, std::move(types));
-    // std::vector outVectors{&scanChunk.getValueVectorMutable(1)};
-    // scanState = std::make_unique<NodeTableScanState>(&scanChunk.getValueVectorMutable(0),
-    //     outVectors, scanChunk.state);
-    // scanState->setToTable(transaction, &nodeTable, std::move(columnIDs));
 }
 
 void* OnDiskEmbeddings::getEmbedding(transaction::Transaction* transaction,
@@ -112,7 +102,7 @@ common::offset_t minNumBytesToStore(common::offset_t value) {
     static constexpr decltype(bitWidth) bitsPerByte = 8;
     return std::bit_ceil(static_cast<common::offset_t>(common::ceilDiv(bitWidth, bitsPerByte)));
 }
-} // namespace
+} 
 
 CompressedNodeOffsetBuffer::CompressedNodeOffsetBuffer(MemoryManager* mm, common::offset_t numNodes,
     common::length_t maxDegree) {
@@ -155,7 +145,6 @@ InMemHNSWGraph::InMemHNSWGraph(MemoryManager* mm, common::offset_t numNodes,
     resetCSRLengthAndDstNodes();
 }
 
-// NOLINTNEXTLINE(readability-make-member-function-const): Semantically non-const function.
 void InMemHNSWGraph::finalize(MemoryManager& mm, common::node_group_idx_t nodeGroupIdx,
     const processor::PartitionerSharedState& partitionerSharedState) {
     const auto& partitionBuffers = partitionerSharedState.partitioningBuffers[0]->partitions;
@@ -177,7 +166,6 @@ void InMemHNSWGraph::finalizeNodeGroup(MemoryManager& mm, common::node_group_idx
     const auto startNodeOffset = StorageUtils::getStartOffsetOfNodeGroup(nodeGroupIdx);
     const auto numNodesInGroup =
         std::min(common::StorageConfig::NODE_GROUP_SIZE, numNodes - startNodeOffset);
-    // BOUND_ID, NBR_ID, REL_ID.
     std::vector<common::LogicalType> columnTypes;
     columnTypes.push_back(common::LogicalType::INTERNAL_ID());
     columnTypes.push_back(common::LogicalType::INTERNAL_ID());
@@ -225,5 +213,5 @@ void InMemHNSWGraph::resetCSRLengthAndDstNodes() {
     }
 }
 
-} // namespace vector_extension
-} // namespace kuzu
+} 
+} 

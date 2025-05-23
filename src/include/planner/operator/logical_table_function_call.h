@@ -24,9 +24,6 @@ public:
     void setColumnSkips(std::vector<bool> columnSkips) {
         bindData->setColumnSkips(std::move(columnSkips));
     }
-    // void setColumnPredicates(std::vector<storage::ColumnPredicateSet> predicates) {
-    //     bindData->setColumnPredicates(std::move(predicates));
-    // }
 
     void setNodeMaskRoots(std::vector<std::shared_ptr<LogicalOperator>> roots) {
         nodeMaskRoots = std::move(roots);
@@ -46,9 +43,8 @@ private:
     function::TableFunction tableFunc;
     std::unique_ptr<function::TableFuncBindData> bindData;
 
-    // TODO(Xiyang): We should unify how masks are planned in GDS and HNSW.
     std::vector<std::shared_ptr<LogicalOperator>> nodeMaskRoots;
 };
 
-} // namespace planner
-} // namespace kuzu
+} 
+} 

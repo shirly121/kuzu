@@ -5,7 +5,6 @@
 #include "common/data_chunk/data_chunk.h"
 #include "common/mask.h"
 #include "function/function.h"
-// todo: remove include path
 #include "processor/operator/physical_operator.h"
 
 namespace kuzu {
@@ -15,31 +14,26 @@ class BoundReadingClause;
 namespace parser {
 struct YieldVariable;
 class ParsedExpression;
-} // namespace parser
+} 
 
 namespace planner {
 class LogicalOperator;
 class LogicalPlan;
 class Planner;
-} // namespace planner
+} 
 
 namespace processor {
 struct ExecutionContext;
 class PlanMapper;
-} // namespace processor
+} 
 
 namespace function {
 
 struct TableFuncBindInput;
 struct TableFuncBindData;
 
-// Shared state
 struct KUZU_API TableFuncSharedState {
     common::row_idx_t numRows = 0;
-    // This for now is only used for QueryHNSWIndex.
-    // TODO(Guodong): This is not a good way to pass semiMasks to QueryHNSWIndex function.
-    // However, to avoid function specific logic when we handle semi mask in mapper, so we can move
-    // HNSW into an extension, we have to let semiMasks be owned by a base class.
     common::NodeOffsetMaskMap semiMasks;
     std::mutex mtx;
 
@@ -56,7 +50,6 @@ struct KUZU_API TableFuncSharedState {
     }
 };
 
-// Local state
 struct TableFuncLocalState {
     virtual ~TableFuncLocalState() = default;
 
@@ -66,7 +59,6 @@ struct TableFuncLocalState {
     }
 };
 
-// Execution input
 struct TableFuncInput {
     TableFuncBindData* bindData;
     TableFuncLocalState* localState;
@@ -80,10 +72,6 @@ struct TableFuncInput {
     DELETE_COPY_DEFAULT_MOVE(TableFuncInput);
 };
 
-// Execution output.
-// We might want to merge this with TableFuncLocalState. Also not all table function output vectors
-// in a single dataChunk, e.g. FTableScan. In future, if we have more cases, we should consider
-// make TableFuncOutput pure virtual.
 struct TableFuncOutput {
     common::DataChunk dataChunk;
 
@@ -102,7 +90,6 @@ struct KUZU_API TableFuncInitSharedStateInput final {
         : bindData{bindData}, context{context} {}
 };
 
-// Init local state
 struct TableFuncInitLocalStateInput {
     TableFuncSharedState& sharedState;
     TableFuncBindData& bindData;
@@ -113,7 +100,6 @@ struct TableFuncInitLocalStateInput {
         : sharedState{sharedState}, bindData{bindData}, clientContext{clientContext} {}
 };
 
-// Init output
 struct TableFuncInitOutputInput {
     std::vector<processor::DataPos> outColumnPositions;
     processor::ResultSet& resultSet;
@@ -142,8 +128,6 @@ using table_func_rewrite_t =
 using table_func_get_logical_plan_t = std::function<void(planner::Planner*,
     const binder::BoundReadingClause&, std::vector<std::shared_ptr<binder::Expression>>,
     std::vector<std::unique_ptr<planner::LogicalPlan>>&)>;
-// using table_func_get_physical_plan_t = std::function<std::unique_ptr<processor::PhysicalOperator>(
-//     processor::PlanMapper*, const planner::LogicalOperator*)>;
 using table_func_infer_input_types =
     std::function<std::vector<common::LogicalType>(const binder::expression_vector&)>;
 
@@ -158,7 +142,6 @@ struct KUZU_API TableFunction final : Function {
     table_func_finalize_t finalizeFunc = [](auto, auto) {};
     table_func_rewrite_t rewriteFunc = nullptr;
     table_func_get_logical_plan_t getLogicalPlanFunc = getLogicalPlan;
-    // table_func_get_physical_plan_t getPhysicalPlanFunc = getPhysicalPlan;
     table_func_infer_input_types inferInputTypes = nullptr;
 
     TableFunction() {}
@@ -175,28 +158,19 @@ struct KUZU_API TableFunction final : Function {
 
     std::unique_ptr<TableFunction> copy() const { return std::make_unique<TableFunction>(*this); }
 
-    // Init local state func
     static std::unique_ptr<TableFuncLocalState> initEmptyLocalState(
         const TableFuncInitLocalStateInput& input);
-    // Init shared state func
     static std::unique_ptr<TableFuncSharedState> initEmptySharedState(
         const TableFuncInitSharedStateInput& input);
-    // Init output func
     static std::unique_ptr<TableFuncOutput> initSingleDataChunkScanOutput(
         const TableFuncInitOutputInput& input);
-    // Utility functions
     static std::vector<std::string> extractYieldVariables(const std::vector<std::string>& names,
         const std::vector<parser::YieldVariable>& yieldVariables);
-    // Get logical plan func
     static void getLogicalPlan(planner::Planner* planner,
         const binder::BoundReadingClause& boundReadingClause, binder::expression_vector predicates,
         std::vector<std::unique_ptr<planner::LogicalPlan>>& plans);
-    // // Get physical plan func
-    // static std::unique_ptr<processor::PhysicalOperator> getPhysicalPlan(
-    //     processor::PlanMapper* planMapper, const planner::LogicalOperator* logicalOp);
-    // Table func
     static common::offset_t emptyTableFunc(const TableFuncInput& input, TableFuncOutput& output);
 };
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

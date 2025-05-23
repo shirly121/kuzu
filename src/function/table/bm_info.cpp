@@ -3,7 +3,6 @@
 #include "function/table/simple_table_function.h"
 #include "main/client_context.h"
 #include "main/database.h"
-// #include "storage/buffer_manager/buffer_manager.h"
 #include "storage/buffer_manager/memory_manager.h"
 
 namespace kuzu {
@@ -32,16 +31,6 @@ static common::offset_t internalTableFunc(const TableFuncMorsel& /*morsel*/,
 
 static std::unique_ptr<TableFuncBindData> bindFunc(const main::ClientContext* context,
     const TableFuncBindInput* input) {
-    // auto memLimit = context->getMemoryManager()->getBufferManager()->getMemoryLimit();
-    // auto memUsage = context->getMemoryManager()->getBufferManager()->getUsedMemory();
-    // std::vector<common::LogicalType> returnTypes;
-    // returnTypes.emplace_back(common::LogicalType::UINT64());
-    // returnTypes.emplace_back(common::LogicalType::UINT64());
-    // auto returnColumnNames = std::vector<std::string>{"mem_limit", "mem_usage"};
-    // returnColumnNames =
-    //     TableFunction::extractYieldVariables(returnColumnNames, input->yieldVariables);
-    // auto columns = input->binder->createVariables(returnColumnNames, returnTypes);
-    // return std::make_unique<BMInfoBindData>(memLimit, memUsage, columns);
     return nullptr;
 }
 
@@ -56,5 +45,5 @@ function_set BMInfoFunction::getFunctionSet() {
     return functionSet;
 }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

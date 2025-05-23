@@ -37,7 +37,6 @@ public:
         bool randomLookup = false);
 
     Chunk getChunk() override {
-        // Mock implementation to avoid dependency on currentIter
         std::vector<common::ValueVector*> vectors;
         for (auto& propertyVector : propertyVectors) {
             vectors.push_back(propertyVector.get());
@@ -46,12 +45,10 @@ public:
         return createChunk(std::span<const common::nodeID_t>(), selVector, vectors);
     }
     bool next() override {
-        // Mock implementation to avoid dependency on currentIter
         return false;
     }
 
     void startScan(common::RelDataDirection direction) {
-        // Mock implementation to avoid dependency on directedIterators
     }
 
 private:
@@ -59,7 +56,6 @@ private:
     std::unique_ptr<common::ValueVector> dstNodeIDVector;
     std::vector<std::unique_ptr<common::ValueVector>> propertyVectors;
 
-    // std::unique_ptr<evaluator::ExpressionEvaluator> relPredicateEvaluator;
     common::SemiMask* nbrNodeMask = nullptr;
 };
 
@@ -83,7 +79,6 @@ private:
 
     common::DataChunk propertyVectors;
     std::unique_ptr<common::ValueVector> nodeIDVector;
-    // std::unique_ptr<storage::NodeTableScanState> tableScanState;
 
     common::offset_t numNodesScanned;
     common::offset_t currentOffset;
@@ -117,8 +112,6 @@ public:
 
     std::unique_ptr<NbrScanState> prepareRelScan(catalog::TableCatalogEntry* tableEntry,
         catalog::TableCatalogEntry* nbrNodeEntry, std::vector<std::string> relProperties) override;
-    // This is used for few random lookups in the relationship table. Internally we skip caching the
-    // CSR header during scan.
     std::unique_ptr<NbrScanState> prepareRelScan(catalog::TableCatalogEntry* tableEntry) const;
 
     EdgeIterator scanFwd(common::nodeID_t nodeID, NbrScanState& state) override;
@@ -137,5 +130,5 @@ private:
     common::table_id_map_t<std::vector<NbrTableInfo>> nodeIDToNbrTableInfos;
 };
 
-} // namespace graph
-} // namespace kuzu
+} 
+} 

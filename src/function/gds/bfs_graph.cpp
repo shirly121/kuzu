@@ -1,7 +1,6 @@
 #include "function/gds/bfs_graph.h"
 
 #include "function/gds/gds_utils.h"
-// #include "processor/execution_context.h"
 
 using namespace kuzu::common;
 using namespace kuzu::graph;
@@ -44,11 +43,6 @@ private:
 };
 
 void DenseBFSGraph::init(ExecutionContext* context, Graph* graph) {
-    // for (auto& [tableID, maxOffset] : maxOffsetMap) {
-    //     denseObjects.allocate(tableID, maxOffset, context->clientContext->getMemoryManager());
-    // }
-    // auto vc = std::make_unique<BFSGraphInitVertexCompute>(*this);
-    // GDSUtils::runVertexCompute(context, GDSDensityState::DENSE, graph, *vc);
 }
 
 void DenseBFSGraph::pinTableID(table_id_t tableID) {
@@ -66,7 +60,6 @@ void DenseBFSGraph::addParent(uint16_t iter, nodeID_t boundNodeID, relID_t edgeI
     nodeID_t nbrNodeID, bool fwdEdge, ObjectBlock<ParentList>* block) {
     auto parent = reserveParent(boundNodeID, edgeID, fwdEdge, block);
     parent->setIter(iter);
-    // Since by default the parentPtr of each node is nullptr, that's what we start with.
     ParentList* expected = nullptr;
     while (!curData[nbrNodeID.offset].compare_exchange_strong(expected, parent))
         ;
@@ -81,7 +74,6 @@ void DenseBFSGraph::addSingleParent(uint16_t iter, nodeID_t boundNodeID, relID_t
     if (curData[nbrNodeID.offset].compare_exchange_strong(expected, parent)) {
         parent->setNextPtr(expected);
     } else {
-        // Other thread has added the parent. Do NOT add parent and revert reserved slot.
         block->revertLast();
     }
 }
@@ -97,14 +89,11 @@ bool DenseBFSGraph::tryAddParentWithWeight(nodeID_t boundNodeID, relID_t edgeID,
     parent->setCost(getParentListHead(boundNodeID)->getCost() + weight);
     while (true) {
         if (parent->getCost() < getCost(expected)) {
-            // New parent has smaller cost, erase all existing parents and add new parent.
             if (curData[nbrNodeID.offset].compare_exchange_strong(expected, parent)) {
                 parent->setNextPtr(nullptr);
                 return true;
             }
         } else if (parent->getCost() == getCost(expected) && expected->getEdgeID() != edgeID) {
-            // New parent has the same cost and comes from different edge,
-            // append new parent as after existing parents.
             if (curData[nbrNodeID.offset].compare_exchange_strong(expected, parent)) {
                 parent->setNextPtr(expected);
                 return true;
@@ -123,12 +112,10 @@ bool DenseBFSGraph::tryAddSingleParentWithWeight(nodeID_t boundNodeID, relID_t e
     parent->setCost(getParentListHead(boundNodeID)->getCost() + weight);
     while (parent->getCost() < getCost(expected)) {
         if (curData[nbrNodeID.offset].compare_exchange_strong(expected, parent)) {
-            // Since each node can have one parent, set next ptr to nullptr.
             parent->setNextPtr(nullptr);
             return true;
         }
     }
-    // Other thread has added the parent. Do NOT add parent and revert reserved slot.
     block->revertLast();
     return false;
 }
@@ -188,9 +175,6 @@ bool SparseBFSGraph::tryAddParentWithWeight(nodeID_t boundNodeID, relID_t edgeID
         curData->insert({nbrNodeID.offset, parent});
         return true;
     }
-    // Append parent if newCost is the same as old cost. And the newCost comes from a different edge
-    // Otherwise, for cases like A->B->C, A->D->C, C->E. If ABD and ADC has the same cost, we will
-    // visit twice to E with the same cost and same edge.
     if (newCost == nbrCost && nbrParent->getEdgeID() != edgeID) {
         auto parent = reserveParent(boundNodeID, edgeID, fwdEdge, block);
         parent->setCost(newCost);
@@ -272,5 +256,5 @@ void BFSGraphManager::switchToDense(ExecutionContext* context, Graph* graph) {
     curGraph = denseBFSGraph.get();
 }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

@@ -26,29 +26,8 @@ PathSemantic QueryRelTypeUtils::getPathSemantic(QueryRelType queryRelType) {
 }
 
 std::unique_ptr<function::RJAlgorithm> QueryRelTypeUtils::getFunction(QueryRelType type) {
-    // switch (type) {
-    // case QueryRelType::VARIABLE_LENGTH_WALK:
-    // case QueryRelType::VARIABLE_LENGTH_TRAIL:
-    // case QueryRelType::VARIABLE_LENGTH_ACYCLIC: {
-    //     return VarLenJoinsFunction::getAlgorithm();
-    // }
-    // case QueryRelType::SHORTEST: {
-    //     return SingleSPPathsFunction::getAlgorithm();
-    // }
-    // case QueryRelType::ALL_SHORTEST: {
-    //     return AllSPPathsFunction::getAlgorithm();
-    // }
-    // case QueryRelType::WEIGHTED_SHORTEST: {
-    //     return WeightedSPPathsFunction::getAlgorithm();
-    // }
-    // case QueryRelType::ALL_WEIGHTED_SHORTEST: {
-    //     return AllWeightedSPPathsFunction::getAlgorithm();
-    // }
-    // default:
-    //     KU_UNREACHABLE;
-    // }
     KU_UNREACHABLE;
 }
 
-} // namespace common
-} // namespace kuzu
+} 
+} 

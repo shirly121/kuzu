@@ -24,5 +24,5 @@ public : GStorageManager(const std::string& statsPath,
         return wal;
     }
 };
-} // namespace storage
-} // namespace kuzu
+} 
+} 

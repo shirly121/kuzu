@@ -24,58 +24,6 @@ TaskScheduler::~TaskScheduler() {
 
 void TaskScheduler::scheduleTaskAndWaitOrError(const std::shared_ptr<Task>& task,
     processor::ExecutionContext* context, bool launchNewWorkerThread) {
-    // for (auto& dependency : task->children) {
-    //     scheduleTaskAndWaitOrError(dependency, context);
-    // }
-    // std::thread newWorkerThread;
-    // if (launchNewWorkerThread) {
-    //     // Note that newWorkerThread is not executing yet. However, we still call
-    //     // task->registerThread() function because the call in the next line will guarantee
-    //     // that the thread starts working on it. registerThread() function only increases the
-    //     // numThreadsRegistered field of the task, tt does not keep track of the thread ids or
-    //     // anything specific to the thread.
-    //     task->registerThread();
-    //     newWorkerThread = std::thread(runTask, task.get());
-    // }
-    // auto scheduledTask = pushTaskIntoQueue(task);
-    // cv.notify_all();
-    // std::unique_lock<std::mutex> taskLck{task->taskMtx, std::defer_lock};
-    // while (true) {
-    //     taskLck.lock();
-    //     bool timedWait = false;
-    //     auto timeout = 0u;
-    //     if (task->isCompletedNoLock()) {
-    //         // Note: we do not remove completed tasks from the queue in this function. They will be
-    //         // removed by the worker threads when they traverse down the queue for a task to work on
-    //         // (see getTaskAndRegister()).
-    //         taskLck.unlock();
-    //         break;
-    //     }
-    //     if (context->clientContext->hasTimeout()) {
-    //         timeout = context->clientContext->getTimeoutRemainingInMS();
-    //         if (timeout == 0) {
-    //             context->clientContext->interrupt();
-    //         } else {
-    //             timedWait = true;
-    //         }
-    //     } else if (task->hasExceptionNoLock()) {
-    //         // Interrupt tasks that errored, so other threads can stop working on them early.
-    //         context->clientContext->interrupt();
-    //     }
-    //     if (timedWait) {
-    //         task->cv.wait_for(taskLck, std::chrono::milliseconds(timeout));
-    //     } else {
-    //         task->cv.wait(taskLck);
-    //     }
-    //     taskLck.unlock();
-    // }
-    // if (launchNewWorkerThread) {
-    //     newWorkerThread.join();
-    // }
-    // if (task->hasException()) {
-    //     removeErroringTask(scheduledTask->ID);
-    //     std::rethrow_exception(task->getExceptionPtr());
-    // }
 }
 
 void TaskScheduler::runWorkerThread() {
@@ -83,15 +31,6 @@ void TaskScheduler::runWorkerThread() {
     std::exception_ptr exceptionPtr = nullptr;
     std::shared_ptr<ScheduledTask> scheduledTask = nullptr;
     while (true) {
-        // Warning: Threads acquire a global lock (using taskSchedulerMutex) right before
-        // deregistering themselves from a task (and they immediately register themselves for
-        // another task without releasing the lock). This acquire-right-before-deregistering ensures
-        // that all writes that were done by threads in Task_j happen before a Task_{j+1} which
-        // depends on Task_j can start. That's because before Task_{j+1} can start, each thread T_i
-        // working on Task_j will need to deregister itself using the global lock. Therefore, by the
-        // time any thread gets to start on Task_{j+1}, all writes made to Task_j by T_i will become
-        // globally visible because T_i grabbed the global lock before deregistering (and without
-        // T_i deregistering Task_{j+1} cannot start).
         lck.lock();
         if (scheduledTask != nullptr) {
             if (exceptionPtr != nullptr) {
@@ -117,7 +56,6 @@ void TaskScheduler::runWorkerThread() {
     }
 }
 #else
-// Single-threaded version of TaskScheduler
 TaskScheduler::TaskScheduler(uint64_t) : stopWorkerThreads{false}, nextScheduledTaskID{0} {}
 
 TaskScheduler::~TaskScheduler() {
@@ -130,7 +68,6 @@ void TaskScheduler::scheduleTaskAndWaitOrError(const std::shared_ptr<Task>& task
         scheduleTaskAndWaitOrError(dependency, context);
     }
     task->registerThread();
-    // runTask deregisters, so we don't need to deregister explicitly here
     runTask(task.get());
     if (task->hasException()) {
         removeErroringTask(task->ID);
@@ -154,15 +91,9 @@ std::shared_ptr<ScheduledTask> TaskScheduler::getTaskAndRegister() {
     while (it != taskQueue.end()) {
         auto task = (*it)->task;
         if (!task->registerThread()) {
-            // If we cannot register for a thread it is because of three possibilities:
-            // (i) maximum number of threads have registered for task and the task is completed
-            // without an exception; or (ii) same as (i) but the task has not yet successfully
-            // completed; or (iii) task has an exception; Only in (i) we remove the task from the
-            // queue. For (ii) and (iii) we keep the task in queue. Recall erroring tasks need to be
-            // manually removed.
-            if (task->isCompletedSuccessfully()) { // option (i)
+            if (task->isCompletedSuccessfully()) { 
                 it = taskQueue.erase(it);
-            } else { // option (ii) or (iii): keep the task in the queue.
+            } else { 
                 ++it;
             }
         } else {
@@ -191,5 +122,5 @@ void TaskScheduler::runTask(Task* task) {
         task->deRegisterThreadAndFinalizeTask();
     }
 }
-} // namespace common
-} // namespace kuzu
+} 
+} 

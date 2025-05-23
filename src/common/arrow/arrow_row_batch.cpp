@@ -7,7 +7,6 @@
 #include "common/types/value/node.h"
 #include "common/types/value/rel.h"
 #include "common/types/value/value.h"
-// #include "storage/storage_utils.h"
 
 namespace kuzu {
 namespace common {
@@ -68,9 +67,9 @@ static uint64_t getArrowMainBufferSize(const LogicalType& type, uint64_t capacit
     case LogicalTypeID::RECURSIVE_REL:
     case LogicalTypeID::NODE:
     case LogicalTypeID::REL:
-        return 0; // no main buffer
+        return 0; 
     default:
-        KU_UNREACHABLE; // should enumerate all types.
+        KU_UNREACHABLE; 
     }
 }
 
@@ -216,10 +215,8 @@ static void resizeVector(ArrowVector* vector, const LogicalType& type, std::int6
     case LogicalTypeID::INTERNAL_ID:
         return resizeInternalIDVector(vector, type, capacity);
     default: {
-        // LCOV_EXCL_START
         throw common::RuntimeException{
             common::stringFormat("Unsupported type: {} for arrow conversion.", type.toString())};
-        // LCOV_EXCL_STOP
     }
     }
 }
@@ -253,15 +250,11 @@ void ArrowRowBatch::appendValue(ArrowVector* vector, const LogicalType& type, Va
 template<LogicalTypeID DT>
 void ArrowRowBatch::templateCopyNonNullValue(ArrowVector* vector, const LogicalType& /*type*/,
     Value* value, std::int64_t pos) {
-    // auto valSize = storage::StorageUtils::getDataTypeSize(LogicalType{DT});
-    // std::memcpy(vector->data.data() + pos * valSize, &value->val, valSize);
 }
 
 template<>
 void ArrowRowBatch::templateCopyNonNullValue<LogicalTypeID::DECIMAL>(ArrowVector* vector,
     const LogicalType& type, Value* value, std::int64_t pos) {
-    // auto valSize = storage::StorageUtils::getDataTypeSize(type);
-    // std::memcpy(vector->data.data() + pos * 16, &value->val, valSize);
 }
 
 template<>
@@ -366,7 +359,7 @@ void ArrowRowBatch::templateCopyNonNullValue<LogicalTypeID::UNION>(ArrowVector* 
                 value->children[0].get());
         }
     }
-    KU_UNREACHABLE; // We should always be able to find a matching type
+    KU_UNREACHABLE; 
 }
 
 template<>
@@ -519,7 +512,6 @@ void ArrowRowBatch::copyNonNullValue(ArrowVector* vector, const LogicalType& typ
 
 template<LogicalTypeID DT>
 void ArrowRowBatch::templateCopyNullValue(ArrowVector* vector, std::int64_t pos) {
-    // TODO(Guodong): make this as a function.
     setBitToZero(vector->validity.data(), pos);
     vector->numNulls++;
 }
@@ -791,8 +783,6 @@ ArrowArray* ArrowRowBatch::convertInternalIDVectorToArray(ArrowVector& vector,
 template<>
 ArrowArray* ArrowRowBatch::templateCreateArray<LogicalTypeID::UNION>(ArrowVector& vector,
     const LogicalType& type) {
-    // since union is a special case, we make the ArrowArray ourselves instead of using
-    // createArrayFromVector
     auto nChildren = UnionType::getNumFields(type);
     vector.array = std::make_unique<ArrowArray>();
     vector.array->private_data = nullptr;
@@ -938,7 +928,7 @@ ArrowArray ArrowRowBatch::toArray() {
     result.n_children = (std::int64_t)types.size();
     result.length = numTuples;
     result.n_buffers = 1;
-    result.buffers = rootHolder->buffers.data(); // no actual buffer
+    result.buffers = rootHolder->buffers.data(); 
     result.offset = 0;
     result.null_count = 0;
     result.dictionary = nullptr;
@@ -952,9 +942,8 @@ ArrowArray ArrowRowBatch::toArray() {
 }
 
 ArrowArray ArrowRowBatch::append(main::QueryResult& queryResult, std::int64_t chunkSize) {
-    // Mock implementation: return empty array
     return toArray();
 }
 
-} // namespace common
-} // namespace kuzu
+} 
+} 

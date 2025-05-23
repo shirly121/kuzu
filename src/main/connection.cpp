@@ -8,7 +8,6 @@ using namespace kuzu::parser;
 using namespace kuzu::binder;
 using namespace kuzu::common;
 using namespace kuzu::planner;
-// using namespace kuzu::processor;
 using namespace kuzu::transaction;
 
 namespace kuzu {
@@ -88,5 +87,5 @@ void Connection::removeScalarFunction(std::string name) {
     clientContext->removeScalarFunction(name);
 }
 
-} // namespace main
-} // namespace kuzu
+} 
+} 

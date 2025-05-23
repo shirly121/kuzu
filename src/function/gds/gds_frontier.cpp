@@ -1,7 +1,6 @@
 #include "function/gds/gds_frontier.h"
 
 #include "function/gds/gds_utils.h"
-// #include "processor/execution_context.h"
 
 using namespace kuzu::common;
 using namespace kuzu::graph;
@@ -102,10 +101,6 @@ private:
 };
 
 void DenseFrontier::init(ExecutionContext* context, Graph* graph, iteration_t val) {
-    // for (const auto& [tableID, maxOffset] : nodeMaxOffsetMap) {
-    //     denseObjects.allocate(tableID, maxOffset, context->clientContext->getMemoryManager());
-    // }
-    // resetValue(context, graph, val);
 }
 
 void DenseFrontier::resetValue(ExecutionContext* context, Graph* graph, iteration_t val) {
@@ -141,49 +136,21 @@ iteration_t DenseFrontier::getIteration(offset_t offset) const {
 
 std::unique_ptr<DenseFrontier> DenseFrontier::getUninitializedFrontier(ExecutionContext* context,
     Graph* graph) {
-    // auto transaction = context->clientContext->getTransaction();
-    // return std::make_unique<DenseFrontier>(graph->getMaxOffsetMap(transaction));
     return nullptr;
 }
 
 std::unique_ptr<DenseFrontier> DenseFrontier::getUnvisitedFrontier(ExecutionContext* context,
     Graph* graph) {
-    // auto transaction = context->clientContext->getTransaction();
-    // auto frontier = std::make_unique<DenseFrontier>(graph->getMaxOffsetMap(transaction));
-    // frontier->init(context, graph, FRONTIER_UNVISITED);
-    // return frontier;
     return nullptr;
 }
 
 std::unique_ptr<DenseFrontier> DenseFrontier::getVisitedFrontier(ExecutionContext* context,
     Graph* graph) {
-    // auto transaction = context->clientContext->getTransaction();
-    // auto frontier = std::make_unique<DenseFrontier>(graph->getMaxOffsetMap(transaction));
-    // frontier->init(context, graph, FRONTIER_INITIAL_VISITED);
-    // return frontier;
     return nullptr;
 }
 
 std::unique_ptr<DenseFrontier> DenseFrontier::getVisitedFrontier(ExecutionContext* context,
     Graph* graph, NodeOffsetMaskMap* maskMap) {
-    // if (maskMap == nullptr) {
-    //     return getVisitedFrontier(context, graph);
-    // }
-    // auto tx = context->clientContext->getTransaction();
-    // auto frontier = std::make_unique<DenseFrontier>(graph->getMaxOffsetMap(tx));
-    // frontier->init(context, graph, FRONTIER_INITIAL_VISITED);
-    // for (auto [tableID, numNodes] : graph->getMaxOffsetMap(tx)) {
-    //     frontier->pinTableID(tableID);
-    //     if (maskMap->containsTableID(tableID)) {
-    //         auto mask = maskMap->getOffsetMask(tableID);
-    //         for (auto i = 0u; i < numNodes; ++i) {
-    //             if (!mask->isMasked(i)) {
-    //                 frontier->curData[i].store(FRONTIER_UNVISITED);
-    //             }
-    //         }
-    //     }
-    // }
-    // return frontier;
     return nullptr;
 }
 
@@ -414,12 +381,11 @@ static constexpr uint64_t EARLY_TERM_NUM_NODES_THRESHOLD = 100;
 bool SPEdgeCompute::terminate(NodeOffsetMaskMap& maskMap) {
     auto targetNumNodes = maskMap.getNumMaskedNode();
     if (targetNumNodes > EARLY_TERM_NUM_NODES_THRESHOLD) {
-        // Skip checking if it's unlikely to early terminate.
         return false;
     }
     numNodesReached += frontierPair->getNumActiveNodesInCurrentFrontier(maskMap);
     return numNodesReached == targetNumNodes;
 }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

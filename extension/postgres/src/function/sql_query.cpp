@@ -6,7 +6,6 @@
 #include "connector/duckdb_type_converter.h"
 #include "function/duckdb_scan.h"
 #include "main/database_manager.h"
-// #include "processor/execution_context.h"
 #include "storage/attached_postgres_database.h"
 #include "storage/postgres_storage.h"
 
@@ -18,8 +17,6 @@ using namespace kuzu::duckdb_extension;
 namespace kuzu {
 namespace postgres_extension {
 
-// SQL based database uses single quote `'` as the escape character. We have to manually escape
-// all `'`.
 static std::string escapeSpecialChars(const std::string& pgQuery) {
     std::string pgQueryWithEscapeChars = "";
     for (auto& i : pgQuery) {
@@ -44,7 +41,6 @@ static std::unique_ptr<TableFuncBindData> bindFunc(const ClientContext* context,
         common::stringFormat("from postgres_query({}, '{}')",
             attachedDB->constCast<AttachedPostgresDatabase>().getAttachedCatalogNameInDuckDB(),
             escapeSpecialChars(query));
-    // Query to sniff the column names and types.
     auto queryToExecuteInDuckDB = common::stringFormat(queryTemplate, "*") + " limit 1";
     auto& attachedPostgresDB = attachedDB->constCast<AttachedPostgresDatabase>();
     auto queryResult = attachedPostgresDB.executeQuery(queryToExecuteInDuckDB);
@@ -74,7 +70,6 @@ offset_t tableFunc(const TableFuncInput& input, TableFuncOutput& output) {
     auto bindData = input.bindData->constPtrCast<DuckDBScanBindData>();
     std::unique_ptr<duckdb::DataChunk> result;
     try {
-        // Duckdb queryResult.fetch() is not thread safe, we have to acquire a lock there.
         std::lock_guard<std::mutex> lock{sharedState->mtx};
         result = sharedState->queryResult->Fetch();
     } catch (std::exception& e) {
@@ -100,5 +95,5 @@ function_set SqlQueryFunction::getFunctionSet() {
     return functionSet;
 }
 
-} // namespace postgres_extension
-} // namespace kuzu
+} 
+} 

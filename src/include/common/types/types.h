@@ -15,7 +15,6 @@ namespace kuzu {
 namespace main {
 class ClientContext;
 }
-// todo: remove include path
 namespace processor {
 class ParquetReader;
 }
@@ -69,17 +68,14 @@ constexpr transaction_t INVALID_TRANSACTION = UINT64_MAX;
 using executor_id_t = uint64_t;
 using executor_info = std::unordered_map<executor_id_t, uint64_t>;
 
-// table id type alias
 using table_id_t = oid_t;
 using table_id_vector_t = std::vector<table_id_t>;
 using table_id_set_t = std::unordered_set<table_id_t>;
 template<typename T>
 using table_id_map_t = std::unordered_map<table_id_t, T>;
 constexpr table_id_t INVALID_TABLE_ID = INVALID_OID;
-// offset type alias
 using offset_t = uint64_t;
 constexpr offset_t INVALID_OFFSET = UINT64_MAX;
-// internal id type alias
 struct internalID_t;
 using nodeID_t = internalID_t;
 using relID_t = internalID_t;
@@ -87,7 +83,6 @@ using relID_t = internalID_t;
 using cardinality_t = uint64_t;
 constexpr offset_t INVALID_LIMIT = UINT64_MAX;
 using offset_vec_t = std::vector<offset_t>;
-// System representation for internalID.
 struct KUZU_API internalID_t {
     offset_t offset;
     table_id_t tableID;
@@ -95,7 +90,6 @@ struct KUZU_API internalID_t {
     internalID_t();
     internalID_t(offset_t offset, table_id_t tableID);
 
-    // comparison operators
     bool operator==(const internalID_t& rhs) const;
     bool operator!=(const internalID_t& rhs) const;
     bool operator>(const internalID_t& rhs) const;
@@ -104,10 +98,7 @@ struct KUZU_API internalID_t {
     bool operator<=(const internalID_t& rhs) const;
 };
 
-// System representation for a variable-sized overflow value.
 struct overflow_value_t {
-    // the size of the overflow buffer can be calculated as:
-    // numElements * sizeof(Element) + nullMap(4 bytes alignment)
     uint64_t numElements = 0;
     uint8_t* value = nullptr;
 };
@@ -180,8 +171,6 @@ enum class LogicalTypeID : uint8_t {
     NODE = 10,
     REL = 11,
     RECURSIVE_REL = 12,
-    // SERIAL is a special data type that is used to represent a sequence of INT64 values that are
-    // incremented by 1 starting from 0.
     SERIAL = 13,
 
     BOOL = 22,
@@ -221,7 +210,6 @@ enum class LogicalTypeID : uint8_t {
 };
 
 enum class PhysicalTypeID : uint8_t {
-    // Fixed size types.
     ANY = 0,
     BOOL = 1,
     INT64 = 2,
@@ -240,7 +228,6 @@ enum class PhysicalTypeID : uint8_t {
     ALP_EXCEPTION_FLOAT = 15,
     ALP_EXCEPTION_DOUBLE = 16,
 
-    // Variable size types.
     STRING = 20,
     LIST = 22,
     ARRAY = 23,
@@ -300,9 +287,6 @@ public:
 
     static LogicalType ANY() { return LogicalType(LogicalTypeID::ANY); }
 
-    // NOTE: avoid using this if possible, this is a temporary hack for passing internal types
-    // TODO(Royi) remove this when float compression no longer relies on this or ColumnChunkData
-    // takes physical types instead of logical types
     static LogicalType ANY(PhysicalTypeID physicalType) {
         auto ret = LogicalType(LogicalTypeID::ANY);
         ret.physicalType = physicalType;
@@ -528,7 +512,6 @@ public:
 
     const LogicalType& getChildType(struct_field_idx_t idx) const;
     std::vector<const LogicalType*> getChildrenTypes() const;
-    // can't be a vector of refs since that can't be for-each looped through
     std::vector<std::string> getChildrenNames() const;
 
     bool containsAny() const override;
@@ -565,7 +548,6 @@ struct KUZU_API ArrayType {
 
 struct KUZU_API StructType {
     static std::vector<const LogicalType*> getFieldTypes(const LogicalType& type);
-    // since the field types isn't stored as a vector of LogicalTypes, we can't return vector<>&
 
     static const LogicalType& getFieldType(const LogicalType& type, struct_field_idx_t idx);
 
@@ -643,13 +625,8 @@ struct KUZU_API LogicalTypeUtils {
         LogicalType& result);
     static bool tryGetMaxLogicalType(const std::vector<LogicalType>& types, LogicalType& result);
 
-    // Differs from tryGetMaxLogicalType because it treats string as a maximal type, instead of a
-    // minimal type. as such, it will always succeed.
-    // Also combines structs by the union of their fields. As such, currently, it is not guaranteed
-    // for casting to work from input types to resulting types. Ideally this changes
     static LogicalType combineTypes(const LogicalType& left, const LogicalType& right);
 
-    // makes a copy of the type with any occurences of ANY replaced with replacement
     static LogicalType purgeAny(const LogicalType& type, const LogicalType& replacement);
 
 private:
@@ -659,5 +636,5 @@ private:
 
 enum class FileVersionType : uint8_t { ORIGINAL = 0, WAL_VERSION = 1 };
 
-} // namespace common
-} // namespace kuzu
+} 
+} 

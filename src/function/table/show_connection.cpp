@@ -7,7 +7,6 @@
 #include "function/table/bind_data.h"
 #include "function/table/bind_input.h"
 #include "function/table/simple_table_function.h"
-// #include "processor/execution_context.h"
 #include "main/client_context.h"
 
 using namespace kuzu::catalog;
@@ -35,17 +34,14 @@ static void outputRelTableConnection(DataChunk& outputDataChunk, uint64_t output
     KU_ASSERT(entry->getType() == CatalogEntryType::REL_TABLE_ENTRY);
     const auto relTableEntry = ku_dynamic_cast<RelTableCatalogEntry*>(entry);
 
-    // Get src and dst name
     const auto srcTableID = relTableEntry->getSrcTableID();
     const auto dstTableID = relTableEntry->getDstTableID();
-    // Get src and dst primary key
     const auto srcTableEntry = catalog->getTableCatalogEntry(context.getTransaction(), srcTableID);
     const auto dstTableEntry = catalog->getTableCatalogEntry(context.getTransaction(), dstTableID);
     const auto srcTablePrimaryKey =
         srcTableEntry->constCast<NodeTableCatalogEntry>().getPrimaryKeyName();
     const auto dstTablePrimaryKey =
         dstTableEntry->constCast<NodeTableCatalogEntry>().getPrimaryKeyName();
-    // Write result to dataChunk
     outputDataChunk.getValueVectorMutable(0).setValue(outputPos, srcTableEntry->getName());
     outputDataChunk.getValueVectorMutable(1).setValue(outputPos, dstTableEntry->getName());
     outputDataChunk.getValueVectorMutable(2).setValue(outputPos, srcTablePrimaryKey);
@@ -54,50 +50,11 @@ static void outputRelTableConnection(DataChunk& outputDataChunk, uint64_t output
 
 static offset_t internalTableFunc(const TableFuncMorsel& morsel, const TableFuncInput& input,
     DataChunk& output) {
-    // const auto bindData = input.bindData->constPtrCast<ShowConnectionBindData>();
-    // auto i = 0u;
-    // auto size = morsel.getMorselSize();
-    // for (; i < size; i++) {
-    //     outputRelTableConnection(output, i, *input.context->clientContext,
-    //         bindData->entries[i + morsel.startOffset]);
-    // }
-    // return i;
     return 0;
 }
 
 static std::unique_ptr<TableFuncBindData> bindFunc(const ClientContext* context,
     const TableFuncBindInput* input) {
-    // std::vector<std::string> columnNames;
-    // std::vector<LogicalType> columnTypes;
-    // columnNames.emplace_back("source table name");
-    // columnTypes.emplace_back(LogicalType::STRING());
-    // columnNames.emplace_back("destination table name");
-    // columnTypes.emplace_back(LogicalType::STRING());
-    // columnNames.emplace_back("source table primary key");
-    // columnTypes.emplace_back(LogicalType::STRING());
-    // columnNames.emplace_back("destination table primary key");
-    // columnTypes.emplace_back(LogicalType::STRING());
-    // const auto name = input->getLiteralVal<std::string>(0);
-    // const auto catalog = context->getCatalog();
-    // auto transaction = context->getTransaction();
-    // std::vector<TableCatalogEntry*> entries;
-    // if (catalog->containsTable(transaction, name)) {
-    //     auto entry = catalog->getTableCatalogEntry(transaction, name);
-    //     if (entry->getType() != catalog::CatalogEntryType::REL_TABLE_ENTRY) {
-    //         throw BinderException{"Show connection can only be called on a rel table!"};
-    //     }
-    //     entries.push_back(entry);
-    // } else if (catalog->containsRelGroup(transaction, name)) {
-    //     auto entry = catalog->getRelGroupEntry(transaction, name);
-    //     for (auto& id : entry->getRelTableIDs()) {
-    //         entries.push_back(catalog->getTableCatalogEntry(transaction, id));
-    //     }
-    // } else {
-    //     throw BinderException{"Show connection can only be called on a rel table!"};
-    // }
-    // columnNames = TableFunction::extractYieldVariables(columnNames, input->yieldVariables);
-    // auto columns = input->binder->createVariables(columnNames, columnTypes);
-    // return std::make_unique<ShowConnectionBindData>(entries, columns, entries.size());
     return nullptr;
 }
 
@@ -112,5 +69,5 @@ function_set ShowConnectionFunction::getFunctionSet() {
     return functionSet;
 }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

@@ -12,7 +12,6 @@
 #include "common/types/uuid.h"
 #include "common/vector/value_vector.h"
 #include "function/hash/hash_functions.h"
-// #include "storage/storage_utils.h"
 
 namespace kuzu {
 namespace common {
@@ -629,8 +628,6 @@ std::string Value::toString() const {
         return listToString();
     }
     case LogicalTypeID::UNION: {
-        // Only one member in the union can be active at a time and that member is always stored
-        // at index 0.
         return children[0]->toString();
     }
     case LogicalTypeID::RECURSIVE_REL:
@@ -667,21 +664,6 @@ void Value::resizeChildrenVector(uint64_t size, const LogicalType& childType) {
 }
 
 void Value::copyFromRowLayoutList(const ku_list_t& list, const LogicalType& childType) {
-    // resizeChildrenVector(list.size, childType);
-    // auto numBytesPerElement = storage::StorageUtils::getDataTypeSize(childType);
-    // auto listNullBytes = reinterpret_cast<uint8_t*>(list.overflowPtr);
-    // auto numBytesForNullValues = NullBuffer::getNumBytesForNullValues(list.size);
-    // auto listValues = listNullBytes + numBytesForNullValues;
-    // for (auto i = 0u; i < list.size; i++) {
-    //     auto childValue = children[i].get();
-    //     if (NullBuffer::isNull(listNullBytes, i)) {
-    //         childValue->setNull(true);
-    //     } else {
-    //         childValue->setNull(false);
-    //         childValue->copyFromRowLayout(listValues);
-    //     }
-    //     listValues += numBytesPerElement;
-    // }
 }
 
 void Value::copyFromColLayoutList(const list_entry_t& listEntry, ValueVector* vec) {
@@ -698,19 +680,6 @@ void Value::copyFromColLayoutList(const list_entry_t& listEntry, ValueVector* ve
 }
 
 void Value::copyFromRowLayoutStruct(const uint8_t* kuStruct) {
-    // auto numFields = childrenSize;
-    // auto structNullValues = kuStruct;
-    // auto structValues = structNullValues + NullBuffer::getNumBytesForNullValues(numFields);
-    // for (auto i = 0u; i < numFields; i++) {
-    //     auto childValue = children[i].get();
-    //     if (NullBuffer::isNull(structNullValues, i)) {
-    //         childValue->setNull(true);
-    //     } else {
-    //         childValue->setNull(false);
-    //         childValue->copyFromRowLayout(structValues);
-    //     }
-    //     structValues += storage::StorageUtils::getDataTypeSize(childValue->dataType);
-    // }
 }
 
 void Value::copyFromColLayoutStruct(const struct_entry_t& structEntry, ValueVector* vec) {
@@ -726,26 +695,6 @@ void Value::copyFromColLayoutStruct(const struct_entry_t& structEntry, ValueVect
 }
 
 void Value::copyFromUnion(const uint8_t* kuUnion) {
-    // auto childrenTypes = StructType::getFieldTypes(dataType);
-    // auto unionNullValues = kuUnion;
-    // auto unionValues = unionNullValues + NullBuffer::getNumBytesForNullValues(childrenTypes.size());
-    // // For union dataType, only one member can be active at a time. So we don't need to copy all
-    // // union fields into value.
-    // auto activeFieldIdx = UnionType::getInternalFieldIdx(*(union_field_idx_t*)unionValues);
-    // auto childValue = children[0].get();
-    // childValue->dataType = childrenTypes[activeFieldIdx]->copy();
-    // auto curMemberIdx = 0u;
-    // // Seek to the current active member value.
-    // while (curMemberIdx < activeFieldIdx) {
-    //     unionValues += storage::StorageUtils::getDataTypeSize(*childrenTypes[curMemberIdx]);
-    //     curMemberIdx++;
-    // }
-    // if (NullBuffer::isNull(unionNullValues, activeFieldIdx)) {
-    //     childValue->setNull(true);
-    // } else {
-    //     childValue->setNull(false);
-    //     childValue->copyFromRowLayout(unionValues);
-    // }
 }
 
 void Value::serialize(Serializer& serializer) const {
@@ -807,7 +756,6 @@ void Value::serialize(Serializer& serializer) const {
         }
     } break;
     case PhysicalTypeID::ANY: {
-        // We want to be able to ser/deser values that are meant to just be null
         if (!isNull_) {
             KU_UNREACHABLE;
         }
@@ -878,7 +826,6 @@ std::unique_ptr<Value> Value::deserialize(Deserializer& deserializer) {
         }
     } break;
     case PhysicalTypeID::ANY: {
-        // We want to be able to ser/deser values that are meant to just be null
         if (!val->isNull_) {
             KU_UNREACHABLE;
         }
@@ -907,7 +854,6 @@ bool Value::hasNoneNullChildren() const {
     return false;
 }
 
-// Handle the case of casting empty list to a different type.
 bool Value::allowTypeChange() const {
     if (isNull_ || !dataType.isInternalType()) {
         return true;
@@ -1055,15 +1001,12 @@ std::string Value::structToString() const {
 
 std::string Value::nodeToString() const {
     if (children[0]->isNull_) {
-        // NODE is represented as STRUCT. We don't have a way to represent STRUCT as null.
-        // Instead, we check the internal ID entry to decide if a NODE is NULL.
         return "";
     }
     std::string result = "{";
     auto fieldNames = StructType::getFieldNames(dataType);
     for (auto i = 0u; i < childrenSize; ++i) {
         if (children[i]->isNull_) {
-            // Avoid printing null key value pair.
             continue;
         }
         if (i != 0) {
@@ -1077,15 +1020,12 @@ std::string Value::nodeToString() const {
 
 std::string Value::relToString() const {
     if (children[3]->isNull_) {
-        // REL is represented as STRUCT. We don't have a way to represent STRUCT as null.
-        // Instead, we check the internal ID entry to decide if a REL is NULL.
         return "";
     }
     std::string result = "(" + children[0]->toString() + ")-{";
     auto fieldNames = StructType::getFieldNames(dataType);
     for (auto i = 2u; i < childrenSize; ++i) {
         if (children[i]->isNull_) {
-            // Avoid printing null key value pair.
             continue;
         }
         if (i != 2) {
@@ -1116,5 +1056,5 @@ std::string Value::decimalToString() const {
     }
 }
 
-} // namespace common
-} // namespace kuzu
+} 
+} 

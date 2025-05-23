@@ -18,7 +18,6 @@
 #include "function/built_in_function_utils.h"
 #include "function/cast/functions/numeric_limits.h"
 #include "main/client_context.h"
-// #include "storage/compression/float_compression.h"
 
 using kuzu::function::BuiltInFunctionsUtils;
 
@@ -57,7 +56,6 @@ bool internalID_t::operator<=(const internalID_t& rhs) const {
 std::string DecimalType::insertDecimalPoint(const std::string& value, uint32_t positionFromEnd) {
     if (positionFromEnd == 0) {
         return value;
-        // Don't want to end up with cases where integral values are followed by a useless dot
     }
     std::string retval;
     if (positionFromEnd > value.size()) {
@@ -223,7 +221,6 @@ uint64_t UnionType::getNumFields(const LogicalType& type) {
 }
 
 std::string PhysicalTypeUtils::toString(PhysicalTypeID physicalType) {
-    // LCOV_EXCL_START
     switch (physicalType) {
     case PhysicalTypeID::BOOL:
         return "BOOL";
@@ -270,7 +267,6 @@ std::string PhysicalTypeUtils::toString(PhysicalTypeID physicalType) {
     default:
         KU_UNREACHABLE;
     }
-    // LCOV_EXCL_STOP
 }
 
 uint32_t PhysicalTypeUtils::getFixedTypeSize(PhysicalTypeID physicalType) {
@@ -303,10 +299,6 @@ uint32_t PhysicalTypeUtils::getFixedTypeSize(PhysicalTypeID physicalType) {
         return sizeof(interval_t);
     case PhysicalTypeID::INTERNAL_ID:
         return sizeof(internalID_t);
-    // case PhysicalTypeID::ALP_EXCEPTION_FLOAT:
-    //     return storage::EncodeException<float>::sizeInBytes();
-    // case PhysicalTypeID::ALP_EXCEPTION_DOUBLE:
-    //     return storage::EncodeException<double>::sizeInBytes();
     default:
         KU_UNREACHABLE;
     }
@@ -528,7 +520,6 @@ static std::string getIncompleteTypeErrMsg(LogicalTypeID id) {
 
 LogicalType::LogicalType(LogicalTypeID typeID, TypeCategory info)
     : typeID{typeID}, extraTypeInfo{nullptr}, category{info} {
-    // LCOV_EXCL_START
     switch (typeID) {
     case LogicalTypeID::DECIMAL:
     case LogicalTypeID::LIST:
@@ -541,7 +532,6 @@ LogicalType::LogicalType(LogicalTypeID typeID, TypeCategory info)
         break;
     }
     physicalType = getPhysicalType(typeID);
-    // LCOV_EXCL_STOP
 }
 
 LogicalType::LogicalType(LogicalTypeID typeID, std::unique_ptr<ExtraTypeInfo> extraTypeInfo)
@@ -955,7 +945,6 @@ bool tryGetIDFromString(const std::string& str, LogicalTypeID& id) {
 }
 
 std::string LogicalTypeUtils::toString(LogicalTypeID dataTypeID) {
-    // LCOV_EXCL_START
     switch (dataTypeID) {
     case LogicalTypeID::ANY:
         return "ANY";
@@ -1030,7 +1019,6 @@ std::string LogicalTypeUtils::toString(LogicalTypeID dataTypeID) {
     default:
         KU_UNREACHABLE;
     }
-    // LCOV_EXCL_STOP
 }
 
 std::string LogicalTypeUtils::toString(const std::vector<LogicalType>& dataTypes) {
@@ -1223,7 +1211,6 @@ std::vector<LogicalTypeID> LogicalTypeUtils::getNumericalLogicalTypeIDs() {
     auto integerTypes = getIntegerTypeIDs();
     auto floatingPointTypes = getFloatingPointTypeIDs();
     integerTypes.insert(integerTypes.end(), floatingPointTypes.begin(), floatingPointTypes.end());
-    // integerTypes.push_back(LogicalTypeID::DECIMAL); // fixed point numeric
     return integerTypes;
 }
 
@@ -1297,7 +1284,6 @@ std::vector<std::string> parseStructFields(const std::string& structTypeStr) {
             }
         } break;
         default: {
-            // Normal character, continue.
         }
         }
         curPos++;
@@ -1321,8 +1307,6 @@ LogicalType parseArrayType(const std::string& trimmedStr, main::ClientContext* c
         trimmedStr.substr(leftBracketPos + 1, rightBracketPos - leftBracketPos - 1).c_str(),
         nullptr, 0 /* base */);
     if (numElements <= 0) {
-        // Note: the parser already guarantees that the number of elements is a non-negative
-        // number. However, we still need to check whether the number of elements is 0.
         throw BinderException("The number of elements in an array must be greater than 0. Given: " +
                               std::to_string(numElements) + ".");
     }
@@ -1336,7 +1320,6 @@ std::vector<StructField> parseStructTypeInfo(const std::string& structTypeStr,
     if (leftBracketPos == std::string::npos || rightBracketPos == std::string::npos) {
         throw Exception("Cannot parse struct type: " + structTypeStr);
     }
-    // Remove the leading and trailing brackets.
     auto structFieldsStr =
         structTypeStr.substr(leftBracketPos + 1, rightBracketPos - leftBracketPos - 1);
     std::vector<StructField> structFields;
@@ -1419,7 +1402,6 @@ LogicalType LogicalType::REL(std::unique_ptr<StructTypeInfo> typeInfo) {
 }
 
 LogicalType LogicalType::UNION(std::vector<StructField>&& fields) {
-    // TODO(Ziy): Use UINT8 to represent tag value.
     fields.insert(fields.begin(),
         StructField(UnionType::TAG_FIELD_NAME, LogicalType(UnionType::TAG_FIELD_TYPE)));
     return LogicalType(LogicalTypeID::UNION, std::make_unique<StructTypeInfo>(std::move(fields)));
@@ -1443,7 +1425,6 @@ LogicalType LogicalType::ARRAY(LogicalType childType, uint64_t numElements) {
         std::make_unique<ArrayTypeInfo>(std::move(childType), numElements));
 }
 
-// If we can combine the child types, then we can combine the list
 static bool tryCombineListTypes(const LogicalType& left, const LogicalType& right,
     LogicalType& result) {
     LogicalType childType;
@@ -1480,8 +1461,6 @@ static bool tryCombineListArrayTypes(const LogicalType& left, const LogicalType&
     return true;
 }
 
-// If we can match child labels and combine their types, then we can combine
-// the struct
 static bool tryCombineStructTypes(const LogicalType& left, const LogicalType& right,
     LogicalType& result) {
     const auto& leftFields = StructType::getFields(left);
@@ -1506,7 +1485,6 @@ static bool tryCombineStructTypes(const LogicalType& left, const LogicalType& ri
     return true;
 }
 
-// If we can combine the key and value, then we cna combine the map
 static bool tryCombineMapTypes(const LogicalType& left, const LogicalType& right,
     LogicalType& result) {
     const auto& leftKeyType = MapType::getKeyType(left);
@@ -1523,8 +1501,6 @@ static bool tryCombineMapTypes(const LogicalType& left, const LogicalType& right
 }
 
 /*
-// If one of the unions labels is a subset of the other labels, and we can
-// combine corresponding labels, then we can combine the union
 static bool tryCombineUnionTypes(const LogicalType& left, const LogicalType& right,
     LogicalType& result) {
     auto leftFields = StructType::getFields(left), rightFields = StructType::getFields(right);
@@ -1607,7 +1583,7 @@ static uint32_t internalTimeOrder(const LogicalTypeID& type) {
     case LogicalTypeID::TIMESTAMP_NS:
         return 55;
     default:
-        return 0; // return 0 if not timestamp
+        return 0; 
     }
 }
 
@@ -1670,9 +1646,6 @@ bool LogicalTypeUtils::tryGetMaxLogicalTypeID(const LogicalTypeID& left, const L
         }
     }
 
-    // check timestamp combination
-    // note: this will become obsolete if implicit casting
-    // between timestamps is allowed
     auto leftOrder = internalTimeOrder(left);
     auto rightOrder = internalTimeOrder(right);
     if (leftOrder && rightOrder) {
@@ -1713,7 +1686,6 @@ static inline bool tryCombineDecimalWithNumeric(const LogicalType& dec, const Lo
     auto precision = DecimalType::getPrecision(dec);
     auto scale = DecimalType::getScale(dec);
     uint32_t requiredDigits = 0;
-    // How many digits before the decimal point does result require?
     switch (nonDec.getLogicalTypeID()) {
     case LogicalTypeID::INT8:
         requiredDigits = function::NumericLimits<int8_t>::digits();
@@ -1797,20 +1769,16 @@ bool LogicalTypeUtils::tryGetMaxLogicalType(const LogicalType& left, const Logic
             return tryCombineStructTypes(left, right, result);
         case LogicalTypeID::MAP:
             return tryCombineMapTypes(left, right, result);
-        // LCOV_EXCL_START
         case LogicalTypeID::UNION:
             throw ConversionException("Union casting is not supported");
-            // return tryCombineUnionTypes(left, right, result);
         default:
             KU_UNREACHABLE;
-            // LCOV_EXCL_END
         }
     }
     auto resultID = LogicalTypeID::ANY;
     if (!tryGetMaxLogicalTypeID(left.typeID, right.typeID, resultID)) {
         return false;
     }
-    // attempt to make complete types first
     if (resultID == left.typeID) {
         result = left.copy();
     } else if (resultID == right.typeID) {
@@ -1834,7 +1802,7 @@ bool LogicalTypeUtils::tryGetMaxLogicalType(const std::vector<LogicalType>& type
 }
 
 LogicalType LogicalTypeUtils::combineTypes(const common::LogicalType& lft,
-    const common::LogicalType& rit) { // always succeeds
+    const common::LogicalType& rit) { 
     if (lft.getLogicalTypeID() == LogicalTypeID::STRING ||
         rit.getLogicalTypeID() == LogicalTypeID::STRING) {
         return LogicalType::STRING();
@@ -1906,5 +1874,5 @@ LogicalType LogicalTypeUtils::purgeAny(const LogicalType& type, const LogicalTyp
     }
 }
 
-} // namespace common
-} // namespace kuzu
+} 
+} 

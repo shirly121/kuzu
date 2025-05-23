@@ -151,7 +151,6 @@ std::string Binder::getUniqueExpressionName(const std::string& name) {
 }
 
 struct ReservedNames {
-    // Column name that might conflict with internal names.
     static std::unordered_set<std::string> getColumnNames() {
         return {
             InternalKeyword::ID,
@@ -169,7 +168,6 @@ struct ReservedNames {
         };
     }
 
-    // Properties that should be hidden from user access.
     static std::unordered_set<std::string> getPropertyLookupName() {
         return {
             InternalKeyword::ID,
@@ -195,9 +193,6 @@ void Binder::addToScope(const std::vector<std::string>& names, const expression_
 }
 
 void Binder::addToScope(const std::string& name, std::shared_ptr<Expression> expr) {
-    // TODO(Xiyang): assert name not in scope.
-    // Note to Xiyang: I don't think the TODO still stands here. I tried adding the assertion, but
-    // it failed a few tests. You may want to revisit this TODO.
     scope.addExpression(name, std::move(expr));
 }
 
@@ -219,5 +214,5 @@ TableFunction Binder::getScanFunction(const FileTypeInfo& typeInfo,
     throw std::runtime_error("getScanFunction is not implemented: removed dependency on processor module");
 }
 
-} // namespace binder
-} // namespace kuzu
+} 
+} 

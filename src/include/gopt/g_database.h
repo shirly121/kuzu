@@ -19,8 +19,7 @@ GDatabase(const std::string &schemaPath, const std::string &statsPath, const kuz
     this->wal = std::make_unique<kuzu::storage::WAL>(); 
     this->transactionManager =
         std::make_unique<kuzu::transaction::GTransactionManager>(*this->wal);
-    // do nothing;
 };
 };
-} // namespace main
-} // namespace kuzu
+} 
+} 

@@ -60,10 +60,9 @@ private:
     TableStats(const TableStats& other);
 
 private:
-    // Note: cardinality is the estimated number of rows in the table. It is not always up-to-date.
     common::cardinality_t cardinality;
     std::vector<ColumnStats> columnStats;
 };
 
-} // namespace storage
-} // namespace kuzu
+} 
+} 

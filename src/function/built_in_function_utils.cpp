@@ -7,7 +7,6 @@
 
 using namespace kuzu::common;
 using namespace kuzu::catalog;
-// using namespace kuzu::processor;
 
 namespace kuzu {
 namespace function {
@@ -70,9 +69,7 @@ uint32_t BuiltInFunctionsUtils::getCastCost(LogicalTypeID inputTypeID, LogicalTy
     if (inputTypeID == targetTypeID) {
         return 0;
     }
-    // TODO(Jiamin): should check any type
     if (inputTypeID == LogicalTypeID::ANY || targetTypeID == LogicalTypeID::ANY) {
-        // anything can be cast to ANY type for (almost no) cost
         return 1;
     }
     if (targetTypeID == LogicalTypeID::STRING) {
@@ -113,8 +110,6 @@ uint32_t BuiltInFunctionsUtils::getCastCost(LogicalTypeID inputTypeID, LogicalTy
     case LogicalTypeID::TIMESTAMP_MS:
     case LogicalTypeID::TIMESTAMP_NS:
     case LogicalTypeID::TIMESTAMP_TZ:
-        // currently don't allow timestamp to other timestamp types
-        // When we implement this in the future, revise tryGetMaxLogicalTypeID
         return castTimestamp(targetTypeID);
     case LogicalTypeID::LIST:
         return castList(targetTypeID);
@@ -358,7 +353,7 @@ uint32_t BuiltInFunctionsUtils::castFromString(LogicalTypeID inputTypeID) {
     case LogicalTypeID::REL:
     case LogicalTypeID::RECURSIVE_REL:
         return UNDEFINED_CAST_COST;
-    default: // Any other inputTypeID can be cast to String, but this cast has a high cost
+    default: 
         return getTargetTypeCost(LogicalTypeID::STRING);
     }
 }
@@ -381,10 +376,6 @@ uint32_t BuiltInFunctionsUtils::castArray(LogicalTypeID targetTypeID) {
     }
 }
 
-// When there is multiple candidates functions, e.g. double + int and double + double for input
-// "1.5 + parameter", we prefer the one without any implicit casting i.e. double + double.
-// Additionally, we prefer function with string parameter because string is most permissive and
-// can be cast to any type.
 Function* BuiltInFunctionsUtils::getBestMatch(std::vector<Function*>& functionsToMatch) {
     KU_ASSERT(functionsToMatch.size() > 1);
     Function* result = nullptr;
@@ -467,7 +458,6 @@ uint32_t BuiltInFunctionsUtils::matchVarLengthParameters(const std::vector<Logic
 void BuiltInFunctionsUtils::validateSpecialCases(std::vector<Function*>& candidateFunctions,
     const std::string& name, const std::vector<LogicalType>& inputTypes,
     const function::function_set& set) {
-    // special case for add func
     if (name == AddFunction::name) {
         auto targetType0 = candidateFunctions[0]->parameterTypeIDs[0];
         auto targetType1 = candidateFunctions[0]->parameterTypeIDs[1];
@@ -531,5 +521,5 @@ void validateNonEmptyCandidateFunctions(std::vector<Function*>& candidateFunctio
     }
 }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

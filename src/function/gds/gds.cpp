@@ -10,9 +10,6 @@
 #include "planner/operator/logical_table_function_call.h"
 #include "planner/operator/sip/logical_semi_masker.h"
 #include "planner/planner.h"
-// #include "processor/operator/table_function_call.h"
-// #include "processor/plan_mapper.h"
-// #include "processor/execution_context.h"
 
 using namespace kuzu::catalog;
 using namespace kuzu::common;
@@ -167,10 +164,6 @@ std::string GDSFunction::bindColumnName(const parser::YieldVariable& yieldVariab
 
 std::unique_ptr<TableFuncSharedState> GDSFunction::initSharedState(
     const TableFuncInitSharedStateInput& input) {
-    // auto bindData = input.bindData->constPtrCast<GDSBindData>();
-    // auto graph =
-    //     std::make_unique<OnDiskGraph>(input.context->clientContext, bindData->graphEntry.copy());
-    // return std::make_unique<GDSFuncSharedState>(std::move(graph));
     return nullptr;
 }
 
@@ -212,50 +205,6 @@ void GDSFunction::getLogicalPlan(Planner* planner, const BoundReadingClause& rea
     }
 }
 
-// std::unique_ptr<PhysicalOperator> GDSFunction::getPhysicalPlan(PlanMapper* planMapper,
-//     const LogicalOperator* logicalOp) {
-//     auto logicalCall = logicalOp->constPtrCast<LogicalTableFunctionCall>();
-//     auto bindData = logicalCall->getBindData()->copy();
-//     auto columns = bindData->columns;
-//     auto tableSchema = PlanMapper::createFlatFTableSchema(columns, *logicalCall->getSchema());
-//     auto table = std::make_shared<FactorizedTable>(planMapper->clientContext->getMemoryManager(),
-//         tableSchema.copy());
-//     bindData->cast<GDSBindData>().setResultFTable(table);
-//     auto info = TableFunctionCallInfo();
-//     info.function = logicalCall->getTableFunc();
-//     info.bindData = std::move(bindData);
-//     auto initInput =
-//         TableFuncInitSharedStateInput(info.bindData.get(), planMapper->executionContext);
-//     auto sharedState = info.function.initSharedStateFunc(initInput);
-//     auto printInfo =
-//         std::make_unique<TableFunctionCallPrintInfo>(info.function.name, info.bindData->columns);
-//     auto call = std::make_unique<TableFunctionCall>(std::move(info), sharedState,
-//         planMapper->getOperatorID(), std::move(printInfo));
-//     if (!logicalCall->getNodeMaskRoots().empty()) {
-//         const auto funcSharedState = sharedState->ptrCast<GDSFuncSharedState>();
-//         funcSharedState->setGraphNodeMask(std::make_unique<NodeOffsetMaskMap>());
-//         auto maskMap = funcSharedState->getGraphNodeMaskMap();
-//         planMapper->logicalOpToPhysicalOpMap.insert({logicalOp, call.get()});
-//         for (auto logicalRoot : logicalCall->getNodeMaskRoots()) {
-//             KU_ASSERT(logicalRoot->getNumChildren() == 1);
-//             auto child = logicalRoot->getChild(0);
-//             KU_ASSERT(child->getOperatorType() == LogicalOperatorType::SEMI_MASKER);
-//             auto logicalSemiMasker = child->ptrCast<LogicalSemiMasker>();
-//             logicalSemiMasker->addTarget(logicalOp);
-//             for (auto tableID : logicalSemiMasker->getNodeTableIDs()) {
-//                 maskMap->addMask(tableID, planMapper->createSemiMask(tableID));
-//             }
-//             auto root = planMapper->mapOperator(logicalRoot.get());
-//             call->addChild(std::move(root));
-//         }
-//         planMapper->logicalOpToPhysicalOpMap.erase(logicalOp);
-//     }
-//     planMapper->logicalOpToPhysicalOpMap.insert({logicalOp, call.get()});
-//     physical_op_vector_t children;
-//     children.push_back(planMapper->createDummySink(logicalCall->getSchema(), std::move(call)));
-//     return planMapper->createFTableScanAligned(columns, logicalCall->getSchema(), table,
-//         DEFAULT_VECTOR_CAPACITY, std::move(children));
-// }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

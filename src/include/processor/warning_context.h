@@ -51,8 +51,6 @@ public:
     void clearPopulatedWarnings() {}
 
     void setIgnoreErrorsForCurrentQuery(bool ignoreErrors) {}
-    // NOTE: this function only works if the logical operator is COPY FROM
-    // for other operators setIgnoreErrorsForCurrentQuery() is not called
     bool getIgnoreErrorsOption() const { return false; }
 
 private:
@@ -65,5 +63,5 @@ private:
     bool ignoreErrorsOption;
 };
 
-} // namespace processor
-} // namespace kuzu
+} 
+} 

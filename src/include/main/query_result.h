@@ -128,20 +128,16 @@ private:
     void validateQuerySucceed() const;
 
 private:
-    // execution status
     bool success = true;
     std::string errMsg;
 
-    // header information
     std::vector<std::string> columnNames;
     std::vector<common::LogicalType> columnDataTypes;
 
-    // execution statistics
     std::unique_ptr<QuerySummary> querySummary;
 
-    // query iterator
     QueryResultIterator queryResultIterator;
 };
 
-} // namespace main
-} // namespace kuzu
+} 
+} 

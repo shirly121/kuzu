@@ -13,24 +13,24 @@ namespace kuzu {
 namespace common {
 class FileSystem;
 enum class LogicalTypeID : uint8_t;
-} // namespace common
+} 
 
 namespace catalog {
 class CatalogEntry;
-} // namespace catalog
+} 
 
 namespace function {
 struct Function;
-} // namespace function
+} 
 
 namespace extension {
 struct ExtensionUtils;
 class ExtensionManager;
-} // namespace extension
+} 
 
 namespace storage {
 class StorageExtension;
-} // namespace storage
+} 
 
 namespace main {
 struct ExtensionOption;
@@ -128,10 +128,7 @@ private:
         std::mutex queryIDLock;
     };
 
-    // static std::unique_ptr<storage::BufferManager> initBufferManager(const Database& db);
-    // void initMembers(std::string_view dbPath, construct_bm_func_t initBmFunc = initBufferManager);
 
-    // factory method only to be used for tests
     Database(std::string_view databasePath, SystemConfig systemConfig,
         construct_bm_func_t constructBMFunc);
 
@@ -148,12 +145,11 @@ private:
     std::string databasePath;
     DBConfig dbConfig;
     std::unique_ptr<common::VirtualFileSystem> vfs;
-    // std::unique_ptr<storage::BufferManager> bufferManager;
     std::unique_ptr<common::FileInfo> lockFile;
     std::unique_ptr<DatabaseManager> databaseManager;
     std::unique_ptr<extension::ExtensionManager> extensionManager;
     QueryIDGenerator queryIDGenerator;
 };
 
-} // namespace main
-} // namespace kuzu
+} 
+} 

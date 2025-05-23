@@ -18,8 +18,6 @@ OpProfileBox::OpProfileBox(std::string opName, const std::string& paramsName,
     std::string paramStr = "";
     std::string subStr;
     bool subParam = false;
-    // This loop splits the parameters by commas, while not
-    // splitting up parameters that are operators.
     while (paramsStream.good()) {
         getline(paramsStream, subStr, ',');
         if (subStr.find('(') != std::string::npos && subStr.find(')') == std::string::npos) {
@@ -36,7 +34,6 @@ OpProfileBox::OpProfileBox(std::string opName, const std::string& paramsName,
             paramStr = "";
             subParam = false;
         }
-        // This if statement discards any strings that are completely whitespace.
         if (subStr.find_first_not_of(" \t\n\v\f\r") != std::string::npos) {
             paramsNames.push_back(subStr);
         }
@@ -74,8 +71,6 @@ OpProfileTree::OpProfileTree(const LogicalOperator* op) {
         });
     auto maxFieldWidth = 0u;
     fillOpProfileBoxes(op, 0 /* rowIdx */, 0 /* colIdx */, maxFieldWidth);
-    // The width of each profileBox = fieldWidth + leftIndentWidth + boxLeftFrameWidth +
-    // rightIndentWidth + boxRightFrameWidth;
     this->opProfileBoxWidth = std::max<uint32_t>(
         maxFieldWidth + 2 * (INDENT_WIDTH + BOX_FRAME_WIDTH), MIN_LOGICAL_BOX_WIDTH);
 }
@@ -137,8 +132,6 @@ void OpProfileTree::printOpProfileBoxUpperFrame(uint32_t rowIdx, std::ostringstr
     for (auto i = 0u; i < opProfileBoxes[rowIdx].size(); i++) {
         printSpaceIfNecessary(i, oss);
         if (getOpProfileBox(rowIdx, i)) {
-            // If the current box has a parent, we need to put a "┴" in the  box upper frame to
-            // connect to its parent.
             if (hasOpProfileBoxOnUpperLeft(rowIdx, i)) {
                 auto leftFrameLength = (opProfileBoxWidth - 2 * BOX_FRAME_WIDTH - 1) / 2;
                 oss << "┌" << genHorizLine(leftFrameLength) << "┴"
@@ -172,8 +165,7 @@ void OpProfileTree::printOpProfileBoxes(uint32_t rowIdx, std::ostringstream& oss
                 unsigned int numParams = opProfileBox->getNumParams();
                 if (i == 0) {
                     textToPrint = opProfileBox->getOpName();
-                } else if (i == 1) { // NOLINT(bugprone-branch-clone): Merging these branches is a
-                                     // logical error, and this conditional chain is pleasant.
+                } else if (i == 1) { 
                     textToPrint = dashedLineAccountingForIndex(opProfileBoxWidth, INDENT_WIDTH);
                 } else if (i <= numParams + 1) {
                     textToPrint = opProfileBox->getParamsName(i - 2);
@@ -189,8 +181,6 @@ void OpProfileTree::printOpProfileBoxes(uint32_t rowIdx, std::ostringstream& oss
                 oss << "│" << std::string(INDENT_WIDTH + numLeftSpaces, ' ') << textToPrint
                     << std::string(INDENT_WIDTH + numRightSpace, ' ') << "│";
             } else if (opProfileBox) {
-                // If we have printed out all the attributes in the current opProfileBox, print
-                // empty spaces as placeholders.
                 printSpaceIfNecessary(j, oss);
                 oss << "│" << std::string(opProfileBoxWidth - 2, ' ') << "│";
             } else {
@@ -243,7 +233,6 @@ void OpProfileTree::printOpProfileBoxLowerFrame(uint32_t rowIdx, std::ostringstr
     for (auto i = 0u; i < opProfileBoxes[rowIdx].size(); i++) {
         if (getOpProfileBox(rowIdx, i)) {
             printSpaceIfNecessary(i, oss);
-            // If the current opProfileBox has a child, we need to print out a connector to it.
             if (hasOpProfileBox(rowIdx + 1, i)) {
                 auto leftFrameLength = (opProfileBoxWidth - 2 * BOX_FRAME_WIDTH - 1) / 2;
                 oss << "└" << genHorizLine(leftFrameLength) << "┬"
@@ -253,8 +242,6 @@ void OpProfileTree::printOpProfileBoxLowerFrame(uint32_t rowIdx, std::ostringstr
                 oss << "└" << genHorizLine(opProfileBoxWidth - 2) << "┘";
             }
         } else if (hasOpProfileBox(rowIdx + 1, i)) {
-            // If there is a opProfileBox at the bottom, we need to print out a vertical line to
-            // connect it.
             auto leftFrameLength = (opProfileBoxWidth - 1) / 2;
             printSpaceIfNecessary(i, oss);
             oss << std::string(leftFrameLength, ' ') << "│"
@@ -347,5 +334,5 @@ nlohmann::json PlanPrinter::toJson(const LogicalOperator* logicalOperator) {
     return json;
 }
 
-} // namespace main
-} // namespace kuzu
+} 
+} 

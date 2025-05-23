@@ -73,8 +73,6 @@ private:
                getOpProfileBox(rowIdx, colIdx);
     }
 
-    //! Returns true if there is a valid OpProfileBox on the upper left side of the OpProfileBox
-    //! located at (rowIdx, colIdx).
     bool hasOpProfileBoxOnUpperLeft(uint32_t rowIdx, uint32_t colIdx) const;
 
     uint32_t calculateRowHeight(uint32_t rowIdx) const;
@@ -97,5 +95,5 @@ private:
     static nlohmann::json toJson(const planner::LogicalOperator* logicalOperator);
 };
 
-} // namespace main
-} // namespace kuzu
+} 
+} 

@@ -49,7 +49,6 @@ std::string ExtensionManager::toCypher() {
 void ExtensionManager::addExtensionOption(std::string name, common::LogicalTypeID type,
     common::Value defaultValue, bool isConfidential) {
     if (getExtensionOption(name) != nullptr) {
-        // One extension option can be shared by multiple extensions.
         return;
     }
     common::StringUtils::toLower(name);
@@ -62,25 +61,11 @@ const main::ExtensionOption* ExtensionManager::getExtensionOption(std::string na
     return extensionOptions.contains(name) ? &extensionOptions.at(name) : nullptr;
 }
 
-// void ExtensionManager::registerStorageExtension(std::string name,
-//     std::unique_ptr<storage::StorageExtension> storageExtension) {
-//     if (storageExtensions.contains(name)) {
-//         return;
-//     }
-//     storageExtensions.emplace(std::move(name), std::move(storageExtension));
-// }
 
-// std::vector<storage::StorageExtension*> ExtensionManager::getStorageExtensions() {
-//     std::vector<storage::StorageExtension*> storageExtensionsToReturn;
-//     for (auto& [name, storageExtension] : storageExtensions) {
-//         storageExtensionsToReturn.push_back(storageExtension.get());
-//     }
-//     return storageExtensionsToReturn;
-// }
 
 void ExtensionManager::autoLoadLinkedExtensions(main::ClientContext* context) {
     loadLinkedExtensions(context);
 }
 
-} // namespace extension
-} // namespace kuzu
+} 
+} 

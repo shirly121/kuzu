@@ -56,7 +56,6 @@ TEST(GOptTest, GCataLog) {
     std::cout << "Table Type: " << static_cast<int>(tableEntry->getType()) << std::endl;
     kuzu::catalog::RelGroupCatalogEntry* groupEntry =
         catalog.getRelGroupEntry(&transaction, "HASCREATOR");
-    // std::cout << "Rel Table ID: " << groupEntry->getRelTableIDs() << std::endl;
     for (auto relTableID : groupEntry->getRelTableIDs()) {
         std::cout << "Rel Table ID: " << relTableID << std::endl;
     }
@@ -84,9 +83,6 @@ TEST(GOptTest, GStorageManager) {
                         std::cerr << "query error: " << statement->errMsg << std::endl;
                         FAIL() << "Unexpected exception type";
                     } else {
-                        // std::cout << std::endl;
-                        // std::cout << "opt plan is: \n"
-                        //           << statement->logicalPlan->toString() << std::endl;
                         std::ofstream outfile(path + ".out");
                         outfile << statement->logicalPlan->toString() << std::endl;
                     }
@@ -101,8 +97,6 @@ TEST(GOptTest, GStorageManager) {
             std::cerr << "query error: " << statement->errMsg << std::endl;
             FAIL() << "Unexpected exception type";
         } else {
-            // std::cout << std::endl;
-            // std::cout << "opt plan is: \n" << statement->logicalPlan->toString() << std::endl;
             std::ofstream outfile(path + ".out");
             outfile << statement->logicalPlan->toString() << std::endl;
         }
@@ -110,45 +104,9 @@ TEST(GOptTest, GStorageManager) {
         throw std::runtime_error("invalid query path: " + queryPath);
     }
 
-    // auto memoryManager =
-    //     std::make_unique<kuzu::storage::MemoryManager>();
-    // auto catalog = std::make_unique<catalog::GCatalog>(std::move(schemaPath));
-    // kuzu::storage::GStorageManager storageManager(statsPath, *catalog, *memoryManager);
-    // auto& transaction = kuzu::Constants::DEFAULT_TRANSACTION;
 
-    // for (auto& entry : catalog->getTableEntries(&transaction)) {
-    //     switch (entry->getTableType()) {
-    //     case kuzu::common::TableType::NODE: {
-    //         auto nodeEntry = dynamic_cast<kuzu::catalog::NodeTableCatalogEntry*>(entry);
-    //         auto nodeTable = dynamic_cast<kuzu::storage::NodeTable*>(
-    //             storageManager.getTable(nodeEntry->getTableID()));
-    //         std::cout << "Node Table Id: " << nodeEntry->getTableID()
-    //                   << ", Table Name: " << nodeEntry->getName()
-    //                   << ", PK: " << nodeEntry->getPrimaryKeyName()
-    //                   << ", Stats: " << nodeTable->getStats(&transaction).getTableCard()
-    //                   << std::endl;
-    //         break;
-    //     }
-    //     case kuzu::common::TableType::REL: {
-    //         auto relEntry = dynamic_cast<kuzu::catalog::GRelTableCatalogEntry*>(entry);
-    //         auto relTable = dynamic_cast<kuzu::storage::RelTable*>(
-    //             storageManager.getTable(relEntry->getTableID()));
-    //         std::cout << "Rel Table Id: " << relEntry->getTableID() << ", Edge Label: <"
-    //                   << relEntry->getEdgeTableId() << ", " << relEntry->getSrcTableID() << ", "
-    //                   << relEntry->getDstTableID() << ">"
-    //                   << ", Table Name: " << relEntry->getName()
-    //                   << ", Stats: " << relTable->getNumTotalRows(&transaction) << std::endl;
-    //         break;
-    //     }
-    //     }
-    // }
 
-    // for (auto& group : catalog->getRelGroupEntries(&transaction)) {
-    //     std::cout << "Rel Group Id: " << group->getOID() << ", Group Name: " << group->getName()
-    //               << ", Rel Ids: " << vectorToString<common::table_id_t>(group->getRelTableIDs())
-    //               << std::endl;
-    // }
 }
 
-} // namespace testing
-} // namespace kuzu
+} 
+} 

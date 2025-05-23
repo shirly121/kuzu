@@ -25,10 +25,6 @@
 #include "function/union/vector_union_functions.h"
 #include "function/utility/vector_utility_functions.h"
 #include "function/uuid/vector_uuid_functions.h"
-// #include "processor/operator/persistent/reader/csv/parallel_csv_reader.h"
-// #include "processor/operator/persistent/reader/csv/serial_csv_reader.h"
-// #include "processor/operator/persistent/reader/npy/npy_reader.h"
-// #include "processor/operator/persistent/reader/parquet/parquet_reader.h"
 
 using namespace kuzu::processor;
 
@@ -57,7 +53,6 @@ namespace function {
 FunctionCollection* FunctionCollection::getFunctions() {
     static FunctionCollection functions[] = {
 
-        // Arithmetic Functions
         SCALAR_FUNCTION(AddFunction), SCALAR_FUNCTION(SubtractFunction),
         SCALAR_FUNCTION(MultiplyFunction), SCALAR_FUNCTION(DivideFunction),
         SCALAR_FUNCTION(ModuloFunction), SCALAR_FUNCTION(PowerFunction),
@@ -78,7 +73,6 @@ FunctionCollection* FunctionCollection::getFunctions() {
         SCALAR_FUNCTION(RoundFunction), SCALAR_FUNCTION(SinFunction), SCALAR_FUNCTION(SignFunction),
         SCALAR_FUNCTION(SqrtFunction), SCALAR_FUNCTION(TanFunction),
 
-        // String Functions
         SCALAR_FUNCTION(ArrayExtractFunction), SCALAR_FUNCTION(ConcatFunction),
         SCALAR_FUNCTION(ContainsFunction), SCALAR_FUNCTION(LowerFunction),
         SCALAR_FUNCTION_ALIAS(ToLowerFunction), SCALAR_FUNCTION_ALIAS(LcaseFunction),
@@ -99,13 +93,11 @@ FunctionCollection* FunctionCollection::getFunctions() {
         SCALAR_FUNCTION_ALIAS(StringToArrayFunction), SCALAR_FUNCTION(SplitPartFunction),
         SCALAR_FUNCTION(InternalIDCreationFunction),
 
-        // Array Functions
         SCALAR_FUNCTION(ArrayValueFunction), SCALAR_FUNCTION(ArrayCrossProductFunction),
         SCALAR_FUNCTION(ArrayCosineSimilarityFunction), SCALAR_FUNCTION(ArrayDistanceFunction),
         SCALAR_FUNCTION(ArraySquaredDistanceFunction), SCALAR_FUNCTION(ArrayInnerProductFunction),
         SCALAR_FUNCTION(ArrayDotProductFunction),
 
-        // List functions
         SCALAR_FUNCTION(ListCreationFunction), SCALAR_FUNCTION(ListRangeFunction),
         SCALAR_FUNCTION(ListExtractFunction), SCALAR_FUNCTION_ALIAS(ListElementFunction),
         SCALAR_FUNCTION(ListConcatFunction), SCALAR_FUNCTION_ALIAS(ListCatFunction),
@@ -128,7 +120,6 @@ FunctionCollection* FunctionCollection::getFunctions() {
         SCALAR_FUNCTION(ListAllFunction), SCALAR_FUNCTION(ListNoneFunction),
         SCALAR_FUNCTION(ListSingleFunction), SCALAR_FUNCTION(ListHasAllFunction),
 
-        // Cast functions
         SCALAR_FUNCTION(CastToDateFunction), SCALAR_FUNCTION_ALIAS(DateFunction),
         SCALAR_FUNCTION(CastToTimestampFunction), SCALAR_FUNCTION(CastToIntervalFunction),
         SCALAR_FUNCTION_ALIAS(IntervalFunctionAlias), SCALAR_FUNCTION_ALIAS(DurationFunction),
@@ -143,12 +134,10 @@ FunctionCollection* FunctionCollection::getFunctions() {
         SCALAR_FUNCTION(CastToUInt8Function), SCALAR_FUNCTION(CastToInt128Function),
         SCALAR_FUNCTION(CastToBoolFunction), SCALAR_FUNCTION(CastAnyFunction),
 
-        // Comparison functions
         SCALAR_FUNCTION(EqualsFunction), SCALAR_FUNCTION(NotEqualsFunction),
         SCALAR_FUNCTION(GreaterThanFunction), SCALAR_FUNCTION(GreaterThanEqualsFunction),
         SCALAR_FUNCTION(LessThanFunction), SCALAR_FUNCTION(LessThanEqualsFunction),
 
-        // Date functions
         SCALAR_FUNCTION(DatePartFunction), SCALAR_FUNCTION_ALIAS(DatePartFunctionAlias),
         SCALAR_FUNCTION(DateTruncFunction), SCALAR_FUNCTION_ALIAS(DateTruncFunctionAlias),
         SCALAR_FUNCTION(DayNameFunction), SCALAR_FUNCTION(GreatestFunction),
@@ -156,69 +145,55 @@ FunctionCollection* FunctionCollection::getFunctions() {
         SCALAR_FUNCTION(MakeDateFunction), SCALAR_FUNCTION(MonthNameFunction),
         SCALAR_FUNCTION(CurrentDateFunction),
 
-        // Timestamp functions
         SCALAR_FUNCTION(CenturyFunction), SCALAR_FUNCTION(EpochMsFunction),
         SCALAR_FUNCTION(ToTimestampFunction), SCALAR_FUNCTION(CurrentTimestampFunction),
         SCALAR_FUNCTION(ToEpochMsFunction),
 
-        // Interval functions
         SCALAR_FUNCTION(ToYearsFunction), SCALAR_FUNCTION(ToMonthsFunction),
         SCALAR_FUNCTION(ToDaysFunction), SCALAR_FUNCTION(ToHoursFunction),
         SCALAR_FUNCTION(ToMinutesFunction), SCALAR_FUNCTION(ToSecondsFunction),
         SCALAR_FUNCTION(ToMillisecondsFunction), SCALAR_FUNCTION(ToMicrosecondsFunction),
 
-        // Blob functions
         SCALAR_FUNCTION(OctetLengthFunctions), SCALAR_FUNCTION(EncodeFunctions),
         SCALAR_FUNCTION(DecodeFunctions),
 
-        // UUID functions
         SCALAR_FUNCTION(GenRandomUUIDFunction),
 
-        // Struct functions
         SCALAR_FUNCTION(StructPackFunctions), SCALAR_FUNCTION(StructExtractFunctions),
         REWRITE_FUNCTION(KeysFunctions),
 
-        // Map functions
         SCALAR_FUNCTION(MapCreationFunctions), SCALAR_FUNCTION(MapExtractFunctions),
         SCALAR_FUNCTION_ALIAS(ElementAtFunctions), SCALAR_FUNCTION_ALIAS(CardinalityFunction),
         SCALAR_FUNCTION(MapKeysFunctions), SCALAR_FUNCTION(MapValuesFunctions),
 
-        // Union functions
         SCALAR_FUNCTION(UnionValueFunction), SCALAR_FUNCTION(UnionTagFunction),
         SCALAR_FUNCTION(UnionExtractFunction),
 
-        // Node/rel functions
         SCALAR_FUNCTION(OffsetFunction), REWRITE_FUNCTION(IDFunction),
         REWRITE_FUNCTION(StartNodeFunction), REWRITE_FUNCTION(EndNodeFunction),
         REWRITE_FUNCTION(LabelFunction), REWRITE_FUNCTION_ALIAS(LabelsFunction),
         REWRITE_FUNCTION(CostFunction),
 
-        // Path functions
         SCALAR_FUNCTION(NodesFunction), SCALAR_FUNCTION(RelsFunction),
         SCALAR_FUNCTION_ALIAS(RelationshipsFunction), SCALAR_FUNCTION(PropertiesFunction),
         SCALAR_FUNCTION(IsTrailFunction), SCALAR_FUNCTION(IsACyclicFunction),
         REWRITE_FUNCTION(LengthFunction),
 
-        // Hash functions
         SCALAR_FUNCTION(MD5Function), SCALAR_FUNCTION(SHA256Function),
         SCALAR_FUNCTION(HashFunction),
 
-        // Scalar utility functions
         SCALAR_FUNCTION(CoalesceFunction), SCALAR_FUNCTION(IfNullFunction),
         SCALAR_FUNCTION(ConstantOrNullFunction), SCALAR_FUNCTION(CountIfFunction),
         SCALAR_FUNCTION(ErrorFunction), REWRITE_FUNCTION(NullIfFunction),
         SCALAR_FUNCTION(TypeOfFunction),
 
-        // Sequence functions
         SCALAR_FUNCTION(CurrValFunction), SCALAR_FUNCTION(NextValFunction),
 
-        // Aggregate functions
         AGGREGATE_FUNCTION(CountStarFunction), AGGREGATE_FUNCTION(CountFunction),
         AGGREGATE_FUNCTION(AggregateSumFunction), AGGREGATE_FUNCTION(AggregateAvgFunction),
         AGGREGATE_FUNCTION(AggregateMinFunction), AGGREGATE_FUNCTION(AggregateMaxFunction),
         AGGREGATE_FUNCTION(CollectFunction),
 
-        // Table functions
         TABLE_FUNCTION(CurrentSettingFunction), TABLE_FUNCTION(CatalogVersionFunction),
         TABLE_FUNCTION(DBVersionFunction), TABLE_FUNCTION(ShowTablesFunction),
         TABLE_FUNCTION(FreeSpaceInfoFunction), TABLE_FUNCTION(ShowWarningsFunction),
@@ -230,24 +205,18 @@ FunctionCollection* FunctionCollection::getFunctions() {
         TABLE_FUNCTION(ShowOfficialExtensionsFunction), TABLE_FUNCTION(ShowIndexesFunction),
         TABLE_FUNCTION(ShowProjectedGraphsFunction),
 
-        // Standalone Table functions
         STANDALONE_TABLE_FUNCTION(LocalCacheArrayColumnFunction),
         STANDALONE_TABLE_FUNCTION(ClearWarningsFunction),
         STANDALONE_TABLE_FUNCTION(CreateProjectedGraphFunction),
         STANDALONE_TABLE_FUNCTION(DropProjectedGraphFunction),
 
-        // // Scan functions
-        // TABLE_FUNCTION(ParquetScanFunction), TABLE_FUNCTION(NpyScanFunction),
-        // TABLE_FUNCTION(SerialCSVScan), TABLE_FUNCTION(ParallelCSVScan),
 
-        // Export functions
         EXPORT_FUNCTION(ExportCSVFunction), EXPORT_FUNCTION(ExportParquetFunction),
 
-        // End of array
         FINAL_FUNCTION};
 
     return functions;
 }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 

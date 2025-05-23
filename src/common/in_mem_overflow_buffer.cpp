@@ -1,7 +1,6 @@
 #include "common/in_mem_overflow_buffer.h"
 
 #include "common/system_config.h"
-// todo: remove include path
 #include "storage/buffer_manager/memory_manager.h"
 #include <bit>
 
@@ -37,7 +36,6 @@ uint8_t* InMemOverflowBuffer::allocateSpace(uint64_t size) {
 
 void InMemOverflowBuffer::resetBuffer() {
     if (!blocks.empty()) {
-        // Last block is usually the largest
         auto lastBlock = std::move(blocks.back());
         blocks.clear();
         lastBlock->resetCurrentOffset();
@@ -46,19 +44,7 @@ void InMemOverflowBuffer::resetBuffer() {
 }
 
 void InMemOverflowBuffer::allocateNewBlock(uint64_t size) {
-    // std::unique_ptr<BufferBlock> newBlock;
-    // if (blocks.empty()) {
-    //     newBlock = make_unique<BufferBlock>(
-    //         memoryManager->allocateBuffer(false /* do not initialize to zero */, size));
-    // } else {
-    //     // Use the doubling strategy so that the initial allocations are small, but if we need many
-    //     // allocations they approach the TEMP_PAGE_SIZE quickly
-    //     auto min = std::min(TEMP_PAGE_SIZE, std::bit_ceil(currentBlock()->size() * 2));
-    //     newBlock = make_unique<BufferBlock>(memoryManager->allocateBuffer(
-    //         false /* do not initialize to zero */, std::max(min, size)));
-    // }
-    // blocks.push_back(std::move(newBlock));
 }
 
-} // namespace common
-} // namespace kuzu
+} 
+} 

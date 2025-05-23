@@ -36,10 +36,8 @@ void ProjectionPushDownOptimizer::rewrite(LogicalPlan* plan) {
 void ProjectionPushDownOptimizer::visitOperator(LogicalOperator* op) {
     visitOperatorSwitch(op);
     if (op->getOperatorType() == LogicalOperatorType::PROJECTION) {
-        // We will start a new optimizer once a projection is encountered.
         return;
     }
-    // top-down traversal
     for (auto i = 0u; i < op->getNumChildren(); ++i) {
         visitOperator(op->getChild(i).get());
     }
@@ -51,21 +49,11 @@ void ProjectionPushDownOptimizer::visitPathPropertyProbe(LogicalOperator* op) {
     auto child = pathPropertyProbe.getChild(0);
     KU_ASSERT(child->getOperatorType() == LogicalOperatorType::RECURSIVE_EXTEND);
     if (nodeOrRelInUse.contains(pathPropertyProbe.getRel())) {
-        return; // Path is needed
+        return; 
     }
-    // Path is not needed
     pathPropertyProbe.setJoinType(planner::RecursiveJoinType::TRACK_NONE);
     auto extend = child->ptrCast<LogicalRecursiveExtend>();
     auto functionName = extend->getFunction().getFunctionName();
-    // if (functionName == VarLenJoinsFunction::name) {
-    //     extend->getBindDataUnsafe().writePath = false;
-    // } else if (functionName == SingleSPPathsFunction::name) {
-    //     extend->setFunction(SingleSPDestinationsFunction::getAlgorithm());
-    // } else if (functionName == AllSPPathsFunction::name) {
-    //     extend->setFunction(AllSPDestinationsFunction::getAlgorithm());
-    // } else if (functionName == WeightedSPPathsFunction::name) {
-    //     extend->setFunction(WeightedSPDestinationsFunction::getAlgorithm());
-    // }
     extend->setResultColumns(extend->getFunction().getResultColumns(extend->getBindData()));
 }
 
@@ -106,13 +94,12 @@ void ProjectionPushDownOptimizer::visitHashJoin(LogicalOperator* op) {
         collectExpressionsInUse(probeJoinKey);
         collectExpressionsInUse(buildJoinKey);
     }
-    if (hashJoin.getJoinType() == JoinType::MARK) { // no need to perform push down for mark join.
+    if (hashJoin.getJoinType() == JoinType::MARK) { 
         return;
     }
     auto expressionsBeforePruning = hashJoin.getExpressionsToMaterialize();
     auto expressionsAfterPruning = pruneExpressions(expressionsBeforePruning);
     if (expressionsBeforePruning.size() == expressionsAfterPruning.size()) {
-        // TODO(Xiyang): replace this with a separate optimizer.
         return;
     }
     preAppendProjection(op, 1, expressionsAfterPruning);
@@ -122,12 +109,9 @@ void ProjectionPushDownOptimizer::visitIntersect(LogicalOperator* op) {
     auto& intersect = op->constCast<LogicalIntersect>();
     collectExpressionsInUse(intersect.getIntersectNodeID());
     for (auto i = 0u; i < intersect.getNumBuilds(); ++i) {
-        auto childIdx = i + 1; // skip probe
+        auto childIdx = i + 1; 
         auto keyNodeID = intersect.getKeyNodeID(i);
         collectExpressionsInUse(keyNodeID);
-        // Note: we have a potential bug under intersect.cpp. The following code ensures build key
-        // and intersect key always appear as the first and second column. Should be removed once
-        // the bug is fixed.
         expression_vector expressionsBeforePruning;
         expression_vector expressionsAfterPruning;
         for (auto& expression :
@@ -152,8 +136,6 @@ void ProjectionPushDownOptimizer::visitIntersect(LogicalOperator* op) {
 }
 
 void ProjectionPushDownOptimizer::visitProjection(LogicalOperator* op) {
-    // Projection operator defines the start of a projection push down until the next projection
-    // operator is seen.
     ProjectionPushDownOptimizer optimizer(this->semantic);
     auto& projection = op->constCast<LogicalProjection>();
     for (auto& expression : projection.getExpressionsToProject()) {
@@ -302,7 +284,6 @@ void ProjectionPushDownOptimizer::visitInsertInfo(const LogicalInsertInfo& info)
     }
 }
 
-// See comments above this class for how to collect expressions in use.
 void ProjectionPushDownOptimizer::collectExpressionsInUse(
     std::shared_ptr<binder::Expression> expression) {
     switch (expression->expressionType) {
@@ -348,7 +329,7 @@ binder::expression_vector ProjectionPushDownOptimizer::pruneExpressions(
                 expressionsAfterPruning.insert(expression);
             }
         } break;
-        default: // We don't track other expression types so always assume they will be in use.
+        default: 
             expressionsAfterPruning.insert(expression);
         }
     }
@@ -358,7 +339,6 @@ binder::expression_vector ProjectionPushDownOptimizer::pruneExpressions(
 void ProjectionPushDownOptimizer::preAppendProjection(LogicalOperator* op, idx_t childIdx,
     binder::expression_vector expressions) {
     if (expressions.empty()) {
-        // We don't have a way to handle
         return;
     }
     auto projection =
@@ -367,5 +347,5 @@ void ProjectionPushDownOptimizer::preAppendProjection(LogicalOperator* op, idx_t
     op->setChild(childIdx, std::move(projection));
 }
 
-} // namespace optimizer
-} // namespace kuzu
+} 
+} 

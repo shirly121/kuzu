@@ -8,7 +8,6 @@
 #include "graph/graph_entry.h"
 #include "parser/parser.h"
 #include "common/types/value/value.h"
-// #include "processor/execution_context.h"
 
 using namespace kuzu::binder;
 using namespace kuzu::common;
@@ -37,18 +36,6 @@ struct CreateProjectedGraphBindData final : TableFuncBindData {
 };
 
 static offset_t tableFunc(const TableFuncInput& input, TableFuncOutput&) {
-    // const auto bindData = ku_dynamic_cast<CreateProjectedGraphBindData*>(input.bindData);
-    // auto& graphEntrySet = input.context->clientContext->getGraphEntrySetUnsafe();
-    // if (graphEntrySet.hasGraph(bindData->graphName)) {
-    //     throw RuntimeException(
-    //         stringFormat("Project graph {} already exists.", bindData->graphName));
-    // }
-    // auto entry = graph::ParsedGraphEntry();
-    // entry.nodeInfos = bindData->nodeInfos;
-    // entry.relInfos = bindData->relInfos;
-    // // bind graph entry to check if input is valid or not. Ignore bind result.
-    // GDSFunction::bindGraphEntry(*input.context->clientContext, entry);
-    // graphEntrySet.addGraph(bindData->graphName, entry);
     return 0;
 }
 
@@ -106,13 +93,6 @@ static std::vector<GraphEntryTableInfo> extractGraphEntryTableInfos(const Value&
 
 static std::unique_ptr<TableFuncBindData> bindFunc(const main::ClientContext*,
     const TableFuncBindInput* input) {
-    // auto graphName = input->getLiteralVal<std::string>(0);
-    // auto bindData = std::make_unique<CreateProjectedGraphBindData>(graphName);
-    // auto argNode = input->getValue(1);
-    // bindData->nodeInfos = extractGraphEntryTableInfos(argNode);
-    // auto argRel = input->getValue(2);
-    // bindData->relInfos = extractGraphEntryTableInfos(argRel);
-    // return bindData;
     return nullptr;
 }
 
@@ -129,5 +109,5 @@ function_set CreateProjectedGraphFunction::getFunctionSet() {
     return functionSet;
 }
 
-} // namespace function
-} // namespace kuzu
+} 
+} 
