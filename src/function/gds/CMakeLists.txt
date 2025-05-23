@@ -1,24 +1,19 @@
-add_library(kuzu_function_algorithm
-        OBJECT
-        asp_destinations.cpp
-        asp_paths.cpp
-        awsp_paths.cpp
+add_library(gds_function
+        STATIC
         bfs_graph.cpp
-        frontier_morsel.cpp
-        gds.cpp
         gds_frontier.cpp
-        gds_state.cpp
-        gds_task.cpp
-        gds_utils.cpp
+        gds.cpp
         output_writer.cpp
+        gds_state.cpp
         rec_joins.cpp
-        ssp_destinations.cpp
-        ssp_paths.cpp
-        variable_length_path.cpp
-        wsp_destinations.cpp
-        wsp_paths.cpp
+        gds_utils.cpp
+        frontier_morsel.cpp
+        gds_task.cpp
         )
 
+target_include_directories(gds_function PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+
 set(ALL_OBJECT_FILES
-        ${ALL_OBJECT_FILES} $<TARGET_OBJECTS:kuzu_function_algorithm>
+        ${ALL_OBJECT_FILES} $<TARGET_OBJECTS:gds_function>
         PARENT_SCOPE)

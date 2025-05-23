@@ -16,8 +16,6 @@
 #include "protocol/TProtocol.h"
 #include "transport/TTransport.h"
 
-#include "stdcxx.h"
-
 #include "windows_compatibility.h"
 
 namespace kuzu_parquet { namespace format {

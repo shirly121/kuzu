@@ -9,7 +9,6 @@ add_library(kuzu_main
         prepared_statement.cpp
         query_result.cpp
         query_summary.cpp
-        storage_driver.cpp
         version.cpp
         db_config.cpp
         settings.cpp)
